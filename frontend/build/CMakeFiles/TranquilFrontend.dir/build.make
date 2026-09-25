@@ -88,6 +88,7 @@ tranquilfrontend_qmltyperegistrations.cpp: /usr/lib/x86_64-linux-gnu/metatypes/q
 tranquilfrontend_qmltyperegistrations.cpp: /usr/lib/x86_64-linux-gnu/metatypes/qt6quick_none_metatypes.json
 tranquilfrontend_qmltyperegistrations.cpp: /usr/lib/x86_64-linux-gnu/metatypes/qt6qmlmodels_none_metatypes.json
 tranquilfrontend_qmltyperegistrations.cpp: /usr/lib/x86_64-linux-gnu/metatypes/qt6opengl_none_metatypes.json
+tranquilfrontend_qmltyperegistrations.cpp: /usr/lib/x86_64-linux-gnu/metatypes/qt6positioning_none_metatypes.json
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Automatic QML type registration for target TranquilFrontend"
 	/usr/lib/qt6/libexec/qmltyperegistrar --generate-qmltypes=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/TranquilTalk/TranquilFrontend.qmltypes --import-name=TranquilTalk --major-version=1 --minor-version=0 @/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/qmltypes/TranquilFrontend_foreign_types.txt -o /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/tranquilfrontend_qmltyperegistrations.cpp /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/meta_types/qt6tranquilfrontend_metatypes.json
 	/usr/bin/cmake -E make_directory /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.generated
@@ -119,22 +120,33 @@ TranquilTalk/TranquilFrontend.qmltypes: tranquilfrontend_qmltyperegistrations.cp
 	/usr/bin/cmake -E make_directory /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache
 	/usr/lib/qt6/libexec/qmlcachegen --bare --resource-path /TranquilTalk/LoginView.qml -I /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build -I /usr/lib/x86_64-linux-gnu/qt6/qml -i /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/TranquilTalk/qmldir --resource /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmake_TranquilTalk.qrc --resource /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/TranquilFrontend_raw_qml_0.qrc -o /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp /mnt/c/users/louie/Tranquil_Talk_V3/frontend/LoginView.qml
 
+.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp: /usr/lib/qt6/libexec/qmlcachegen
+.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp: /mnt/c/users/louie/Tranquil_Talk_V3/frontend/ClinicMapView.qml
+.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp: .rcc/qmake_TranquilTalk.qrc
+.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp: .rcc/TranquilFrontend_raw_qml_0.qrc
+.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp: TranquilTalk/TranquilFrontend.qmltypes
+.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp: TranquilTalk/qmldir
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Generating .rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp"
+	/usr/bin/cmake -E make_directory /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache
+	/usr/lib/qt6/libexec/qmlcachegen --bare --resource-path /TranquilTalk/ClinicMapView.qml -I /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build -I /usr/lib/x86_64-linux-gnu/qt6/qml -i /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/TranquilTalk/qmldir --resource /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmake_TranquilTalk.qrc --resource /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/TranquilFrontend_raw_qml_0.qrc -o /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp /mnt/c/users/louie/Tranquil_Talk_V3/frontend/ClinicMapView.qml
+
 .rcc/qrc_TranquilFrontend_raw_qml_0.cpp: /mnt/c/users/louie/Tranquil_Talk_V3/frontend/LoginView.qml
+.rcc/qrc_TranquilFrontend_raw_qml_0.cpp: /mnt/c/users/louie/Tranquil_Talk_V3/frontend/ClinicMapView.qml
 .rcc/qrc_TranquilFrontend_raw_qml_0.cpp: .rcc/TranquilFrontend_raw_qml_0.qrc
 .rcc/qrc_TranquilFrontend_raw_qml_0.cpp: /usr/lib/qt6/libexec/rcc
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Running rcc for resource TranquilFrontend_raw_qml_0"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Running rcc for resource TranquilFrontend_raw_qml_0"
 	/usr/lib/qt6/libexec/rcc --output /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qrc_TranquilFrontend_raw_qml_0.cpp --name TranquilFrontend_raw_qml_0 /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/TranquilFrontend_raw_qml_0.qrc
 
 TranquilFrontend_autogen/timestamp: /usr/lib/qt6/libexec/moc
 TranquilFrontend_autogen/timestamp: CMakeFiles/TranquilFrontend.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Automatic MOC and UIC for target TranquilFrontend"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Automatic MOC and UIC for target TranquilFrontend"
 	/usr/bin/cmake -E cmake_autogen /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles/TranquilFrontend_autogen.dir/AutogenInfo.json ""
 	/usr/bin/cmake -E touch /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/TranquilFrontend_autogen/timestamp
 
 CMakeFiles/TranquilFrontend.dir/TranquilFrontend_autogen/mocs_compilation.cpp.o: CMakeFiles/TranquilFrontend.dir/flags.make
 CMakeFiles/TranquilFrontend.dir/TranquilFrontend_autogen/mocs_compilation.cpp.o: TranquilFrontend_autogen/mocs_compilation.cpp
 CMakeFiles/TranquilFrontend.dir/TranquilFrontend_autogen/mocs_compilation.cpp.o: CMakeFiles/TranquilFrontend.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/TranquilFrontend.dir/TranquilFrontend_autogen/mocs_compilation.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/TranquilFrontend.dir/TranquilFrontend_autogen/mocs_compilation.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TranquilFrontend.dir/TranquilFrontend_autogen/mocs_compilation.cpp.o -MF CMakeFiles/TranquilFrontend.dir/TranquilFrontend_autogen/mocs_compilation.cpp.o.d -o CMakeFiles/TranquilFrontend.dir/TranquilFrontend_autogen/mocs_compilation.cpp.o -c /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/TranquilFrontend_autogen/mocs_compilation.cpp
 
 CMakeFiles/TranquilFrontend.dir/TranquilFrontend_autogen/mocs_compilation.cpp.i: cmake_force
@@ -148,7 +160,7 @@ CMakeFiles/TranquilFrontend.dir/TranquilFrontend_autogen/mocs_compilation.cpp.s:
 CMakeFiles/TranquilFrontend.dir/main.cpp.o: CMakeFiles/TranquilFrontend.dir/flags.make
 CMakeFiles/TranquilFrontend.dir/main.cpp.o: /mnt/c/users/louie/Tranquil_Talk_V3/frontend/main.cpp
 CMakeFiles/TranquilFrontend.dir/main.cpp.o: CMakeFiles/TranquilFrontend.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/TranquilFrontend.dir/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/TranquilFrontend.dir/main.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TranquilFrontend.dir/main.cpp.o -MF CMakeFiles/TranquilFrontend.dir/main.cpp.o.d -o CMakeFiles/TranquilFrontend.dir/main.cpp.o -c /mnt/c/users/louie/Tranquil_Talk_V3/frontend/main.cpp
 
 CMakeFiles/TranquilFrontend.dir/main.cpp.i: cmake_force
@@ -162,7 +174,7 @@ CMakeFiles/TranquilFrontend.dir/main.cpp.s: cmake_force
 CMakeFiles/TranquilFrontend.dir/ApiClient.cpp.o: CMakeFiles/TranquilFrontend.dir/flags.make
 CMakeFiles/TranquilFrontend.dir/ApiClient.cpp.o: /mnt/c/users/louie/Tranquil_Talk_V3/frontend/ApiClient.cpp
 CMakeFiles/TranquilFrontend.dir/ApiClient.cpp.o: CMakeFiles/TranquilFrontend.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/TranquilFrontend.dir/ApiClient.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/TranquilFrontend.dir/ApiClient.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TranquilFrontend.dir/ApiClient.cpp.o -MF CMakeFiles/TranquilFrontend.dir/ApiClient.cpp.o.d -o CMakeFiles/TranquilFrontend.dir/ApiClient.cpp.o -c /mnt/c/users/louie/Tranquil_Talk_V3/frontend/ApiClient.cpp
 
 CMakeFiles/TranquilFrontend.dir/ApiClient.cpp.i: cmake_force
@@ -176,7 +188,7 @@ CMakeFiles/TranquilFrontend.dir/ApiClient.cpp.s: cmake_force
 CMakeFiles/TranquilFrontend.dir/tranquilfrontend_qmltyperegistrations.cpp.o: CMakeFiles/TranquilFrontend.dir/flags.make
 CMakeFiles/TranquilFrontend.dir/tranquilfrontend_qmltyperegistrations.cpp.o: tranquilfrontend_qmltyperegistrations.cpp
 CMakeFiles/TranquilFrontend.dir/tranquilfrontend_qmltyperegistrations.cpp.o: CMakeFiles/TranquilFrontend.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/TranquilFrontend.dir/tranquilfrontend_qmltyperegistrations.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/TranquilFrontend.dir/tranquilfrontend_qmltyperegistrations.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TranquilFrontend.dir/tranquilfrontend_qmltyperegistrations.cpp.o -MF CMakeFiles/TranquilFrontend.dir/tranquilfrontend_qmltyperegistrations.cpp.o.d -o CMakeFiles/TranquilFrontend.dir/tranquilfrontend_qmltyperegistrations.cpp.o -c /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/tranquilfrontend_qmltyperegistrations.cpp
 
 CMakeFiles/TranquilFrontend.dir/tranquilfrontend_qmltyperegistrations.cpp.i: cmake_force
@@ -190,7 +202,7 @@ CMakeFiles/TranquilFrontend.dir/tranquilfrontend_qmltyperegistrations.cpp.s: cma
 CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_qmake_TranquilTalk.cpp.o: CMakeFiles/TranquilFrontend.dir/flags.make
 CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_qmake_TranquilTalk.cpp.o: .rcc/qrc_qmake_TranquilTalk.cpp
 CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_qmake_TranquilTalk.cpp.o: CMakeFiles/TranquilFrontend.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_qmake_TranquilTalk.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_qmake_TranquilTalk.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_qmake_TranquilTalk.cpp.o -MF CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_qmake_TranquilTalk.cpp.o.d -o CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_qmake_TranquilTalk.cpp.o -c /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qrc_qmake_TranquilTalk.cpp
 
 CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_qmake_TranquilTalk.cpp.i: cmake_force
@@ -204,7 +216,7 @@ CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_qmake_TranquilTalk.cpp.s: cmake_f
 CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp.o: CMakeFiles/TranquilFrontend.dir/flags.make
 CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp.o: .rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp
 CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp.o: CMakeFiles/TranquilFrontend.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp.o -MF CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp.o.d -o CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp.o -c /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp
 
 CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp.i: cmake_force
@@ -218,7 +230,7 @@ CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_qmlcache_lo
 CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.o: CMakeFiles/TranquilFrontend.dir/flags.make
 CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.o: .rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp
 CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.o: CMakeFiles/TranquilFrontend.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.o -MF CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.o.d -o CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.o -c /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp
 
 CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.i: cmake_force
@@ -229,10 +241,24 @@ CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_q
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp -o CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.s
 
+CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.o: CMakeFiles/TranquilFrontend.dir/flags.make
+CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.o: .rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp
+CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.o: CMakeFiles/TranquilFrontend.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.o -MF CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.o.d -o CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.o -c /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp
+
+CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp > CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.i
+
+CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp -o CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.s
+
 CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_TranquilFrontend_raw_qml_0.cpp.o: CMakeFiles/TranquilFrontend.dir/flags.make
 CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_TranquilFrontend_raw_qml_0.cpp.o: .rcc/qrc_TranquilFrontend_raw_qml_0.cpp
 CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_TranquilFrontend_raw_qml_0.cpp.o: CMakeFiles/TranquilFrontend.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_TranquilFrontend_raw_qml_0.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_TranquilFrontend_raw_qml_0.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_TranquilFrontend_raw_qml_0.cpp.o -MF CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_TranquilFrontend_raw_qml_0.cpp.o.d -o CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_TranquilFrontend_raw_qml_0.cpp.o -c /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qrc_TranquilFrontend_raw_qml_0.cpp
 
 CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_TranquilFrontend_raw_qml_0.cpp.i: cmake_force
@@ -252,6 +278,7 @@ TranquilFrontend_OBJECTS = \
 "CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_qmake_TranquilTalk.cpp.o" \
 "CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp.o" \
 "CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.o" \
+"CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.o" \
 "CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_TranquilFrontend_raw_qml_0.cpp.o"
 
 # External object files for target TranquilFrontend
@@ -264,19 +291,21 @@ TranquilFrontend: CMakeFiles/TranquilFrontend.dir/tranquilfrontend_qmltyperegist
 TranquilFrontend: CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_qmake_TranquilTalk.cpp.o
 TranquilFrontend: CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp.o
 TranquilFrontend: CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.o
+TranquilFrontend: CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.o
 TranquilFrontend: CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_TranquilFrontend_raw_qml_0.cpp.o
 TranquilFrontend: CMakeFiles/TranquilFrontend.dir/build.make
 TranquilFrontend: /usr/lib/x86_64-linux-gnu/libQt6Quick.so.6.4.2
+TranquilFrontend: /usr/lib/x86_64-linux-gnu/libQt6Positioning.so.6.4.2
 TranquilFrontend: /usr/lib/x86_64-linux-gnu/libQt6QmlModels.so.6.4.2
 TranquilFrontend: /usr/lib/x86_64-linux-gnu/libQt6Qml.so.6.4.2
 TranquilFrontend: /usr/lib/x86_64-linux-gnu/libQt6Network.so.6.4.2
 TranquilFrontend: /usr/lib/x86_64-linux-gnu/libQt6OpenGL.so.6.4.2
 TranquilFrontend: /usr/lib/x86_64-linux-gnu/libQt6Gui.so.6.4.2
-TranquilFrontend: /usr/lib/x86_64-linux-gnu/libQt6Core.so.6.4.2
 TranquilFrontend: /usr/lib/x86_64-linux-gnu/libGLX.so
 TranquilFrontend: /usr/lib/x86_64-linux-gnu/libOpenGL.so
+TranquilFrontend: /usr/lib/x86_64-linux-gnu/libQt6Core.so.6.4.2
 TranquilFrontend: CMakeFiles/TranquilFrontend.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Linking CXX executable TranquilFrontend"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Linking CXX executable TranquilFrontend"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/TranquilFrontend.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -287,6 +316,7 @@ CMakeFiles/TranquilFrontend.dir/clean:
 	$(CMAKE_COMMAND) -P CMakeFiles/TranquilFrontend.dir/cmake_clean.cmake
 .PHONY : CMakeFiles/TranquilFrontend.dir/clean
 
+CMakeFiles/TranquilFrontend.dir/depend: .rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp
 CMakeFiles/TranquilFrontend.dir/depend: .rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp
 CMakeFiles/TranquilFrontend.dir/depend: .rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp
 CMakeFiles/TranquilFrontend.dir/depend: .rcc/qrc_TranquilFrontend_raw_qml_0.cpp

@@ -506,6 +506,27 @@
  /usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGL/Qt6OpenGLTargets-none.cmake
  /usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGL/Qt6OpenGLTargets.cmake
  /usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGL/Qt6OpenGLVersionlessTargets.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6PositioningAdditionalTargetInfo.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6PositioningConfig.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6PositioningConfigVersion.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6PositioningConfigVersionImpl.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6PositioningDependencies.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6PositioningPlugins.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6PositioningTargets-none.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6PositioningTargets.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6PositioningVersionlessTargets.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6QGeoPositionInfoSourceFactoryGeoclue2PluginAdditionalTargetInfo.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6QGeoPositionInfoSourceFactoryGeoclue2PluginConfig.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6QGeoPositionInfoSourceFactoryGeoclue2PluginTargets-none.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6QGeoPositionInfoSourceFactoryGeoclue2PluginTargets.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6QGeoPositionInfoSourceFactoryNmeaPluginAdditionalTargetInfo.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6QGeoPositionInfoSourceFactoryNmeaPluginConfig.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6QGeoPositionInfoSourceFactoryNmeaPluginTargets-none.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6QGeoPositionInfoSourceFactoryNmeaPluginTargets.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6QGeoPositionInfoSourceFactoryPollPluginAdditionalTargetInfo.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6QGeoPositionInfoSourceFactoryPollPluginConfig.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6QGeoPositionInfoSourceFactoryPollPluginTargets-none.cmake
+ /usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6QGeoPositionInfoSourceFactoryPollPluginTargets.cmake
  /usr/lib/x86_64-linux-gnu/cmake/Qt6Qml/Qt6QDebugMessageServiceFactoryPluginAdditionalTargetInfo.cmake
  /usr/lib/x86_64-linux-gnu/cmake/Qt6Qml/Qt6QDebugMessageServiceFactoryPluginConfig.cmake
  /usr/lib/x86_64-linux-gnu/cmake/Qt6Qml/Qt6QDebugMessageServiceFactoryPluginTargets-none.cmake

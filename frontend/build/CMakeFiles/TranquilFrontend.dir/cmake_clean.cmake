@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  ".rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp"
   ".rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp"
   ".rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp"
   ".rcc/qrc_TranquilFrontend_raw_qml_0.cpp"
@@ -10,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/TranquilFrontend.dir/ApiClient.cpp.o.d"
   "CMakeFiles/TranquilFrontend.dir/TranquilFrontend_autogen/mocs_compilation.cpp.o"
   "CMakeFiles/TranquilFrontend.dir/TranquilFrontend_autogen/mocs_compilation.cpp.o.d"
+  "CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.o"
+  "CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.o.d"
   "CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.o"
   "CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.o.d"
   "CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp.o"

@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "TranquilTalk/ClinicMapView.qml"
   "TranquilTalk/LoginView.qml"
 )
 

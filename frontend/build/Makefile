@@ -333,6 +333,30 @@ TranquilFrontend_autogen/mocs_compilation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilFrontend.dir/build.make CMakeFiles/TranquilFrontend.dir/TranquilFrontend_autogen/mocs_compilation.cpp.s
 .PHONY : TranquilFrontend_autogen/mocs_compilation.cpp.s
 
+build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.o: build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.o
+.PHONY : build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.o
+
+# target to build an object file
+build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilFrontend.dir/build.make CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.o
+.PHONY : build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.o
+
+build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.i: build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.i
+.PHONY : build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.i
+
+# target to preprocess a source file
+build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilFrontend.dir/build.make CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.i
+.PHONY : build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.i
+
+build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.s: build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.s
+.PHONY : build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.s
+
+# target to generate assembly for a file
+build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilFrontend.dir/build.make CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.s
+.PHONY : build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.s
+
 build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.o: build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.o
 .PHONY : build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.o
 
@@ -504,6 +528,9 @@ help:
 	@echo "... TranquilFrontend_autogen/mocs_compilation.o"
 	@echo "... TranquilFrontend_autogen/mocs_compilation.i"
 	@echo "... TranquilFrontend_autogen/mocs_compilation.s"
+	@echo "... build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.o"
+	@echo "... build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.i"
+	@echo "... build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.s"
 	@echo "... build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.o"
 	@echo "... build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.i"
 	@echo "... build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.s"

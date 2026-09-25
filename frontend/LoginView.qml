@@ -3,86 +3,112 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ApplicationWindow {
+    id: mainWindow
     visible: true
-    width: 400
+    width: 450
     height: 650
-    title: "Tranquil Talk"
-    color: "#f4f7f6" // Soft, calming background color
+    title: "Tranquil Talk V3"
 
-    // Listen to the C++ ApiClient signals
-    Connections {
-        target: apiClient
-        
-        function onLoginSuccess() {
-            statusText.text = "Login successful! Connecting..."
-            statusText.color = "#27ae60" // Green
-            // TODO: Route to CallView.qml or Clinic Locator
-        }
-        
-        function onLoginFailed(error) {
-            statusText.text = error
-            statusText.color = "#e74c3c" // Red
+    // Loader to switch between Login and the Clinic Map
+    Loader {
+        id: viewLoader
+        anchors.fill: parent
+        sourceComponent: loginComponent
+    }
+
+    Component {
+        id: loginComponent
+        Item {
+            anchors.fill: parent
+
+            ColumnLayout {
+                anchors.centerIn: parent
+                width: parent.width * 0.8
+                spacing: 20
+
+                Text {
+                    text: "Tranquil Talk"
+                    font.pixelSize: 28
+                    font.bold: true
+                    Layout.alignment: Qt.AlignHCenter
+                    color: "#1e293b"
+                }
+
+                TextField {
+                    id: emailField
+                    placeholderText: "Email"
+                    text: "test@tranquiltalk.com"
+                    Layout.fillWidth: true
+                    height: 45
+                }
+
+                TextField {
+                    id: passwordField
+                    placeholderText: "Password"
+                    text: "mysecurepassword"
+                    echoMode: TextInput.Password
+                    Layout.fillWidth: true
+                    height: 45
+                }
+
+                Button {
+                    text: "Sign In"
+                    Layout.fillWidth: true
+                    height: 45
+                    onClicked: {
+                        statusText.text = "Authenticating...";
+                        statusText.color = "blue";
+                        
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "http://localhost:8080/api/login", true);
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                if (xhr.status === 200) {
+                                    statusText.text = "Login successful! Loading Clinic Locator...";
+                                    statusText.color = "green";
+                                    
+                                    // Switch view to Clinic Map after a brief pause
+                                    loadTimer.start();
+                                } else {
+                                    statusText.text = "Login failed: " + xhr.status;
+                                    statusText.color = "red";
+                                }
+                            }
+                        };
+                        
+                        var payload = JSON.stringify({
+                            email: emailField.text,
+                            password: passwordField.text
+                        });
+                        xhr.send(payload);
+                    }
+                }
+
+                Text {
+                    id: statusText
+                    text: ""
+                    font.pixelSize: 14
+                    Layout.alignment: Qt.AlignHCenter
+                }
+            }
+
+            Timer {
+                id: loadTimer
+                interval: 800
+                repeat: false
+                onTriggered: {
+                    viewLoader.sourceComponent = clinicMapComponent;
+                }
+            }
         }
     }
 
-    ColumnLayout {
-        anchors.centerIn: parent
-        spacing: 24
-        width: parent.width * 0.85
-
-        Text {
-            text: "Tranquil Talk"
-            font.pixelSize: 32
-            font.bold: true
-            color: "#2c3e50"
-            Layout.alignment: Qt.AlignHCenter
-            Layout.bottomMargin: 20
-        }
-
-        TextField {
-            id: emailInput
-            placeholderText: "Email Address"
-            font.pixelSize: 16
-            Layout.fillWidth: true
-            Layout.preferredHeight: 50
-        }
-
-        TextField {
-            id: passwordInput
-            placeholderText: "Password"
-            font.pixelSize: 16
-            echoMode: TextInput.Password // Hide characters
-            Layout.fillWidth: true
-            Layout.preferredHeight: 50
-        }
-
-        Button {
-            text: "Sign In"
-            font.pixelSize: 16
-            font.bold: true
-            Layout.fillWidth: true
-            Layout.preferredHeight: 50
-            
-            onClicked: {
-                if (emailInput.text === "" || passwordInput.text === "") {
-                    statusText.text = "Please fill in all fields"
-                    statusText.color = "#e74c3c"
-                    return
-                }
-                
-                statusText.text = "Authenticating..."
-                statusText.color = "#7f8c8d"
-                
-                // Call the C++ slot
-                apiClient.login(emailInput.text, passwordInput.text)
-            }
-        }
-
-        Text {
-            id: statusText
-            text: ""
-            font.pixelSize: 14
-            Layout.alignment: Qt.AlignHCenter
+    Component {
+        id: clinicMapComponent
+        ClinicMapView {
+            anchors.fill: parent
         }
     }
 }

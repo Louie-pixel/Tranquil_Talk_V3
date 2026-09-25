@@ -79,6 +79,7 @@ tranquilfrontend_qmltyperegistrations.cpp: /usr/lib/x86_64-linux-gnu/metatypes/q
 tranquilfrontend_qmltyperegistrations.cpp: /usr/lib/x86_64-linux-gnu/metatypes/qt6quick_none_metatypes.json
 tranquilfrontend_qmltyperegistrations.cpp: /usr/lib/x86_64-linux-gnu/metatypes/qt6qmlmodels_none_metatypes.json
 tranquilfrontend_qmltyperegistrations.cpp: /usr/lib/x86_64-linux-gnu/metatypes/qt6opengl_none_metatypes.json
+tranquilfrontend_qmltyperegistrations.cpp: /usr/lib/x86_64-linux-gnu/metatypes/qt6positioning_none_metatypes.json
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic QML type registration for target TranquilFrontend"
 	/usr/lib/qt6/libexec/qmltyperegistrar --generate-qmltypes=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/TranquilTalk/TranquilFrontend.qmltypes --import-name=TranquilTalk --major-version=1 --minor-version=0 @/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/qmltypes/TranquilFrontend_foreign_types.txt -o /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/tranquilfrontend_qmltyperegistrations.cpp /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/meta_types/qt6tranquilfrontend_metatypes.json
 	/usr/bin/cmake -E make_directory /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.generated

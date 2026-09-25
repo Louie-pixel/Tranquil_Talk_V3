@@ -70,6 +70,11 @@ TranquilTalk/LoginView.qml: /mnt/c/users/louie/Tranquil_Talk_V3/frontend/LoginVi
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating TranquilTalk/LoginView.qml"
 	cd /mnt/c/users/louie/Tranquil_Talk_V3/frontend && /usr/bin/cmake -E copy /mnt/c/users/louie/Tranquil_Talk_V3/frontend/LoginView.qml /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/TranquilTalk/LoginView.qml
 
+TranquilTalk/ClinicMapView.qml: /mnt/c/users/louie/Tranquil_Talk_V3/frontend/ClinicMapView.qml
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating TranquilTalk/ClinicMapView.qml"
+	cd /mnt/c/users/louie/Tranquil_Talk_V3/frontend && /usr/bin/cmake -E copy /mnt/c/users/louie/Tranquil_Talk_V3/frontend/ClinicMapView.qml /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/TranquilTalk/ClinicMapView.qml
+
+TranquilFrontend_tooling: TranquilTalk/ClinicMapView.qml
 TranquilFrontend_tooling: TranquilTalk/LoginView.qml
 TranquilFrontend_tooling: CMakeFiles/TranquilFrontend_tooling.dir/build.make
 .PHONY : TranquilFrontend_tooling

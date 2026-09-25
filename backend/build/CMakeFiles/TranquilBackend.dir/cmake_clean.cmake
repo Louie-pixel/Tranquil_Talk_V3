@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o"
+  "CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o.d"
   "CMakeFiles/TranquilBackend.dir/controllers/UserController.cc.o"
   "CMakeFiles/TranquilBackend.dir/controllers/UserController.cc.o.d"
   "CMakeFiles/TranquilBackend.dir/main.cc.o"

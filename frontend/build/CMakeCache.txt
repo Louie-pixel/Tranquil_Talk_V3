@@ -172,21 +172,6 @@ CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 //Value Computed by CMake
 CMAKE_PROJECT_NAME:STATIC=TranquilFrontend
 
-//Value Computed by CMake
-CMAKE_PROJECT_VERSION:STATIC=0.1
-
-//Value Computed by CMake
-CMAKE_PROJECT_VERSION_MAJOR:STATIC=0
-
-//Value Computed by CMake
-CMAKE_PROJECT_VERSION_MINOR:STATIC=1
-
-//Value Computed by CMake
-CMAKE_PROJECT_VERSION_PATCH:STATIC=
-
-//Value Computed by CMake
-CMAKE_PROJECT_VERSION_TWEAK:STATIC=
-
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
 
@@ -324,6 +309,9 @@ Qt6Network_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6Network
 
 //The directory containing a CMake configuration file for Qt6OpenGL.
 Qt6OpenGL_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6OpenGL
+
+//The directory containing a CMake configuration file for Qt6Positioning.
+Qt6Positioning_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning
 
 //The directory containing a CMake configuration file for Qt6QmlCompilerPlusPrivate.
 Qt6QmlCompilerPlusPrivate_DIR:PATH=Qt6QmlCompilerPlusPrivate_DIR-NOTFOUND
@@ -830,6 +818,8 @@ QT_FEATURE_glibc:INTERNAL=ON
 QT_FEATURE_gssapi:INTERNAL=ON
 //Qt feature: gui (from target Qt6::Core)
 QT_FEATURE_gui:INTERNAL=ON
+//Qt feature: gypsy (from target Qt6::Positioning)
+QT_FEATURE_gypsy:INTERNAL=OFF
 //Qt feature: harfbuzz (from target Qt6::Gui)
 QT_FEATURE_harfbuzz:INTERNAL=ON
 //Qt feature: highdpiscaling (from target Qt6::Gui)
@@ -1254,6 +1244,8 @@ QT_FEATURE_whatsthis:INTERNAL=ON
 QT_FEATURE_wheelevent:INTERNAL=ON
 //Qt feature: widgets (from target Qt6::Core)
 QT_FEATURE_widgets:INTERNAL=ON
+//Qt feature: winrt_geolocation (from target Qt6::Positioning)
+QT_FEATURE_winrt_geolocation:INTERNAL=OFF
 //Qt feature: xcb (from target Qt6::Gui)
 QT_FEATURE_xcb:INTERNAL=ON
 //Qt feature: xcb_egl_plugin (from target Qt6::Gui)

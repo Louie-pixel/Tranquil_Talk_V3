@@ -129,6 +129,30 @@ TranquilBackend/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilBackend.dir/build.make CMakeFiles/TranquilBackend.dir/build
 .PHONY : TranquilBackend/fast
 
+controllers/ClinicController.o: controllers/ClinicController.cc.o
+.PHONY : controllers/ClinicController.o
+
+# target to build an object file
+controllers/ClinicController.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilBackend.dir/build.make CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o
+.PHONY : controllers/ClinicController.cc.o
+
+controllers/ClinicController.i: controllers/ClinicController.cc.i
+.PHONY : controllers/ClinicController.i
+
+# target to preprocess a source file
+controllers/ClinicController.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilBackend.dir/build.make CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.i
+.PHONY : controllers/ClinicController.cc.i
+
+controllers/ClinicController.s: controllers/ClinicController.cc.s
+.PHONY : controllers/ClinicController.s
+
+# target to generate assembly for a file
+controllers/ClinicController.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilBackend.dir/build.make CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.s
+.PHONY : controllers/ClinicController.cc.s
+
 controllers/UserController.o: controllers/UserController.cc.o
 .PHONY : controllers/UserController.o
 
@@ -258,6 +282,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... TranquilBackend"
+	@echo "... controllers/ClinicController.o"
+	@echo "... controllers/ClinicController.i"
+	@echo "... controllers/ClinicController.s"
 	@echo "... controllers/UserController.o"
 	@echo "... controllers/UserController.i"
 	@echo "... controllers/UserController.s"

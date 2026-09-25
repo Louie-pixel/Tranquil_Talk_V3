@@ -67,9 +67,10 @@ include CMakeFiles/TranquilFrontend_autogen_timestamp_deps.dir/compiler_depend.m
 include CMakeFiles/TranquilFrontend_autogen_timestamp_deps.dir/progress.make
 
 CMakeFiles/TranquilFrontend_autogen_timestamp_deps: .rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp
+CMakeFiles/TranquilFrontend_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt6Positioning.so.6.4.2
+CMakeFiles/TranquilFrontend_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt6Qml.so.6.4.2
 CMakeFiles/TranquilFrontend_autogen_timestamp_deps: /usr/lib/qt6/libexec/moc
 CMakeFiles/TranquilFrontend_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt6Gui.so.6.4.2
-CMakeFiles/TranquilFrontend_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt6Network.so.6.4.2
 CMakeFiles/TranquilFrontend_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt6Quick.so.6.4.2
 
 .rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp: /usr/lib/qt6/libexec/qmlcachegen

@@ -1,9 +1,8 @@
-CMakeFiles/TranquilFrontend.dir/main.cpp.o: \
- /mnt/c/users/louie/Tranquil_Talk_V3/frontend/main.cpp \
+CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.o: \
+ /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp \
  /usr/include/stdc-predef.h \
- /usr/include/x86_64-linux-gnu/qt6/QtGui/QGuiApplication \
- /usr/include/x86_64-linux-gnu/qt6/QtGui/qguiapplication.h \
- /usr/include/x86_64-linux-gnu/qt6/QtGui/qtguiglobal.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmlprivate.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtQml/qtqmlglobal.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qglobal.h \
  /usr/include/c++/13/type_traits \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
@@ -133,9 +132,17 @@ CMakeFiles/TranquilFrontend.dir/main.cpp.o: \
  /usr/include/c++/13/tr1/riemann_zeta.tcc \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qversiontagging.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qforeach.h \
- /usr/include/x86_64-linux-gnu/qt6/QtGui/qtgui-config.h \
- /usr/include/x86_64-linux-gnu/qt6/QtGui/qtguiexports.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qcoreapplication.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtQml/qtqml-config.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qtnetworkglobal.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qtnetwork-config.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qtnetworkexports.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtQml/qtqmlexports.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmlparserstatus.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qnamespace.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qtmetamacros.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs_impl.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qchar.h \
  /usr/include/c++/13/functional /usr/include/c++/13/bits/stl_function.h \
@@ -169,8 +176,6 @@ CMakeFiles/TranquilFrontend.dir/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringview.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearray.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qrefcount.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qnamespace.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qtmetamacros.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qarraydata.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpair.h /usr/include/string.h \
  /usr/include/strings.h \
@@ -253,11 +258,6 @@ CMakeFiles/TranquilFrontend.dir/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qanystringview.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qutf8stringview.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringtokenizer.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qcoreevent.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs_impl.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qeventloop.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qlist.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qhashfunctions.h \
  /usr/include/c++/13/numeric /usr/include/c++/13/bits/stl_numeric.h \
@@ -286,7 +286,8 @@ CMakeFiles/TranquilFrontend.dir/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbindingstorage.h \
  /usr/include/c++/13/chrono /usr/include/c++/13/bits/chrono.h \
  /usr/include/c++/13/ratio /usr/include/c++/13/ctime \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qnativeinterface.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmllist.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qvariant.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdebug.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtextstream.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringconverter_base.h \
@@ -307,45 +308,27 @@ CMakeFiles/TranquilFrontend.dir/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qset.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qhash.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvarlengtharray.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qcoreapplication_platform.h \
- /usr/include/x86_64-linux-gnu/qt6/QtGui/qwindowdefs.h \
- /usr/include/x86_64-linux-gnu/qt6/QtGui/qinputmethod.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qlocale.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qvariant.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qpoint.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qsize.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qmargins.h \
- /usr/include/x86_64-linux-gnu/qt6/QtGui/qguiapplication_platform.h \
- /usr/include/x86_64-linux-gnu/qt6/QtGui/qguiapplication.h \
- /usr/include/x86_64-linux-gnu/qt6/QtQml/QQmlApplicationEngine \
- /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmlapplicationengine.h \
- /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmlengine.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qurl.h \
- /usr/include/x86_64-linux-gnu/qt6/QtQml/qjsengine.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QMetaType \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qmetatype.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmlpropertyvaluesource.h \
  /usr/include/x86_64-linux-gnu/qt6/QtQml/qjsvalue.h \
- /usr/include/x86_64-linux-gnu/qt6/QtQml/qtqmlglobal.h \
- /usr/include/x86_64-linux-gnu/qt6/QtQml/qtqml-config.h \
- /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qtnetworkglobal.h \
- /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qtnetwork-config.h \
- /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qtnetworkexports.h \
- /usr/include/x86_64-linux-gnu/qt6/QtQml/qtqmlexports.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qurl.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qpointer.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qversionnumber.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qmetaobject.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qdatetime.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qcalendar.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qlocale.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtQml/qjsengine.h \
  /usr/include/x86_64-linux-gnu/qt6/QtQml/qjsmanagedvalue.h \
  /usr/include/x86_64-linux-gnu/qt6/QtQml/qjsprimitivevalue.h \
  /usr/include/x86_64-linux-gnu/qt6/QtQml/qjsnumbercoercion.h \
  /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmldebug.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmlcomponent.h \
  /usr/include/x86_64-linux-gnu/qt6/QtQml/qqml.h \
- /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmlprivate.h \
- /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmlparserstatus.h \
- /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmllist.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/QMetaType \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qmetatype.h \
- /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmlpropertyvaluesource.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qpointer.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qversionnumber.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qmetaobject.h \
  /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmlregistration.h \
  /usr/include/x86_64-linux-gnu/qt6/QtQmlIntegration/qqmlintegration.h \
  /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmlerror.h \
- /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmlabstracturlinterceptor.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/QUrl \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qurl.h
+ /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmlcontext.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmlengine.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtQml/qqmlabstracturlinterceptor.h

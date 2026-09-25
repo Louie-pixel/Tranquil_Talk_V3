@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="/TranquilTalk/">
     <file alias="LoginView.qml">/mnt/c/users/louie/Tranquil_Talk_V3/frontend/LoginView.qml</file>
+    <file alias="ClinicMapView.qml">/mnt/c/users/louie/Tranquil_Talk_V3/frontend/ClinicMapView.qml</file>
   </qresource>
 </RCC>
 

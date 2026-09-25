@@ -72,6 +72,7 @@ CMakeFiles/TranquilFrontend_qmlimportscan: .qt_plugins/Qt6_QmlPlugins_Imports_Tr
 .qt_plugins/Qt6_QmlPlugins_Imports_TranquilFrontend.cmake: .rcc/qmake_TranquilTalk.qrc
 .qt_plugins/Qt6_QmlPlugins_Imports_TranquilFrontend.cmake: .rcc/TranquilFrontend_raw_qml_0.qrc
 .qt_plugins/Qt6_QmlPlugins_Imports_TranquilFrontend.cmake: /mnt/c/users/louie/Tranquil_Talk_V3/frontend/LoginView.qml
+.qt_plugins/Qt6_QmlPlugins_Imports_TranquilFrontend.cmake: /mnt/c/users/louie/Tranquil_Talk_V3/frontend/ClinicMapView.qml
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running qmlimportscanner for TranquilFrontend"
 	cd /mnt/c/users/louie/Tranquil_Talk_V3/frontend && /usr/lib/qt6/libexec/qmlimportscanner @/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.qt_plugins/Qt6_QmlPlugins_Imports_TranquilFrontend.rsp
 

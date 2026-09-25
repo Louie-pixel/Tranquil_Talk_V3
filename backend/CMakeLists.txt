@@ -11,16 +11,15 @@ find_package(bsoncxx REQUIRED)
 find_package(mongocxx REQUIRED)
 
 include_directories(third_party/jwt-cpp/include)
-# Fix 1: Point to the bcrypt include directory
 include_directories(third_party/bcrypt/include)
 
-# Fix 2: Recursively grab all the source files inside the bcrypt src directory
 file(GLOB_RECURSE BCRYPT_SOURCES "third_party/bcrypt/src/*.cpp" "third_party/bcrypt/src/*.c")
 
 add_executable(${PROJECT_NAME} 
     main.cc
     models/DatabaseManager.cc
     controllers/UserController.cc
+    controllers/ClinicController.cc
     ${BCRYPT_SOURCES}
 )
 
