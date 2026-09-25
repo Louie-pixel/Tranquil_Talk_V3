@@ -1,0 +1,14 @@
+-rootPath
+/mnt/c/users/louie/Tranquil_Talk_V3
+-cmake-output
+-output-file
+/mnt/c/users/louie/Tranquil_Talk_V3/build/.qt_plugins/Qt6_QmlPlugins_Imports_TranquilFrontend.cmake
+-importPath
+/mnt/c/users/louie/Tranquil_Talk_V3/build/TranquilTalk
+-importPath
+/mnt/c/users/louie/Tranquil_Talk_V3/build
+-importPath
+/usr/lib/x86_64-linux-gnu/qt6/qml
+-qrcFiles
+/mnt/c/users/louie/Tranquil_Talk_V3/build/.rcc/qmake_TranquilTalk.qrc
+/mnt/c/users/louie/Tranquil_Talk_V3/build/.rcc/TranquilFrontend_raw_qml_0.qrc

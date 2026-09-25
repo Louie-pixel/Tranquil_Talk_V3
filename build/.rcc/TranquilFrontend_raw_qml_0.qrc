@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/TranquilTalk/">
+    <file alias="LoginView.qml">/mnt/c/users/louie/Tranquil_Talk_V3/LoginView.qml</file>
+  </qresource>
+</RCC>
+

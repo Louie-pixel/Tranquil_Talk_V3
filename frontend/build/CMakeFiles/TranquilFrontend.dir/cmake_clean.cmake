@@ -1,0 +1,38 @@
+file(REMOVE_RECURSE
+  ".rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp"
+  ".rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp"
+  ".rcc/qrc_TranquilFrontend_raw_qml_0.cpp"
+  ".rcc/qrc_qmake_TranquilTalk.cpp"
+  "CMakeFiles/TranquilFrontend_autogen.dir/AutogenUsed.txt"
+  "CMakeFiles/TranquilFrontend_autogen.dir/ParseCache.txt"
+  "TranquilFrontend_autogen"
+  "CMakeFiles/TranquilFrontend.dir/ApiClient.cpp.o"
+  "CMakeFiles/TranquilFrontend.dir/ApiClient.cpp.o.d"
+  "CMakeFiles/TranquilFrontend.dir/TranquilFrontend_autogen/mocs_compilation.cpp.o"
+  "CMakeFiles/TranquilFrontend.dir/TranquilFrontend_autogen/mocs_compilation.cpp.o.d"
+  "CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.o"
+  "CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.o.d"
+  "CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp.o"
+  "CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp.o.d"
+  "CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_TranquilFrontend_raw_qml_0.cpp.o"
+  "CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_TranquilFrontend_raw_qml_0.cpp.o.d"
+  "CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_qmake_TranquilTalk.cpp.o"
+  "CMakeFiles/TranquilFrontend.dir/build/.rcc/qrc_qmake_TranquilTalk.cpp.o.d"
+  "CMakeFiles/TranquilFrontend.dir/main.cpp.o"
+  "CMakeFiles/TranquilFrontend.dir/main.cpp.o.d"
+  "CMakeFiles/TranquilFrontend.dir/tranquilfrontend_qmltyperegistrations.cpp.o"
+  "CMakeFiles/TranquilFrontend.dir/tranquilfrontend_qmltyperegistrations.cpp.o.d"
+  "TranquilFrontend"
+  "TranquilFrontend.pdb"
+  "TranquilFrontend_autogen/mocs_compilation.cpp"
+  "TranquilFrontend_autogen/timestamp"
+  "TranquilTalk/TranquilFrontend.qmltypes"
+  "meta_types/qt6tranquilfrontend_metatypes.json"
+  "meta_types/qt6tranquilfrontend_metatypes.json.gen"
+  "tranquilfrontend_qmltyperegistrations.cpp"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/TranquilFrontend.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

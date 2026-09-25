@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/TranquilTalk">
+    <file alias="qmldir">/mnt/c/users/louie/Tranquil_Talk_V3/build/TranquilTalk/qmldir</file>
+  </qresource>
+</RCC>
+

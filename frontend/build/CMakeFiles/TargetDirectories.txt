@@ -1,0 +1,15 @@
+/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles/TranquilFrontend.dir
+/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles/TranquilFrontend_automoc_json_extraction.dir
+/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles/TranquilFrontend_qmltyperegistration.dir
+/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles/all_qmltyperegistrations.dir
+/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles/TranquilFrontend_other_files.dir
+/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles/TranquilFrontend_qmllint.dir
+/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles/TranquilFrontend_qmllint_json.dir
+/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles/all_qmllint.dir
+/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles/all_qmllint_json.dir
+/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles/TranquilFrontend_tooling.dir
+/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles/TranquilFrontend_qmlimportscan.dir
+/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles/edit_cache.dir
+/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles/rebuild_cache.dir
+/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles/TranquilFrontend_autogen_timestamp_deps.dir
+/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/CMakeFiles/TranquilFrontend_autogen.dir
