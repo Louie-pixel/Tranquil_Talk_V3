@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/mnt/c/users/louie/Tranquil_Talk_V3/backend/third_party/jwt-cpp/include -I/mnt/c/users/louie/Tranquil_Talk_V3/backend/third_party/bcrypt/include -isystem /usr/include/jsoncpp -isystem /home/louie/mongo-cxx-driver/build/install/include/mongocxx/v_noabi -isystem /home/louie/mongo-cxx-driver/build/install/include -isystem /home/louie/mongo-cxx-driver/build/install/include/bsoncxx/v_noabi
+CXX_INCLUDES = -isystem /usr/include/jsoncpp -isystem /usr/local/include/mongocxx/v_noabi -isystem /usr/local/include/bsoncxx/v_noabi/bsoncxx/third_party/mnmlstc -isystem /usr/local/include/bsoncxx/v_noabi
 
 CXX_FLAGS = -std=gnu++17
 

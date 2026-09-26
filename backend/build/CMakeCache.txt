@@ -268,7 +268,7 @@ ZLIB_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/libz.so
 bson-1.0_DIR:PATH=/usr/local/lib/cmake/bson-1.0
 
 //The directory containing a CMake configuration file for bsoncxx.
-bsoncxx_DIR:PATH=/home/louie/mongo-cxx-driver/build/install/lib/cmake/bsoncxx-3.9.0
+bsoncxx_DIR:PATH=/usr/local/lib/cmake/bsoncxx-3.9.0
 
 //The directory containing a CMake configuration file for jsoncpp.
 jsoncpp_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/jsoncpp
@@ -277,7 +277,7 @@ jsoncpp_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/jsoncpp
 mongoc-1.0_DIR:PATH=/usr/local/lib/cmake/mongoc-1.0
 
 //The directory containing a CMake configuration file for mongocxx.
-mongocxx_DIR:PATH=/home/louie/mongo-cxx-driver/build/install/lib/cmake/mongocxx-3.9.0
+mongocxx_DIR:PATH=/usr/local/lib/cmake/mongocxx-3.9.0
 
 //Path to a library.
 pkgcfg_lib__OPENSSL_crypto:FILEPATH=/usr/lib/x86_64-linux-gnu/libcrypto.so

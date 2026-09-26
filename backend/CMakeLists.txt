@@ -1,30 +1,23 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.16)
 project(TranquilBackend CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-list(APPEND CMAKE_PREFIX_PATH "/home/louie/mongo-cxx-driver/build/install")
-
 find_package(Drogon REQUIRED)
-find_package(bsoncxx REQUIRED)
 find_package(mongocxx REQUIRED)
+find_package(bsoncxx REQUIRED)
 
-include_directories(third_party/jwt-cpp/include)
-include_directories(third_party/bcrypt/include)
-
-file(GLOB_RECURSE BCRYPT_SOURCES "third_party/bcrypt/src/*.cpp" "third_party/bcrypt/src/*.c")
-
-add_executable(${PROJECT_NAME} 
+add_executable(TranquilBackend
     main.cc
-    models/DatabaseManager.cc
-    controllers/UserController.cc
     controllers/ClinicController.cc
-    ${BCRYPT_SOURCES}
+    controllers/UserController.cc
+    models/DatabaseManager.cc
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE 
+target_link_libraries(TranquilBackend PRIVATE
     Drogon::Drogon
     mongo::mongocxx_shared
     mongo::bsoncxx_shared
+    bcrypt
 )

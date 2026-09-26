@@ -13,6 +13,19 @@ Rectangle {
     property double activeLng: 0.0
     property bool coordsLocked: false
     property bool hasLocationPermission: false
+    
+    // 1. Trigger a tiny delay on load
+    Component.onCompleted: {
+        startupTimer.start();
+    }
+
+    // 2. Wait 100ms for the Loader to attach this view to the Window, then show the popup
+    Timer {
+        id: startupTimer
+        interval: 100
+        repeat: false
+        onTriggered: detectLocation()
+    }
 
     // 1. Hardware Positioning Source
     PositionSource {

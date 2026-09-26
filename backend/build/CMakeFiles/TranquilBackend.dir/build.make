@@ -83,19 +83,19 @@ CMakeFiles/TranquilBackend.dir/main.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TranquilBackend.dir/main.cc.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/users/louie/Tranquil_Talk_V3/backend/main.cc -o CMakeFiles/TranquilBackend.dir/main.cc.s
 
-CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o: CMakeFiles/TranquilBackend.dir/flags.make
-CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o: /mnt/c/users/louie/Tranquil_Talk_V3/backend/models/DatabaseManager.cc
-CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o: CMakeFiles/TranquilBackend.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o -MF CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o.d -o CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o -c /mnt/c/users/louie/Tranquil_Talk_V3/backend/models/DatabaseManager.cc
+CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o: CMakeFiles/TranquilBackend.dir/flags.make
+CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o: /mnt/c/users/louie/Tranquil_Talk_V3/backend/controllers/ClinicController.cc
+CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o: CMakeFiles/TranquilBackend.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o -MF CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o.d -o CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o -c /mnt/c/users/louie/Tranquil_Talk_V3/backend/controllers/ClinicController.cc
 
-CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/users/louie/Tranquil_Talk_V3/backend/models/DatabaseManager.cc > CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.i
+CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/users/louie/Tranquil_Talk_V3/backend/controllers/ClinicController.cc > CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.i
 
-CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/users/louie/Tranquil_Talk_V3/backend/models/DatabaseManager.cc -o CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.s
+CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/users/louie/Tranquil_Talk_V3/backend/controllers/ClinicController.cc -o CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.s
 
 CMakeFiles/TranquilBackend.dir/controllers/UserController.cc.o: CMakeFiles/TranquilBackend.dir/flags.make
 CMakeFiles/TranquilBackend.dir/controllers/UserController.cc.o: /mnt/c/users/louie/Tranquil_Talk_V3/backend/controllers/UserController.cc
@@ -111,70 +111,38 @@ CMakeFiles/TranquilBackend.dir/controllers/UserController.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TranquilBackend.dir/controllers/UserController.cc.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/users/louie/Tranquil_Talk_V3/backend/controllers/UserController.cc -o CMakeFiles/TranquilBackend.dir/controllers/UserController.cc.s
 
-CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o: CMakeFiles/TranquilBackend.dir/flags.make
-CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o: /mnt/c/users/louie/Tranquil_Talk_V3/backend/controllers/ClinicController.cc
-CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o: CMakeFiles/TranquilBackend.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o -MF CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o.d -o CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o -c /mnt/c/users/louie/Tranquil_Talk_V3/backend/controllers/ClinicController.cc
+CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o: CMakeFiles/TranquilBackend.dir/flags.make
+CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o: /mnt/c/users/louie/Tranquil_Talk_V3/backend/models/DatabaseManager.cc
+CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o: CMakeFiles/TranquilBackend.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o -MF CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o.d -o CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o -c /mnt/c/users/louie/Tranquil_Talk_V3/backend/models/DatabaseManager.cc
 
-CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/users/louie/Tranquil_Talk_V3/backend/controllers/ClinicController.cc > CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.i
+CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/users/louie/Tranquil_Talk_V3/backend/models/DatabaseManager.cc > CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.i
 
-CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/users/louie/Tranquil_Talk_V3/backend/controllers/ClinicController.cc -o CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.s
-
-CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.o: CMakeFiles/TranquilBackend.dir/flags.make
-CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.o: /mnt/c/users/louie/Tranquil_Talk_V3/backend/third_party/bcrypt/src/bcrypt.cpp
-CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.o: CMakeFiles/TranquilBackend.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.o -MF CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.o.d -o CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.o -c /mnt/c/users/louie/Tranquil_Talk_V3/backend/third_party/bcrypt/src/bcrypt.cpp
-
-CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/users/louie/Tranquil_Talk_V3/backend/third_party/bcrypt/src/bcrypt.cpp > CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.i
-
-CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/users/louie/Tranquil_Talk_V3/backend/third_party/bcrypt/src/bcrypt.cpp -o CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.s
-
-CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.o: CMakeFiles/TranquilBackend.dir/flags.make
-CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.o: /mnt/c/users/louie/Tranquil_Talk_V3/backend/third_party/bcrypt/src/blowfish.cpp
-CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.o: CMakeFiles/TranquilBackend.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.o -MF CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.o.d -o CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.o -c /mnt/c/users/louie/Tranquil_Talk_V3/backend/third_party/bcrypt/src/blowfish.cpp
-
-CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/users/louie/Tranquil_Talk_V3/backend/third_party/bcrypt/src/blowfish.cpp > CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.i
-
-CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/users/louie/Tranquil_Talk_V3/backend/third_party/bcrypt/src/blowfish.cpp -o CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.s
+CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/users/louie/Tranquil_Talk_V3/backend/models/DatabaseManager.cc -o CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.s
 
 # Object files for target TranquilBackend
 TranquilBackend_OBJECTS = \
 "CMakeFiles/TranquilBackend.dir/main.cc.o" \
-"CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o" \
-"CMakeFiles/TranquilBackend.dir/controllers/UserController.cc.o" \
 "CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o" \
-"CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.o" \
-"CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.o"
+"CMakeFiles/TranquilBackend.dir/controllers/UserController.cc.o" \
+"CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o"
 
 # External object files for target TranquilBackend
 TranquilBackend_EXTERNAL_OBJECTS =
 
 TranquilBackend: CMakeFiles/TranquilBackend.dir/main.cc.o
-TranquilBackend: CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o
-TranquilBackend: CMakeFiles/TranquilBackend.dir/controllers/UserController.cc.o
 TranquilBackend: CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o
-TranquilBackend: CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.o
-TranquilBackend: CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.o
+TranquilBackend: CMakeFiles/TranquilBackend.dir/controllers/UserController.cc.o
+TranquilBackend: CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o
 TranquilBackend: CMakeFiles/TranquilBackend.dir/build.make
 TranquilBackend: /usr/local/lib/libdrogon.a
-TranquilBackend: /home/louie/mongo-cxx-driver/build/install/lib/libmongocxx.so.3.9.0
-TranquilBackend: /home/louie/mongo-cxx-driver/build/install/lib/libbsoncxx.so.3.9.0
+TranquilBackend: /usr/local/lib/libmongocxx.so.3.9.0
+TranquilBackend: /usr/local/lib/libbsoncxx.so.3.9.0
 TranquilBackend: /usr/local/lib/libtrantor.a
 TranquilBackend: /usr/lib/x86_64-linux-gnu/libcares.so
 TranquilBackend: /usr/lib/x86_64-linux-gnu/libjsoncpp.so.1.9.5
@@ -183,7 +151,7 @@ TranquilBackend: /usr/lib/x86_64-linux-gnu/libz.so
 TranquilBackend: /usr/lib/x86_64-linux-gnu/libssl.so
 TranquilBackend: /usr/lib/x86_64-linux-gnu/libcrypto.so
 TranquilBackend: CMakeFiles/TranquilBackend.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable TranquilBackend"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable TranquilBackend"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/TranquilBackend.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -20,5 +20,5 @@ set(qml_import_scanner_import_17 "CLASSNAME;QtQuickControls2UniversalStyleImplPl
 set(qml_import_scanner_import_18 "CLASSNAME;QtQuickControls2BasicStyleImplPlugin;LINKTARGET;Qt6::qtquickcontrols2basicstyleimplplugin;NAME;QtQuick.Controls.Basic.impl;PATH;/usr/lib/x86_64-linux-gnu/qt6/qml/QtQuick/Controls/Basic/impl;PLUGIN;qtquickcontrols2basicstyleimplplugin;PREFER;:/qt-project.org/imports/QtQuick/Controls/Basic/impl/;RELATIVEPATH;QtQuick/Controls/Basic/impl;TYPE;module;")
 set(qml_import_scanner_import_19 "NAME;QtQuick.Shapes;TYPE;module;")
 set(qml_import_scanner_import_20 "CLASSNAME;QtQuickLayoutsPlugin;LINKTARGET;Qt6::qquicklayoutsplugin;NAME;QtQuick.Layouts;PATH;/usr/lib/x86_64-linux-gnu/qt6/qml/QtQuick/Layouts;PLUGIN;qquicklayoutsplugin;PLUGINISOPTIONAL;;PREFER;:/qt-project.org/imports/QtQuick/Layouts/;RELATIVEPATH;QtQuick/Layouts;TYPE;module;")
-set(qml_import_scanner_import_21 "NAME;QtPositioning;TYPE;module;")
+set(qml_import_scanner_import_21 "CLASSNAME;QtPositioningDeclarativeModule;LINKTARGET;Qt6::positioningquickplugin;NAME;QtPositioning;PATH;/usr/lib/x86_64-linux-gnu/qt6/qml/QtPositioning;PLUGIN;positioningquickplugin;PREFER;:/qt-project.org/imports/QtPositioning/;RELATIVEPATH;QtPositioning;TYPE;module;")
 

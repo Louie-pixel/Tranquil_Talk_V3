@@ -39,8 +39,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-uy9Vtv"
-      binary: "/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-uy9Vtv"
+      source: "/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-Ape4aO"
+      binary: "/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-Ape4aO"
     cmakeVariables:
       CMAKE_CXX_FLAGS: ""
       CMAKE_CXX_FLAGS_DEBUG: "-g"
@@ -49,13 +49,13 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-uy9Vtv'
+        Change Dir: '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-Ape4aO'
         
-        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_8d20c/fast
-        /usr/bin/gmake  -f CMakeFiles/cmTC_8d20c.dir/build.make CMakeFiles/cmTC_8d20c.dir/build
-        gmake[1]: Entering directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-uy9Vtv'
-        Building CXX object CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.o
-        /usr/bin/c++   -v -o CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_32a16/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_32a16.dir/build.make CMakeFiles/cmTC_32a16.dir/build
+        gmake[1]: Entering directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-Ape4aO'
+        Building CXX object CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.o
+        /usr/bin/c++   -v -o CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp
         Using built-in specs.
         COLLECT_GCC=/usr/bin/c++
         OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa
@@ -65,8 +65,8 @@ events:
         Thread model: posix
         Supported LTO compression algorithms: zlib zstd
         gcc version 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_8d20c.dir/'
-         /usr/libexec/gcc/x86_64-linux-gnu/13/cc1plus -quiet -v -imultiarch x86_64-linux-gnu -D_GNU_SOURCE /usr/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_8d20c.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/cccxvGj6.s
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_32a16.dir/'
+         /usr/libexec/gcc/x86_64-linux-gnu/13/cc1plus -quiet -v -imultiarch x86_64-linux-gnu -D_GNU_SOURCE /usr/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_32a16.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/ccVcn5c5.s
         GNU C++17 (Ubuntu 13.3.0-6ubuntu2~24.04.1) version 13.3.0 (x86_64-linux-gnu)
         	compiled by GNU C version 13.3.0, GMP version 6.3.0, MPFR version 4.2.1, MPC version 1.3.1, isl version isl-0.26-GMP
         
@@ -87,15 +87,15 @@ events:
          /usr/include
         End of search list.
         Compiler executable checksum: 7896445e4990772fdae9dc0659a99266
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_8d20c.dir/'
-         as -v --64 -o CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.o /tmp/cccxvGj6.s
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_32a16.dir/'
+         as -v --64 -o CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccVcn5c5.s
         GNU assembler version 2.42 (x86_64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.42
         COMPILER_PATH=/usr/libexec/gcc/x86_64-linux-gnu/13/:/usr/libexec/gcc/x86_64-linux-gnu/13/:/usr/libexec/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/13/:/usr/lib/gcc/x86_64-linux-gnu/
         LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/13/:/usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/13/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/13/../../../:/lib/:/usr/lib/
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.'
-        Linking CXX executable cmTC_8d20c
-        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8d20c.dir/link.txt --verbose=1
-        /usr/bin/c++  -v CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_8d20c 
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.'
+        Linking CXX executable cmTC_32a16
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_32a16.dir/link.txt --verbose=1
+        /usr/bin/c++  -v CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_32a16 
         Using built-in specs.
         COLLECT_GCC=/usr/bin/c++
         COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-linux-gnu/13/lto-wrapper
@@ -108,10 +108,10 @@ events:
         gcc version 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 
         COMPILER_PATH=/usr/libexec/gcc/x86_64-linux-gnu/13/:/usr/libexec/gcc/x86_64-linux-gnu/13/:/usr/libexec/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/13/:/usr/lib/gcc/x86_64-linux-gnu/
         LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/13/:/usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/13/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/13/../../../:/lib/:/usr/lib/
-        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_8d20c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_8d20c.'
-         /usr/libexec/gcc/x86_64-linux-gnu/13/collect2 -plugin /usr/libexec/gcc/x86_64-linux-gnu/13/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-linux-gnu/13/lto-wrapper -plugin-opt=-fresolution=/tmp/ccFkySXv.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_8d20c /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/13/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/13 -L/usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/13/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/13/../../.. CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/13/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/crtn.o
-        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_8d20c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_8d20c.'
-        gmake[1]: Leaving directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-uy9Vtv'
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_32a16' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_32a16.'
+         /usr/libexec/gcc/x86_64-linux-gnu/13/collect2 -plugin /usr/libexec/gcc/x86_64-linux-gnu/13/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-linux-gnu/13/lto-wrapper -plugin-opt=-fresolution=/tmp/ccsWCUAr.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_32a16 /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/13/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/13 -L/usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/13/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/13/../../.. CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/13/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/crtn.o
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_32a16' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_32a16.'
+        gmake[1]: Leaving directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-Ape4aO'
         
       exitCode: 0
   -
@@ -151,13 +151,13 @@ events:
     message: |
       Parsed CXX implicit link information:
         link line regex: [^( *|.*[/\\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
-        ignore line: [Change Dir: '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-uy9Vtv']
+        ignore line: [Change Dir: '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-Ape4aO']
         ignore line: []
-        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_8d20c/fast]
-        ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_8d20c.dir/build.make CMakeFiles/cmTC_8d20c.dir/build]
-        ignore line: [gmake[1]: Entering directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-uy9Vtv']
-        ignore line: [Building CXX object CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.o]
-        ignore line: [/usr/bin/c++   -v -o CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_32a16/fast]
+        ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_32a16.dir/build.make CMakeFiles/cmTC_32a16.dir/build]
+        ignore line: [gmake[1]: Entering directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-Ape4aO']
+        ignore line: [Building CXX object CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [/usr/bin/c++   -v -o CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/usr/bin/c++]
         ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa]
@@ -167,8 +167,8 @@ events:
         ignore line: [Thread model: posix]
         ignore line: [Supported LTO compression algorithms: zlib zstd]
         ignore line: [gcc version 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04.1) ]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_8d20c.dir/']
-        ignore line: [ /usr/libexec/gcc/x86_64-linux-gnu/13/cc1plus -quiet -v -imultiarch x86_64-linux-gnu -D_GNU_SOURCE /usr/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_8d20c.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/cccxvGj6.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_32a16.dir/']
+        ignore line: [ /usr/libexec/gcc/x86_64-linux-gnu/13/cc1plus -quiet -v -imultiarch x86_64-linux-gnu -D_GNU_SOURCE /usr/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_32a16.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/ccVcn5c5.s]
         ignore line: [GNU C++17 (Ubuntu 13.3.0-6ubuntu2~24.04.1) version 13.3.0 (x86_64-linux-gnu)]
         ignore line: [	compiled by GNU C version 13.3.0  GMP version 6.3.0  MPFR version 4.2.1  MPC version 1.3.1  isl version isl-0.26-GMP]
         ignore line: []
@@ -189,15 +189,15 @@ events:
         ignore line: [ /usr/include]
         ignore line: [End of search list.]
         ignore line: [Compiler executable checksum: 7896445e4990772fdae9dc0659a99266]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_8d20c.dir/']
-        ignore line: [ as -v --64 -o CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.o /tmp/cccxvGj6.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_32a16.dir/']
+        ignore line: [ as -v --64 -o CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccVcn5c5.s]
         ignore line: [GNU assembler version 2.42 (x86_64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.42]
         ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-linux-gnu/13/:/usr/libexec/gcc/x86_64-linux-gnu/13/:/usr/libexec/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/13/:/usr/lib/gcc/x86_64-linux-gnu/]
         ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/13/:/usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/13/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/13/../../../:/lib/:/usr/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.']
-        ignore line: [Linking CXX executable cmTC_8d20c]
-        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8d20c.dir/link.txt --verbose=1]
-        ignore line: [/usr/bin/c++  -v CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_8d20c ]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.']
+        ignore line: [Linking CXX executable cmTC_32a16]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_32a16.dir/link.txt --verbose=1]
+        ignore line: [/usr/bin/c++  -v CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_32a16 ]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/usr/bin/c++]
         ignore line: [COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-linux-gnu/13/lto-wrapper]
@@ -210,13 +210,13 @@ events:
         ignore line: [gcc version 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04.1) ]
         ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-linux-gnu/13/:/usr/libexec/gcc/x86_64-linux-gnu/13/:/usr/libexec/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/13/:/usr/lib/gcc/x86_64-linux-gnu/]
         ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/13/:/usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/13/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/13/../../../:/lib/:/usr/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_8d20c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_8d20c.']
-        link line: [ /usr/libexec/gcc/x86_64-linux-gnu/13/collect2 -plugin /usr/libexec/gcc/x86_64-linux-gnu/13/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-linux-gnu/13/lto-wrapper -plugin-opt=-fresolution=/tmp/ccFkySXv.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_8d20c /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/13/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/13 -L/usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/13/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/13/../../.. CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/13/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/crtn.o]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_32a16' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_32a16.']
+        link line: [ /usr/libexec/gcc/x86_64-linux-gnu/13/collect2 -plugin /usr/libexec/gcc/x86_64-linux-gnu/13/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-linux-gnu/13/lto-wrapper -plugin-opt=-fresolution=/tmp/ccsWCUAr.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_32a16 /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/13/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/13 -L/usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/13/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/13/../../.. CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/13/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/crtn.o]
           arg [/usr/libexec/gcc/x86_64-linux-gnu/13/collect2] ==> ignore
           arg [-plugin] ==> ignore
           arg [/usr/libexec/gcc/x86_64-linux-gnu/13/liblto_plugin.so] ==> ignore
           arg [-plugin-opt=/usr/libexec/gcc/x86_64-linux-gnu/13/lto-wrapper] ==> ignore
-          arg [-plugin-opt=-fresolution=/tmp/ccFkySXv.res] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccsWCUAr.res] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -234,7 +234,7 @@ events:
           arg [-znow] ==> ignore
           arg [-zrelro] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_8d20c] ==> ignore
+          arg [cmTC_32a16] ==> ignore
           arg [/usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/Scrt1.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/Scrt1.o]
           arg [/usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/crti.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/crti.o]
           arg [/usr/lib/gcc/x86_64-linux-gnu/13/crtbeginS.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/13/crtbeginS.o]
@@ -246,7 +246,7 @@ events:
           arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
           arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
           arg [-L/usr/lib/gcc/x86_64-linux-gnu/13/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/13/../../..]
-          arg [CMakeFiles/cmTC_8d20c.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [CMakeFiles/cmTC_32a16.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
           arg [-lstdc++] ==> lib [stdc++]
           arg [-lm] ==> lib [m]
           arg [-lgcc_s] ==> lib [gcc_s]
@@ -284,12 +284,12 @@ events:
       - "/usr/local/lib/cmake/Trantor/TrantorConfig.cmake:48 (find_dependency)"
       - "/usr/share/cmake-3.28/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)"
       - "/usr/local/lib/cmake/Drogon/DrogonConfig.cmake:44 (find_dependency)"
-      - "CMakeLists.txt:9 (find_package)"
+      - "CMakeLists.txt:7 (find_package)"
     checks:
       - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
     directories:
-      source: "/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-oLL4jE"
-      binary: "/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-oLL4jE"
+      source: "/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-EIoguM"
+      binary: "/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-EIoguM"
     cmakeVariables:
       CMAKE_CXX_FLAGS: ""
       CMAKE_CXX_FLAGS_DEBUG: "-g"
@@ -299,21 +299,17 @@ events:
       variable: "CMAKE_HAVE_LIBC_PTHREAD"
       cached: true
       stdout: |
-        Change Dir: '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-oLL4jE'
+        Change Dir: '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-EIoguM'
         
-        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_32fa6/fast
-        gmake: Warning: File 'Makefile' has modification time 0.025 s in the future
-        /usr/bin/gmake  -f CMakeFiles/cmTC_32fa6.dir/build.make CMakeFiles/cmTC_32fa6.dir/build
-        gmake[1]: Entering directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-oLL4jE'
-        gmake[1]: Warning: File 'CMakeFiles/cmTC_32fa6.dir/progress.make' has modification time 0.17 s in the future
-        Building CXX object CMakeFiles/cmTC_32fa6.dir/src.cxx.o
-        /usr/bin/c++ -DCMAKE_HAVE_LIBC_PTHREAD  -std=gnu++17 -o CMakeFiles/cmTC_32fa6.dir/src.cxx.o -c /mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-oLL4jE/src.cxx
-        Linking CXX executable cmTC_32fa6
-        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_32fa6.dir/link.txt --verbose=1
-        /usr/bin/c++ CMakeFiles/cmTC_32fa6.dir/src.cxx.o -o cmTC_32fa6 
-        gmake[1]: warning:  Clock skew detected.  Your build may be incomplete.
-        gmake[1]: Leaving directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-oLL4jE'
-        gmake: warning:  Clock skew detected.  Your build may be incomplete.
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_c88a6/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_c88a6.dir/build.make CMakeFiles/cmTC_c88a6.dir/build
+        gmake[1]: Entering directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-EIoguM'
+        Building CXX object CMakeFiles/cmTC_c88a6.dir/src.cxx.o
+        /usr/bin/c++ -DCMAKE_HAVE_LIBC_PTHREAD  -std=gnu++17 -o CMakeFiles/cmTC_c88a6.dir/src.cxx.o -c /mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-EIoguM/src.cxx
+        Linking CXX executable cmTC_c88a6
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c88a6.dir/link.txt --verbose=1
+        /usr/bin/c++ CMakeFiles/cmTC_c88a6.dir/src.cxx.o -o cmTC_c88a6 
+        gmake[1]: Leaving directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-EIoguM'
         
       exitCode: 0
   -
@@ -323,12 +319,12 @@ events:
       - "/usr/local/lib/cmake/Drogon/FindFilesystem.cmake:162 (check_include_file_cxx)"
       - "/usr/share/cmake-3.28/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)"
       - "/usr/local/lib/cmake/Drogon/DrogonConfig.cmake:74 (find_dependency)"
-      - "CMakeLists.txt:9 (find_package)"
+      - "CMakeLists.txt:7 (find_package)"
     checks:
       - "Looking for C++ include filesystem"
     directories:
-      source: "/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-dWW5qB"
-      binary: "/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-dWW5qB"
+      source: "/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-aRWaOB"
+      binary: "/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-aRWaOB"
     cmakeVariables:
       CMAKE_CXX_FLAGS: ""
       CMAKE_CXX_FLAGS_DEBUG: "-g"
@@ -338,21 +334,17 @@ events:
       variable: "_CXX_FILESYSTEM_HAVE_HEADER"
       cached: true
       stdout: |
-        Change Dir: '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-dWW5qB'
+        Change Dir: '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-aRWaOB'
         
-        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_6bc5b/fast
-        gmake: Warning: File 'Makefile' has modification time 0.5 s in the future
-        /usr/bin/gmake  -f CMakeFiles/cmTC_6bc5b.dir/build.make CMakeFiles/cmTC_6bc5b.dir/build
-        gmake[1]: Entering directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-dWW5qB'
-        gmake[1]: Warning: File 'CMakeFiles/cmTC_6bc5b.dir/flags.make' has modification time 0.47 s in the future
-        Building CXX object CMakeFiles/cmTC_6bc5b.dir/CheckIncludeFile.cxx.o
-        /usr/bin/c++   -std=gnu++17 -o CMakeFiles/cmTC_6bc5b.dir/CheckIncludeFile.cxx.o -c /mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-dWW5qB/CheckIncludeFile.cxx
-        Linking CXX executable cmTC_6bc5b
-        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6bc5b.dir/link.txt --verbose=1
-        /usr/bin/c++ CMakeFiles/cmTC_6bc5b.dir/CheckIncludeFile.cxx.o -o cmTC_6bc5b 
-        gmake[1]: warning:  Clock skew detected.  Your build may be incomplete.
-        gmake[1]: Leaving directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-dWW5qB'
-        gmake: warning:  Clock skew detected.  Your build may be incomplete.
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_80fa4/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_80fa4.dir/build.make CMakeFiles/cmTC_80fa4.dir/build
+        gmake[1]: Entering directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-aRWaOB'
+        Building CXX object CMakeFiles/cmTC_80fa4.dir/CheckIncludeFile.cxx.o
+        /usr/bin/c++   -std=gnu++17 -o CMakeFiles/cmTC_80fa4.dir/CheckIncludeFile.cxx.o -c /mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-aRWaOB/CheckIncludeFile.cxx
+        Linking CXX executable cmTC_80fa4
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_80fa4.dir/link.txt --verbose=1
+        /usr/bin/c++ CMakeFiles/cmTC_80fa4.dir/CheckIncludeFile.cxx.o -o cmTC_80fa4 
+        gmake[1]: Leaving directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-aRWaOB'
         
       exitCode: 0
   -
@@ -364,12 +356,12 @@ events:
       - "/usr/local/lib/cmake/Drogon/FindFilesystem.cmake:220 (_cmcm_check_cxx_source)"
       - "/usr/share/cmake-3.28/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)"
       - "/usr/local/lib/cmake/Drogon/DrogonConfig.cmake:74 (find_dependency)"
-      - "CMakeLists.txt:9 (find_package)"
+      - "CMakeLists.txt:7 (find_package)"
     checks:
       - "Performing Test CXX_FILESYSTEM_NO_LINK_NEEDED"
     directories:
-      source: "/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-jSMZxK"
-      binary: "/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-jSMZxK"
+      source: "/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-CG2PnU"
+      binary: "/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-CG2PnU"
     cmakeVariables:
       CMAKE_CXX_FLAGS: ""
       CMAKE_CXX_FLAGS_DEBUG: "-g"
@@ -379,21 +371,17 @@ events:
       variable: "CXX_FILESYSTEM_NO_LINK_NEEDED_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-jSMZxK'
+        Change Dir: '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-CG2PnU'
         
-        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_ffef7/fast
-        gmake: Warning: File 'Makefile' has modification time 0.61 s in the future
-        /usr/bin/gmake  -f CMakeFiles/cmTC_ffef7.dir/build.make CMakeFiles/cmTC_ffef7.dir/build
-        gmake[1]: Entering directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-jSMZxK'
-        gmake[1]: Warning: File 'CMakeFiles/cmTC_ffef7.dir/flags.make' has modification time 0.53 s in the future
-        Building CXX object CMakeFiles/cmTC_ffef7.dir/src.cxx.o
-        /usr/bin/c++ -DCXX_FILESYSTEM_NO_LINK_NEEDED  -std=c++17 -std=gnu++17 -o CMakeFiles/cmTC_ffef7.dir/src.cxx.o -c /mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-jSMZxK/src.cxx
-        Linking CXX executable cmTC_ffef7
-        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ffef7.dir/link.txt --verbose=1
-        /usr/bin/c++  -std=c++17 CMakeFiles/cmTC_ffef7.dir/src.cxx.o -o cmTC_ffef7 
-        gmake[1]: warning:  Clock skew detected.  Your build may be incomplete.
-        gmake[1]: Leaving directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-jSMZxK'
-        gmake: warning:  Clock skew detected.  Your build may be incomplete.
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_67626/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_67626.dir/build.make CMakeFiles/cmTC_67626.dir/build
+        gmake[1]: Entering directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-CG2PnU'
+        Building CXX object CMakeFiles/cmTC_67626.dir/src.cxx.o
+        /usr/bin/c++ -DCXX_FILESYSTEM_NO_LINK_NEEDED  -std=c++17 -std=gnu++17 -o CMakeFiles/cmTC_67626.dir/src.cxx.o -c /mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-CG2PnU/src.cxx
+        Linking CXX executable cmTC_67626
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_67626.dir/link.txt --verbose=1
+        /usr/bin/c++  -std=c++17 CMakeFiles/cmTC_67626.dir/src.cxx.o -o cmTC_67626 
+        gmake[1]: Leaving directory '/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/CMakeScratch/TryCompile-CG2PnU'
         
       exitCode: 0
     runResult:

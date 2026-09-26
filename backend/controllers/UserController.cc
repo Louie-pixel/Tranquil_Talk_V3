@@ -6,7 +6,7 @@
 #include <bsoncxx/builder/stream/document.hpp>
 #include <bsoncxx/json.hpp>
 #include <jwt-cpp/jwt.h>
-#include <bcrypt.h> // Our new library
+#include <bcrypt/BCrypt.hpp> // Our new library
 
 using namespace bsoncxx::builder::stream;
 
@@ -38,7 +38,7 @@ void UserController::registerUser(const drogon::HttpRequestPtr& req, std::functi
         }
 
         // HASH THE PASSWORD (Automatically handles salting internally)
-        std::string hashed_password = bcrypt::generateHash(raw_password);
+        std::string hashed_password = BCrypt::generateHash(raw_password);
 
         bsoncxx::document::value new_user = document{} 
             << "email" << email 
@@ -87,7 +87,7 @@ void UserController::loginUser(const drogon::HttpRequestPtr& req, std::function<
 
         // VERIFY THE BCRYPT HASH
         std::string db_hash(user->view()["password"].get_string().value);
-        if (!bcrypt::validatePassword(raw_password, db_hash)) {
+        if (!BCrypt::validatePassword(raw_password, db_hash)) {
             auto resp = drogon::HttpResponse::newHttpResponse();
             resp->setStatusCode(drogon::k401Unauthorized);
             resp->setBody("Invalid credentials");

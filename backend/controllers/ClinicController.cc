@@ -38,7 +38,7 @@ void ClinicController::addClinic(const drogon::HttpRequestPtr& req, std::functio
             
         collection.insert_one(new_clinic.view());
 
-        // Automatically ensure the 2dsphere index exists upon creation
+        // Automatically ensure the 2dsphere index exists upon creation for $near queries
         bsoncxx::document::value index_spec = document{} << "location" << "2dsphere" << finalize;
         collection.create_index(index_spec.view());
 
@@ -90,7 +90,7 @@ void ClinicController::getNearbyClinics(const drogon::HttpRequestPtr& req, std::
 
         auto cursor = collection.find(query.view());
         
-        // Stream the BSON results directly into a valid JSON array
+        // Stream the BSON results directly into a valid JSON array string
         std::string response_body = "[";
         bool first = true;
         for (auto&& doc : cursor) {

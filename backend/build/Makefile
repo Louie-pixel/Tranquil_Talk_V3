@@ -225,54 +225,6 @@ models/DatabaseManager.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilBackend.dir/build.make CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.s
 .PHONY : models/DatabaseManager.cc.s
 
-third_party/bcrypt/src/bcrypt.o: third_party/bcrypt/src/bcrypt.cpp.o
-.PHONY : third_party/bcrypt/src/bcrypt.o
-
-# target to build an object file
-third_party/bcrypt/src/bcrypt.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilBackend.dir/build.make CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.o
-.PHONY : third_party/bcrypt/src/bcrypt.cpp.o
-
-third_party/bcrypt/src/bcrypt.i: third_party/bcrypt/src/bcrypt.cpp.i
-.PHONY : third_party/bcrypt/src/bcrypt.i
-
-# target to preprocess a source file
-third_party/bcrypt/src/bcrypt.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilBackend.dir/build.make CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.i
-.PHONY : third_party/bcrypt/src/bcrypt.cpp.i
-
-third_party/bcrypt/src/bcrypt.s: third_party/bcrypt/src/bcrypt.cpp.s
-.PHONY : third_party/bcrypt/src/bcrypt.s
-
-# target to generate assembly for a file
-third_party/bcrypt/src/bcrypt.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilBackend.dir/build.make CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/bcrypt.cpp.s
-.PHONY : third_party/bcrypt/src/bcrypt.cpp.s
-
-third_party/bcrypt/src/blowfish.o: third_party/bcrypt/src/blowfish.cpp.o
-.PHONY : third_party/bcrypt/src/blowfish.o
-
-# target to build an object file
-third_party/bcrypt/src/blowfish.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilBackend.dir/build.make CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.o
-.PHONY : third_party/bcrypt/src/blowfish.cpp.o
-
-third_party/bcrypt/src/blowfish.i: third_party/bcrypt/src/blowfish.cpp.i
-.PHONY : third_party/bcrypt/src/blowfish.i
-
-# target to preprocess a source file
-third_party/bcrypt/src/blowfish.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilBackend.dir/build.make CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.i
-.PHONY : third_party/bcrypt/src/blowfish.cpp.i
-
-third_party/bcrypt/src/blowfish.s: third_party/bcrypt/src/blowfish.cpp.s
-.PHONY : third_party/bcrypt/src/blowfish.s
-
-# target to generate assembly for a file
-third_party/bcrypt/src/blowfish.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilBackend.dir/build.make CMakeFiles/TranquilBackend.dir/third_party/bcrypt/src/blowfish.cpp.s
-.PHONY : third_party/bcrypt/src/blowfish.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -294,12 +246,6 @@ help:
 	@echo "... models/DatabaseManager.o"
 	@echo "... models/DatabaseManager.i"
 	@echo "... models/DatabaseManager.s"
-	@echo "... third_party/bcrypt/src/bcrypt.o"
-	@echo "... third_party/bcrypt/src/bcrypt.i"
-	@echo "... third_party/bcrypt/src/bcrypt.s"
-	@echo "... third_party/bcrypt/src/blowfish.o"
-	@echo "... third_party/bcrypt/src/blowfish.i"
-	@echo "... third_party/bcrypt/src/blowfish.s"
 .PHONY : help
 
 
