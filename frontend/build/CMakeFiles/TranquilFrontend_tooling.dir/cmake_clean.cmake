@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
   "TranquilTalk/ClinicMapView.qml"
   "TranquilTalk/LoginView.qml"
+  "TranquilTalk/VideoCallView.qml"
 )
 
 # Per-language clean rules from dependency scanning.

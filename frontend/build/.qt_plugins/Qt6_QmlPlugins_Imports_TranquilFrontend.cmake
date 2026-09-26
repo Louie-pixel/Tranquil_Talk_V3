@@ -1,4 +1,4 @@
-set(qml_import_scanner_imports_count 22)
+set(qml_import_scanner_imports_count 25)
 set(qml_import_scanner_import_0 "CLASSNAME;QtQuick2Plugin;LINKTARGET;Qt6::qtquick2plugin;NAME;QtQuick;PATH;/usr/lib/x86_64-linux-gnu/qt6/qml/QtQuick;PLUGIN;qtquick2plugin;PLUGINISOPTIONAL;;PREFER;:/qt-project.org/imports/QtQuick/;RELATIVEPATH;QtQuick;TYPE;module;")
 set(qml_import_scanner_import_1 "NAME;QtQml;PATH;/usr/lib/x86_64-linux-gnu/qt6/qml/QtQml;RELATIVEPATH;QtQml;TYPE;module;")
 set(qml_import_scanner_import_2 "CLASSNAME;QtQuickControls2Plugin;LINKTARGET;Qt6::qtquickcontrols2plugin;NAME;QtQuick.Controls;PATH;/usr/lib/x86_64-linux-gnu/qt6/qml/QtQuick/Controls;PLUGIN;qtquickcontrols2plugin;PREFER;:/qt-project.org/imports/QtQuick/Controls/;RELATIVEPATH;QtQuick/Controls;TYPE;module;")
@@ -21,4 +21,7 @@ set(qml_import_scanner_import_18 "CLASSNAME;QtQuickControls2BasicStyleImplPlugin
 set(qml_import_scanner_import_19 "NAME;QtQuick.Shapes;TYPE;module;")
 set(qml_import_scanner_import_20 "CLASSNAME;QtQuickLayoutsPlugin;LINKTARGET;Qt6::qquicklayoutsplugin;NAME;QtQuick.Layouts;PATH;/usr/lib/x86_64-linux-gnu/qt6/qml/QtQuick/Layouts;PLUGIN;qquicklayoutsplugin;PLUGINISOPTIONAL;;PREFER;:/qt-project.org/imports/QtQuick/Layouts/;RELATIVEPATH;QtQuick/Layouts;TYPE;module;")
 set(qml_import_scanner_import_21 "CLASSNAME;QtPositioningDeclarativeModule;LINKTARGET;Qt6::positioningquickplugin;NAME;QtPositioning;PATH;/usr/lib/x86_64-linux-gnu/qt6/qml/QtPositioning;PLUGIN;positioningquickplugin;PREFER;:/qt-project.org/imports/QtPositioning/;RELATIVEPATH;QtPositioning;TYPE;module;")
+set(qml_import_scanner_import_22 "NAME;TranquilTalk.WebRTC;TYPE;module;")
+set(qml_import_scanner_import_23 "CLASSNAME;QtWebEnginePlugin;LINKTARGET;Qt6::qtwebenginequickplugin;NAME;QtWebEngine;PATH;/usr/lib/x86_64-linux-gnu/qt6/qml/QtWebEngine;PLUGIN;qtwebenginequickplugin;PREFER;:/qt-project.org/imports/QtWebEngine/;RELATIVEPATH;QtWebEngine;TYPE;module;")
+set(qml_import_scanner_import_24 "NAME;QtWebChannel;TYPE;module;")
 

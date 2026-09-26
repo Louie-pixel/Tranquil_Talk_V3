@@ -352,6 +352,52 @@
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6QGeoPositionInfoSourceFactoryPollPluginTargets.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6QGeoPositionInfoSourceFactoryPollPluginTargets-none.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Positioning/Qt6QGeoPositionInfoSourceFactoryPollPluginAdditionalTargetInfo.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebSockets/Qt6WebSocketsConfigVersion.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebSockets/Qt6WebSocketsConfigVersionImpl.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebSockets/Qt6WebSocketsConfig.cmake",
+		"/usr/share/cmake-3.28/Modules/CMakeFindDependencyMacro.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebSockets/Qt6WebSocketsDependencies.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebSockets/Qt6WebSocketsTargets.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebSockets/Qt6WebSocketsTargets-none.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebSockets/Qt6WebSocketsAdditionalTargetInfo.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebSockets/Qt6WebSocketsVersionlessTargets.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineQuick/Qt6WebEngineQuickConfigVersion.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineQuick/Qt6WebEngineQuickConfigVersionImpl.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineQuick/Qt6WebEngineQuickConfig.cmake",
+		"/usr/share/cmake-3.28/Modules/CMakeFindDependencyMacro.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineQuick/Qt6WebEngineQuickDependencies.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineCore/Qt6WebEngineCoreConfigVersion.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineCore/Qt6WebEngineCoreConfigVersionImpl.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineCore/Qt6WebEngineCoreConfig.cmake",
+		"/usr/share/cmake-3.28/Modules/CMakeFindDependencyMacro.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineCore/Qt6WebEngineCoreDependencies.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineCoreTools/Qt6WebEngineCoreToolsConfigVersion.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineCoreTools/Qt6WebEngineCoreToolsConfigVersionImpl.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineCoreTools/Qt6WebEngineCoreToolsConfig.cmake",
+		"/usr/share/cmake-3.28/Modules/CMakeFindDependencyMacro.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineCoreTools/Qt6WebEngineCoreToolsDependencies.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineCoreTools/Qt6WebEngineCoreToolsTargets.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineCoreTools/Qt6WebEngineCoreToolsTargets-none.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineCoreTools/Qt6WebEngineCoreToolsAdditionalTargetInfo.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineCoreTools/Qt6WebEngineCoreToolsVersionlessTargets.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebChannel/Qt6WebChannelConfigVersion.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebChannel/Qt6WebChannelConfigVersionImpl.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebChannel/Qt6WebChannelConfig.cmake",
+		"/usr/share/cmake-3.28/Modules/CMakeFindDependencyMacro.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebChannel/Qt6WebChannelDependencies.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebChannel/Qt6WebChannelTargets.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebChannel/Qt6WebChannelTargets-none.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebChannel/Qt6WebChannelAdditionalTargetInfo.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebChannel/Qt6WebChannelVersionlessTargets.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineCore/Qt6WebEngineCoreTargets.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineCore/Qt6WebEngineCoreTargets-none.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineCore/Qt6WebEngineCoreAdditionalTargetInfo.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineCore/Qt6WebEngineCoreVersionlessTargets.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineCore/Qt6WebEngineCoreMacros.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineQuick/Qt6WebEngineQuickTargets.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineQuick/Qt6WebEngineQuickTargets-none.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineQuick/Qt6WebEngineQuickAdditionalTargetInfo.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/Qt6WebEngineQuick/Qt6WebEngineQuickVersionlessTargets.cmake",
 		"/usr/share/cmake-3.28/Modules/GNUInstallDirs.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Core/Qt6CoreConfigureFileTemplate.in",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Core/Qt6CoreConfigureFileTemplate.in",
@@ -366,6 +412,12 @@
 			"/mnt/c/users/louie/Tranquil_Talk_V3/frontend/ApiClient.h",
 			"MU",
 			"EWIEGA46WW/moc_ApiClient.cpp",
+			null
+		],
+		[
+			"/mnt/c/users/louie/Tranquil_Talk_V3/frontend/WebRTCClient.h",
+			"MU",
+			"EWIEGA46WW/moc_WebRTCClient.cpp",
 			null
 		]
 	],
@@ -383,7 +435,11 @@
 		"QT_QMLINTEGRATION_LIB",
 		"QT_QMLMODELS_LIB",
 		"QT_QML_LIB",
-		"QT_QUICK_LIB"
+		"QT_QUICK_LIB",
+		"QT_WEBCHANNEL_LIB",
+		"QT_WEBENGINECORE_LIB",
+		"QT_WEBENGINEQUICK_LIB",
+		"QT_WEBSOCKETS_LIB"
 	],
 	"MOC_DEPEND_FILTERS" : 
 	[
@@ -410,6 +466,10 @@
 		"/usr/include/x86_64-linux-gnu/qt6/QtQmlModels",
 		"/usr/include/x86_64-linux-gnu/qt6/QtOpenGL",
 		"/usr/include/x86_64-linux-gnu/qt6/QtPositioning",
+		"/usr/include/x86_64-linux-gnu/qt6/QtWebSockets",
+		"/usr/include/x86_64-linux-gnu/qt6/QtWebEngineQuick",
+		"/usr/include/x86_64-linux-gnu/qt6/QtWebEngineCore",
+		"/usr/include/x86_64-linux-gnu/qt6/QtWebChannel",
 		"/usr/include",
 		"/usr/include/c++/13",
 		"/usr/include/x86_64-linux-gnu/c++/13",
@@ -443,6 +503,7 @@
 	[
 		"/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp",
 		"/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp",
+		"/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.cpp",
 		"/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qrc_TranquilFrontend_raw_qml_0.cpp",
 		"/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qrc_qmake_TranquilTalk.cpp",
 		"/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/tranquilfrontend_qmltyperegistrations.cpp"
@@ -463,6 +524,11 @@
 			null
 		],
 		[
+			"/mnt/c/users/louie/Tranquil_Talk_V3/frontend/WebRTCClient.cpp",
+			"MU",
+			null
+		],
+		[
 			"/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp",
 			"MU",
 			null
@@ -475,6 +541,7 @@
 	[
 		"/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp",
 		"/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp",
+		"/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.cpp",
 		"/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qrc_TranquilFrontend_raw_qml_0.cpp",
 		"/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qrc_qmake_TranquilTalk.cpp",
 		"/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/tranquilfrontend_qmltyperegistrations.cpp"

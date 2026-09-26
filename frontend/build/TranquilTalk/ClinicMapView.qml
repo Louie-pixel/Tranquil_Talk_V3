@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtPositioning
+import TranquilTalk.WebRTC 1.0
 
 Rectangle {
     id: clinicRoot
@@ -25,6 +26,16 @@ Rectangle {
         interval: 100
         repeat: false
         onTriggered: detectLocation()
+    }
+    WebRTCClient {
+        id: rtcClient
+        onConnectedToRoom: {
+            statusText.text = "Joined consultation room successfully!";
+            statusText.color = "#15803d";
+        }
+        onIncomingSignal: (actionType, payload) => {
+            console.log("Received WebRTC signal:", actionType);
+        }
     }
 
     // 1. Hardware Positioning Source
@@ -77,6 +88,19 @@ Rectangle {
         timeoutTimer.restart();
     }
 
+    Button {
+    text: "Start Consultation"
+    Layout.preferredHeight: 36
+    onClicked: {
+        // 1. Connect to signaling room
+        rtcClient.connectToRoom("clinic_room_101");
+
+        // 2. Transition view
+        if (typeof mainWindow !== "undefined" && mainWindow.loadVideoCall) {
+            mainWindow.loadVideoCall();
+        }
+    }
+}
     // 3. Translate exact coordinates back to a building/street name
     function reverseGeocode(lat, lng) {
         var xhr = new XMLHttpRequest();

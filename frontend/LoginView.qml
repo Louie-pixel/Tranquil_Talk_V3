@@ -9,6 +9,17 @@ ApplicationWindow {
     height: 650
     title: "Tranquil Talk V3"
 
+    // Inside ApplicationWindow in LoginView.qml:
+Component {
+    id: videoCallComponent
+    VideoCallView {
+        anchors.fill: parent
+    }
+}
+
+function loadVideoCall() {
+    viewLoader.sourceComponent = videoCallComponent;
+}
     // Loader to switch between Login and the Clinic Map
     Loader {
         id: viewLoader

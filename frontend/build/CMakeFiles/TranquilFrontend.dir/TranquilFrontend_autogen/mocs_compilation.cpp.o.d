@@ -353,4 +353,25 @@ CMakeFiles/TranquilFrontend.dir/TranquilFrontend_autogen/mocs_compilation.cpp.o:
  /usr/include/x86_64-linux-gnu/qt6/QtNetwork/QNetworkAccessManager \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
  /usr/include/x86_64-linux-gnu/qt6/QtNetwork/QSslError \
- /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qsslerror.h
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qsslerror.h \
+ /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/TranquilFrontend_autogen/EWIEGA46WW/moc_WebRTCClient.cpp \
+ /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/TranquilFrontend_autogen/EWIEGA46WW/../../../WebRTCClient.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtWebSockets/QWebSocket \
+ /usr/include/x86_64-linux-gnu/qt6/QtWebSockets/qwebsocket.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/QAbstractSocket \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qabstractsocket.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/QNetworkProxy \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qnetworkproxy.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtWebSockets/qwebsockets_global.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtWebSockets/qtwebsocketsexports.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtWebSockets/qwebsocketprotocol.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonObject \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonvalue.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborvalue.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborcommon.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qurl.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonDocument \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsondocument.h

@@ -153,6 +153,30 @@ controllers/ClinicController.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilBackend.dir/build.make CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.s
 .PHONY : controllers/ClinicController.cc.s
 
+controllers/SignalingController.o: controllers/SignalingController.cc.o
+.PHONY : controllers/SignalingController.o
+
+# target to build an object file
+controllers/SignalingController.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilBackend.dir/build.make CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.o
+.PHONY : controllers/SignalingController.cc.o
+
+controllers/SignalingController.i: controllers/SignalingController.cc.i
+.PHONY : controllers/SignalingController.i
+
+# target to preprocess a source file
+controllers/SignalingController.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilBackend.dir/build.make CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.i
+.PHONY : controllers/SignalingController.cc.i
+
+controllers/SignalingController.s: controllers/SignalingController.cc.s
+.PHONY : controllers/SignalingController.s
+
+# target to generate assembly for a file
+controllers/SignalingController.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilBackend.dir/build.make CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.s
+.PHONY : controllers/SignalingController.cc.s
+
 controllers/UserController.o: controllers/UserController.cc.o
 .PHONY : controllers/UserController.o
 
@@ -237,6 +261,9 @@ help:
 	@echo "... controllers/ClinicController.o"
 	@echo "... controllers/ClinicController.i"
 	@echo "... controllers/ClinicController.s"
+	@echo "... controllers/SignalingController.o"
+	@echo "... controllers/SignalingController.i"
+	@echo "... controllers/SignalingController.s"
 	@echo "... controllers/UserController.o"
 	@echo "... controllers/UserController.i"
 	@echo "... controllers/UserController.s"

@@ -69,7 +69,8 @@ include CMakeFiles/TranquilFrontend_qmllint_json.dir/progress.make
 CMakeFiles/TranquilFrontend_qmllint_json: /usr/lib/qt6/bin/qmllint
 CMakeFiles/TranquilFrontend_qmllint_json: /mnt/c/users/louie/Tranquil_Talk_V3/frontend/LoginView.qml
 CMakeFiles/TranquilFrontend_qmllint_json: /mnt/c/users/louie/Tranquil_Talk_V3/frontend/ClinicMapView.qml
-	cd /mnt/c/users/louie/Tranquil_Talk_V3/frontend && /usr/lib/qt6/bin/qmllint --bare -I /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build -I /usr/lib/x86_64-linux-gnu/qt6/qml --resource /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmake_TranquilTalk.qrc --resource /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/TranquilFrontend_raw_qml_0.qrc /mnt/c/users/louie/Tranquil_Talk_V3/frontend/LoginView.qml /mnt/c/users/louie/Tranquil_Talk_V3/frontend/ClinicMapView.qml --json /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/TranquilFrontend_qmllint.json
+CMakeFiles/TranquilFrontend_qmllint_json: /mnt/c/users/louie/Tranquil_Talk_V3/frontend/VideoCallView.qml
+	cd /mnt/c/users/louie/Tranquil_Talk_V3/frontend && /usr/lib/qt6/bin/qmllint --bare -I /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build -I /usr/lib/x86_64-linux-gnu/qt6/qml --resource /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/qmake_TranquilTalk.qrc --resource /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/.rcc/TranquilFrontend_raw_qml_0.qrc /mnt/c/users/louie/Tranquil_Talk_V3/frontend/LoginView.qml /mnt/c/users/louie/Tranquil_Talk_V3/frontend/ClinicMapView.qml /mnt/c/users/louie/Tranquil_Talk_V3/frontend/VideoCallView.qml --json /mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/TranquilFrontend_qmllint.json
 
 TranquilFrontend_qmllint_json: CMakeFiles/TranquilFrontend_qmllint_json
 TranquilFrontend_qmllint_json: CMakeFiles/TranquilFrontend_qmllint_json.dir/build.make

@@ -111,10 +111,24 @@ CMakeFiles/TranquilBackend.dir/controllers/UserController.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TranquilBackend.dir/controllers/UserController.cc.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/users/louie/Tranquil_Talk_V3/backend/controllers/UserController.cc -o CMakeFiles/TranquilBackend.dir/controllers/UserController.cc.s
 
+CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.o: CMakeFiles/TranquilBackend.dir/flags.make
+CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.o: /mnt/c/users/louie/Tranquil_Talk_V3/backend/controllers/SignalingController.cc
+CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.o: CMakeFiles/TranquilBackend.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.o -MF CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.o.d -o CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.o -c /mnt/c/users/louie/Tranquil_Talk_V3/backend/controllers/SignalingController.cc
+
+CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/users/louie/Tranquil_Talk_V3/backend/controllers/SignalingController.cc > CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.i
+
+CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/users/louie/Tranquil_Talk_V3/backend/controllers/SignalingController.cc -o CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.s
+
 CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o: CMakeFiles/TranquilBackend.dir/flags.make
 CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o: /mnt/c/users/louie/Tranquil_Talk_V3/backend/models/DatabaseManager.cc
 CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o: CMakeFiles/TranquilBackend.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o -MF CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o.d -o CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o -c /mnt/c/users/louie/Tranquil_Talk_V3/backend/models/DatabaseManager.cc
 
 CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.i: cmake_force
@@ -130,6 +144,7 @@ TranquilBackend_OBJECTS = \
 "CMakeFiles/TranquilBackend.dir/main.cc.o" \
 "CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o" \
 "CMakeFiles/TranquilBackend.dir/controllers/UserController.cc.o" \
+"CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.o" \
 "CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o"
 
 # External object files for target TranquilBackend
@@ -138,6 +153,7 @@ TranquilBackend_EXTERNAL_OBJECTS =
 TranquilBackend: CMakeFiles/TranquilBackend.dir/main.cc.o
 TranquilBackend: CMakeFiles/TranquilBackend.dir/controllers/ClinicController.cc.o
 TranquilBackend: CMakeFiles/TranquilBackend.dir/controllers/UserController.cc.o
+TranquilBackend: CMakeFiles/TranquilBackend.dir/controllers/SignalingController.cc.o
 TranquilBackend: CMakeFiles/TranquilBackend.dir/models/DatabaseManager.cc.o
 TranquilBackend: CMakeFiles/TranquilBackend.dir/build.make
 TranquilBackend: /usr/local/lib/libdrogon.a
@@ -151,7 +167,7 @@ TranquilBackend: /usr/lib/x86_64-linux-gnu/libz.so
 TranquilBackend: /usr/lib/x86_64-linux-gnu/libssl.so
 TranquilBackend: /usr/lib/x86_64-linux-gnu/libcrypto.so
 TranquilBackend: CMakeFiles/TranquilBackend.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable TranquilBackend"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable TranquilBackend"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/TranquilBackend.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -333,6 +333,30 @@ TranquilFrontend_autogen/mocs_compilation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilFrontend.dir/build.make CMakeFiles/TranquilFrontend.dir/TranquilFrontend_autogen/mocs_compilation.cpp.s
 .PHONY : TranquilFrontend_autogen/mocs_compilation.cpp.s
 
+WebRTCClient.o: WebRTCClient.cpp.o
+.PHONY : WebRTCClient.o
+
+# target to build an object file
+WebRTCClient.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilFrontend.dir/build.make CMakeFiles/TranquilFrontend.dir/WebRTCClient.cpp.o
+.PHONY : WebRTCClient.cpp.o
+
+WebRTCClient.i: WebRTCClient.cpp.i
+.PHONY : WebRTCClient.i
+
+# target to preprocess a source file
+WebRTCClient.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilFrontend.dir/build.make CMakeFiles/TranquilFrontend.dir/WebRTCClient.cpp.i
+.PHONY : WebRTCClient.cpp.i
+
+WebRTCClient.s: WebRTCClient.cpp.s
+.PHONY : WebRTCClient.s
+
+# target to generate assembly for a file
+WebRTCClient.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilFrontend.dir/build.make CMakeFiles/TranquilFrontend.dir/WebRTCClient.cpp.s
+.PHONY : WebRTCClient.cpp.s
+
 build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.o: build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.cpp.o
 .PHONY : build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.o
 
@@ -380,6 +404,30 @@ build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.s: build/.rcc/qmlcache/Tranqu
 build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilFrontend.dir/build.make CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.s
 .PHONY : build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.cpp.s
+
+build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.o: build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.cpp.o
+.PHONY : build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.o
+
+# target to build an object file
+build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilFrontend.dir/build.make CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.cpp.o
+.PHONY : build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.cpp.o
+
+build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.i: build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.cpp.i
+.PHONY : build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.i
+
+# target to preprocess a source file
+build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilFrontend.dir/build.make CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.cpp.i
+.PHONY : build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.cpp.i
+
+build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.s: build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.cpp.s
+.PHONY : build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.s
+
+# target to generate assembly for a file
+build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TranquilFrontend.dir/build.make CMakeFiles/TranquilFrontend.dir/build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.cpp.s
+.PHONY : build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.cpp.s
 
 build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.o: build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.cpp.o
 .PHONY : build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.o
@@ -528,12 +576,18 @@ help:
 	@echo "... TranquilFrontend_autogen/mocs_compilation.o"
 	@echo "... TranquilFrontend_autogen/mocs_compilation.i"
 	@echo "... TranquilFrontend_autogen/mocs_compilation.s"
+	@echo "... WebRTCClient.o"
+	@echo "... WebRTCClient.i"
+	@echo "... WebRTCClient.s"
 	@echo "... build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.o"
 	@echo "... build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.i"
 	@echo "... build/.rcc/qmlcache/TranquilFrontend_ClinicMapView_qml.s"
 	@echo "... build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.o"
 	@echo "... build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.i"
 	@echo "... build/.rcc/qmlcache/TranquilFrontend_LoginView_qml.s"
+	@echo "... build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.o"
+	@echo "... build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.i"
+	@echo "... build/.rcc/qmlcache/TranquilFrontend_VideoCallView_qml.s"
 	@echo "... build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.o"
 	@echo "... build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.i"
 	@echo "... build/.rcc/qmlcache/TranquilFrontend_qmlcache_loader.s"

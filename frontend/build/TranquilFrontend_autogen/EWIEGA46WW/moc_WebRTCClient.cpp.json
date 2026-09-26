@@ -1,0 +1,96 @@
+{
+    "classes": [
+        {
+            "className": "WebRTCClient",
+            "methods": [
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "roomId",
+                            "type": "QString"
+                        }
+                    ],
+                    "name": "connectToRoom",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "actionType",
+                            "type": "QString"
+                        },
+                        {
+                            "name": "payload",
+                            "type": "QJsonObject"
+                        }
+                    ],
+                    "name": "sendSignal",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "actionType",
+                            "type": "QString"
+                        }
+                    ],
+                    "name": "sendSignal",
+                    "returnType": "void"
+                }
+            ],
+            "object": true,
+            "qualifiedClassName": "WebRTCClient",
+            "signals": [
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "actionType",
+                            "type": "QString"
+                        },
+                        {
+                            "name": "payload",
+                            "type": "QJsonObject"
+                        }
+                    ],
+                    "name": "incomingSignal",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "name": "connectedToRoom",
+                    "returnType": "void"
+                }
+            ],
+            "slots": [
+                {
+                    "access": "private",
+                    "name": "onConnected",
+                    "returnType": "void"
+                },
+                {
+                    "access": "private",
+                    "arguments": [
+                        {
+                            "name": "message",
+                            "type": "QString"
+                        }
+                    ],
+                    "name": "onTextMessageReceived",
+                    "returnType": "void"
+                }
+            ],
+            "superClasses": [
+                {
+                    "access": "public",
+                    "name": "QObject"
+                }
+            ]
+        }
+    ],
+    "inputFile": "WebRTCClient.h",
+    "outputRevision": 68
+}

@@ -3,4 +3,5 @@ typeinfo TranquilFrontend.qmltypes
 prefer :/TranquilTalk/
 LoginView 1.0 LoginView.qml
 ClinicMapView 1.0 ClinicMapView.qml
+VideoCallView 1.0 VideoCallView.qml
 

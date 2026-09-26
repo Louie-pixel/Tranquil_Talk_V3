@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { margin: 0; background-color: #1e293b; overflow: hidden; display: flex; align-items: center; justify-content: center; font-family: sans-serif; }
+        video { object-fit: cover; }
+        #remoteVideo { width: 100vw; height: 100vh; background: #0f172a; }
+        /* Picture-in-Picture style for the patient feed, elevated above the QML buttons */
+        #localVideo { position: absolute; bottom: 110px; right: 24px; width: 120px; height: 160px; border-radius: 12px; border: 2px solid #475569; background: #334155; transform: scaleX(-1); }
+    </style>
+</head>
+<body>
+    <video id="remoteVideo" autoplay playsinline></video>
+    <video id="localVideo" autoplay playsinline muted></video>
+
+    <script>
+        const localVideo = document.getElementById('localVideo');
+        const remoteVideo = document.getElementById('remoteVideo');
+        
+        let localStream;
+        let peerConnection;
+        // Standard Google STUN server to help clients find each other through routers/NATs
+        const config = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
+
+        async function startCamera() {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                localVideo.srcObject = localStream;
+            } catch (err) {
+                console.error("Camera error:", err);
+            }
+        }
+
+        function createPeerConnection() {
+            peerConnection = new RTCPeerConnection(config);
+            localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+            // When the doctor's video stream arrives, attach it to the fullscreen element
+            peerConnection.ontrack = event => {
+                if (!remoteVideo.srcObject) remoteVideo.srcObject = event.streams[0];
+            };
+
+            // When WebRTC generates networking candidates, send them to QML
+            peerConnection.onicecandidate = event => {
+                if (event.candidate) {
+                    sendSignalToQML('ice_candidate', { candidate: event.candidate });
+                }
+            };
+        }
+
+        // Called from QML when the C++ WebSocket receives data from the backend
+        async function receiveRemoteSignal(type, payload) {
+            if (!peerConnection) createPeerConnection();
+
+            if (type === 'offer') {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(payload.offer));
+                const answer = await peerConnection.createAnswer();
+                await peerConnection.setLocalDescription(answer);
+                sendSignalToQML('answer', { answer: answer });
+            } 
+            else if (type === 'answer') {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(payload.answer));
+            } 
+            else if (type === 'ice_candidate' && payload.candidate) {
+                await peerConnection.addIceCandidate(new RTCIceCandidate(payload.candidate));
+            }
+        }
+
+        // Bridge to QML: Encode JSON as a custom URL string
+        function sendSignalToQML(type, payload) {
+            const message = JSON.stringify({ type: type, payload: payload });
+            window.location.href = "rtcsignal:" + encodeURIComponent(message);
+        }
+
+        startCamera();
+    </script>
+</body>
+</html>

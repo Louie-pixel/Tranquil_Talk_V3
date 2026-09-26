@@ -12,6 +12,7 @@ add_executable(TranquilBackend
     main.cc
     controllers/ClinicController.cc
     controllers/UserController.cc
+    controllers/SignalingController.cc
     models/DatabaseManager.cc
 )
 
