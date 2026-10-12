@@ -23,7 +23,7 @@ qt_add_qml_module(TranquilFrontend
         RegistrationView.qml
         LoginView.qml
         ClinicMapView.qml
-       #VideoCallView.qml
+        VideoCallView.qml
 )
 
 # 2. They MUST also be linked here so the final executable can use them
