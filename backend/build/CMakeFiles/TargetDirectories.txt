@@ -1,3 +1,0 @@
-/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/TranquilBackend.dir
-/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/edit_cache.dir
-/mnt/c/users/louie/Tranquil_Talk_V3/backend/build/CMakeFiles/rebuild_cache.dir

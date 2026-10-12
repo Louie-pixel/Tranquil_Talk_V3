@@ -1,5 +1,0 @@
-module TranquilTalk
-typeinfo TranquilFrontend.qmltypes
-prefer :/TranquilTalk/
-LoginView 1.0 LoginView.qml
-
