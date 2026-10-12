@@ -2,3 +2,6 @@ build/
 **/build/
 .vs/
 *.user
+
+emsdk/
+CMakeUserPresets.json
