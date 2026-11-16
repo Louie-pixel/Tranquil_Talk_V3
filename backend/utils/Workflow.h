@@ -11,6 +11,7 @@
 #include <openssl/evp.h>
 #include <iomanip>
 #include <sstream>
+#include <typeinfo>
 
 namespace workflow {
 using Callback = std::function<void(const drogon::HttpResponsePtr&)>;
@@ -80,9 +81,12 @@ template<class F> inline void respond(Callback cb,F fn) {
     catch(const Error& e){cb(http::error(e.code,e.what()));}
     catch(const auth::Unavailable&){cb(http::error(drogon::k503ServiceUnavailable,"Account service unavailable"));}
     catch(const std::invalid_argument&){cb(http::error(drogon::k401Unauthorized,"Sign in required"));}
-    catch(const mongocxx::operation_exception& e){cb(http::error(e.code().value()==11000 ? drogon::k409Conflict : drogon::k503ServiceUnavailable,
+    catch(const mongocxx::operation_exception& e){
+        LOG_ERROR << "Workflow database error code " << e.code().value();
+        cb(http::error(e.code().value()==11000 ? drogon::k409Conflict : drogon::k503ServiceUnavailable,
         e.code().value()==11000 ? "That time was just reserved. Choose another available time." : "Database operation unavailable. Booking requires a MongoDB replica set."));}
-    catch(const std::exception&){cb(http::error(drogon::k503ServiceUnavailable,"The service is temporarily unavailable"));}
+    catch(const Json::Exception& e){LOG_ERROR << "Workflow JSON error: " << e.what();cb(http::error(drogon::k503ServiceUnavailable,"The service could not read this record"));}
+    catch(const std::exception& e){LOG_ERROR << "Workflow error category: " << typeid(e).name();cb(http::error(drogon::k503ServiceUnavailable,"The service is temporarily unavailable"));}
 }
 inline Json::Value message(const std::string& text) {Json::Value v;v["message"]=text;return v;}
 }

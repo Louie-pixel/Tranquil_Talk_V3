@@ -7,7 +7,8 @@ const password="test-only-workflow-password";
 function database(code){return JSON.parse(execFileSync("docker",["exec",mongo,"mongosh","--quiet","--eval",`const d=db.getSiblingDB('tranquil_talk'); const result=(()=>{${code}})(); print(JSON.stringify(result ?? null));`],{encoding:"utf8"}).trim());}
 async function api(path,token,body,method=body ? "POST" : "GET"){
     const r=await fetch(base+"/api"+path,{method,headers:{connection:"close",...(token ? {authorization:"Bearer "+token} : {}),...(body ? {"content-type":"application/json"} : {})},body:body ? JSON.stringify(body) : undefined});
-    return {status:r.status,data:await r.json()};
+    const data=await r.json();if(r.status>=500)console.log("Workflow failure",path,r.status,data.error);
+    return {status:r.status,data};
 }
 test("transactional booking, participant-only rooms, account actions and moderation",{skip:!mongo,timeout:90000},async()=>{
     async function user(label,role="patient"){

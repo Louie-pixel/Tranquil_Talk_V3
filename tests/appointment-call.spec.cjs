@@ -14,7 +14,8 @@ test("an accepted appointment connects its two accounts using only the patient a
     expect((await request.post("/api/availability/"+expert.id,{headers:headers(expert.token),data:{startAt:start}})).status()).toBe(200);
     const slots=await (await request.get("/api/availability/"+expert.id)).json();
     const created=await request.post("/api/appointments",{headers:headers(patient.token),data:{expertId:expert.id,mode:"audio",alias:"Quiet River",slotId:slots.items[0].id}});expect(created.status()).toBe(200);
-    const a=await created.json();expect((await request.post(`/api/appointments/${a.id}/accept`,{headers:headers(expert.token),data:{revision:a.revision}})).status()).toBe(200);
+    const a=await created.json();const accepted=await request.post(`/api/appointments/${a.id}/accept`,{headers:headers(expert.token),data:{revision:a.revision}});
+    expect(accepted.status(),await accepted.text()).toBe(200);
     // Move a disposable fixture into the consultation window; booking rules are covered separately.
     database(`d.appointments.updateOne({_id:${JSON.stringify(a.id)}},{$set:{startAt:Math.floor(Date.now()/1000)-30}});`);
     const contexts=await Promise.all([0,1].map(()=>browser.newContext({baseURL,permissions:["microphone","camera"]})));
