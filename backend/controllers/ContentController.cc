@@ -17,7 +17,7 @@ drogon::HttpResponsePtr list(const std::string& name) {
     auto collection = client->database("tranquil_talk").collection(name);
     mongocxx::options::find options;
     options.limit(50);
-    options.sort(document{} << (name == "events" ? "startsAt" : "createdAt") << (name == "events" ? 1 : -1) << finalize);
+    options.sort(document{} << std::string(name == "events" ? "startsAt" : "createdAt") << (name == "events" ? 1 : -1) << finalize);
     if (name == "blogs")
         options.projection(document{} << "title" << 1 << "body" << 1 << "author" << 1 << "createdAt" << 1 << "_id" << 0 << finalize);
     else options.projection(document{} << "title" << 1 << "description" << 1 << "startsAt" << 1 << "location" << 1 << "_id" << 0 << finalize);
