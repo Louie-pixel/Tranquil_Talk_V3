@@ -30,3 +30,5 @@ header{padding-block:23px}nav{gap:22px;flex-wrap:wrap}.brand{font-size:22px;lett
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}button,.button,.expert-card{transition:none}}
 
 .profile-dialog h2,.review-card h3{overflow-wrap:anywhere}.review-card>div{min-width:0}
+
+.expert-title,.expert-location,.review-card p{overflow-wrap:anywhere}.profile-hero>div{min-width:0}

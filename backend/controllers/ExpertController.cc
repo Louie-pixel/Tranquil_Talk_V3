@@ -194,8 +194,9 @@ void ExpertController::directory(const drogon::HttpRequestPtr& req, Callback&& c
         stage["$lookup"]["as"] = "account"; pipeline.append_stage(bsoncxx::from_json(write(stage)));
         stage = Json::Value(); stage["$match"]["account.role"] = "expert";
         pipeline.append_stage(bsoncxx::from_json(write(stage)));
-        stage = Json::Value(); stage["$sort"]["name"] = 1; stage["$sort"]["_id"] = 1;
-        pipeline.append_stage(bsoncxx::from_json(write(stage)));
+        using namespace bsoncxx::builder::stream;
+        pipeline.append_stage(document{} << "$sort" << open_document
+            << "name" << 1 << "_id" << 1 << close_document << finalize);
         stage = Json::Value(); stage["$skip"] = skip; pipeline.append_stage(bsoncxx::from_json(write(stage)));
         stage = Json::Value(); stage["$limit"] = 21; pipeline.append_stage(bsoncxx::from_json(write(stage)));
         // Exclude account hashes/emails and credential/review material before returning any document.
@@ -207,7 +208,7 @@ void ExpertController::directory(const drogon::HttpRequestPtr& req, Callback&& c
         Json::Value result; result["items"] = Json::Value(Json::arrayValue);
         result["nextOffset"] = Json::Value();
         for (auto&& value : profiles.aggregate(pipeline)) {
-            if (result["items"].size() == 20) { if (skip < 10000) result["nextOffset"] = skip + 20; break; }
+            if (result["items"].size() == 20) { if (skip <= 9980) result["nextOffset"] = skip + 20; break; }
             result["items"].append(publicProfile(read(value)));
         }
         callback(drogon::HttpResponse::newHttpJsonResponse(result));
@@ -343,15 +344,15 @@ void ExpertController::queue(const drogon::HttpRequestPtr& req, Callback&& callb
         auto client = DatabaseManager::getInstance().getConnection();
         auto profiles = client->database("tranquil_talk").collection("expert_profiles");
         Json::Value filter; filter["status"] = requested;
-        Json::Value sort; sort["updatedAt"] = -1; sort["_id"] = 1;
         mongocxx::options::find options; options.limit(21); options.skip(skip);
-        options.sort(bsoncxx::from_json(write(sort)));
+        using namespace bsoncxx::builder::stream;
+        options.sort(document{} << "updatedAt" << -1 << "_id" << 1 << finalize);
         Json::Value projection;
         for (const auto* key : {"_id","name","professionalTitle","city","country","status","revision","updatedAt"}) projection[key] = 1;
         options.projection(bsoncxx::from_json(write(projection)));
         Json::Value result; result["items"] = Json::Value(Json::arrayValue); result["nextOffset"] = Json::Value();
         for (auto&& value : profiles.find(bsoncxx::from_json(write(filter)),options)) {
-            if (result["items"].size() == 20) { if (skip < 10000) result["nextOffset"] = skip + 20; break; }
+            if (result["items"].size() == 20) { if (skip <= 9980) result["nextOffset"] = skip + 20; break; }
             result["items"].append(privateProfile(read(value),true));
         }
         callback(drogon::HttpResponse::newHttpJsonResponse(result));

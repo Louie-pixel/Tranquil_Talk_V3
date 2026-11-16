@@ -52,6 +52,7 @@ int main() {
     assert(experts::httpsUrl("https://register.example.com/check?id=123"));
     assert(!experts::httpsUrl("javascript:alert(1)"));
     assert(!experts::httpsUrl("http://register.example.com"));
+    assert(!experts::httpsUrl(std::string("https://register.example.com/") + char(0)));
     assert(!experts::httpsUrl("https://user:password@register.example.com"));
     assert(!experts::httpsUrl("https://register.example.com/has space"));
     assert(experts::escapeRegex(".*[name]") == "\\.\\*\\[name\\]");

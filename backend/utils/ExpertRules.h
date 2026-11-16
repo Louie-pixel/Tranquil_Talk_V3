@@ -27,7 +27,7 @@ inline bool clean(const std::string& value, std::size_t max) {
 }
 inline bool httpsUrl(const std::string& value) {
     static const std::regex pattern(R"(^https://[A-Za-z0-9][A-Za-z0-9.-]*(?::[0-9]{1,5})?(?:[/?#][^\s\\]*)?$)");
-    return value.size() <= 512 && std::regex_match(value, pattern);
+    return clean(value,512) && std::regex_match(value, pattern);
 }
 inline std::string escapeRegex(const std::string& value) {
     const std::string metacharacters = R"(\.^$|()[]{}*+?)";
