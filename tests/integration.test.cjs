@@ -65,6 +65,9 @@ test("real backend: authentication, public resources, room capabilities and sign
         req.on("error",reject);req.end();
     });
     assert.equal(handshake.status,101,JSON.stringify(handshake));
+    require("node:diagnostics_channel").channel("undici:request:headers").subscribe(({request,response})=>{
+        if(request.path === "/rtc/signal") console.log("WebSocket HTTP status:",response.statusCode);
+    });
     const sockets=[];
     async function connect() {
         const ws=new WebSocket(base.replace(/^http/,"ws")+"/rtc/signal");
@@ -77,7 +80,7 @@ test("real backend: authentication, public resources, room capabilities and sign
         const opened=Promise.withResolvers();
         ws.addEventListener("open",()=>opened.resolve(),{once:true});
         ws.addEventListener("error",event=>opened.reject(new Error("WebSocket open failed: "+(event.message || event.error?.message || "unknown error"))),{once:true});
-        await opened.promise; sockets.push(ws);
+        await opened.promise; sockets.push(ws); console.log("WebSocket connected:",sockets.length);
         return {
             ws,
             send(body){ws.send(JSON.stringify(body));},

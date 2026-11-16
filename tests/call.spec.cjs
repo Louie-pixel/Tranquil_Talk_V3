@@ -15,6 +15,9 @@ test("two invitees connect through the real backend, audio keeps camera off, and
     })));
     try {
         const [first,second]=await Promise.all(contexts.map(context=>context.newPage()));
+        for(const page of [first,second]) page.on("console",message=>{
+            if(message.type() === "error") console.log("Browser error:",message.text());
+        });
         await Promise.all([first,second].map(page=>page.goto("/#invite="+encodeURIComponent(ticket))));
         await second.getByRole("radio",{name:"Video & audio"}).check();
         await first.getByRole("button",{name:"Enter conversation"}).click();

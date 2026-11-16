@@ -56,11 +56,16 @@ jobs:
             sleep 2
           done
       - run: npm run test:integration
+        id: api-checks
+        continue-on-error: true
       - name: Test real browser calls with emulated devices
         run: |
           npm install --no-save --package-lock=false @playwright/test@1.56.1
           npx playwright install --with-deps chromium
           npx playwright test --config=playwright.integration.config.cjs
+      - name: Enforce API integration result
+        if: always() && steps.api-checks.outcome != 'success'
+        run: exit 1
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
