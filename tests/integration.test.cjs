@@ -1,6 +1,6 @@
 const {test} = require("node:test");
 const assert = require("node:assert/strict");
-const base = process.env.TEST_BASE_URL || "http://localhost:8080";
+const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8080";
 async function request(path, method="GET", body, token) {
     return fetch(base + path, {method, headers:{
         ...(body ? {"content-type":"application/json"} : {}),
@@ -48,6 +48,23 @@ test("real backend: authentication, public resources, room capabilities and sign
         const response = await request(path);
         assert.equal(response.status,200); assert(Array.isArray(await response.json()));
     }
+    // Expose handshake status/body when a WebSocket client only reports a network error.
+    const handshake = await new Promise((resolve,reject)=>{
+        const http = require("node:http");
+        const https = require("node:https");
+        const url = new URL("/rtc/signal",base);
+        const req = (url.protocol === "https:" ? https : http).request(url,{
+            headers:{connection:"Upgrade",upgrade:"websocket",
+                "sec-websocket-version":"13","sec-websocket-key":require("node:crypto").randomBytes(16).toString("base64")}
+        });
+        req.on("upgrade",(res,socket)=>{socket.destroy();resolve({status:res.statusCode});});
+        req.on("response",res=>{
+            let body="";res.on("data",chunk=>{body+=chunk;});
+            res.on("end",()=>resolve({status:res.statusCode,body:body.slice(0,500)}));
+        });
+        req.on("error",reject);req.end();
+    });
+    assert.equal(handshake.status,101,JSON.stringify(handshake));
     const sockets=[];
     async function connect() {
         const ws=new WebSocket(base.replace(/^http/,"ws")+"/rtc/signal");
@@ -59,7 +76,7 @@ test("real backend: authentication, public resources, room capabilities and sign
         });
         const opened=Promise.withResolvers();
         ws.addEventListener("open",()=>opened.resolve(),{once:true});
-        ws.addEventListener("error",()=>opened.reject(new Error("WebSocket open failed")),{once:true});
+        ws.addEventListener("error",event=>opened.reject(new Error("WebSocket open failed: "+(event.message || event.error?.message || "unknown error"))),{once:true});
         await opened.promise; sockets.push(ws);
         return {
             ws,

@@ -20,6 +20,7 @@ int main() {
         if (port != static_cast<int>(port)) throw std::invalid_argument("PORT must be an integer");
         drogon::app()
             .setDocumentRoot(env("WEB_ROOT", "web"))
+            .setUploadPath(env("UPLOAD_PATH", "/tmp/tranquil-talk-uploads"))
             .setClientMaxBodySize(65536)
             .setClientMaxWebSocketMessageSize(65536)
             .setThreadNum(2)
