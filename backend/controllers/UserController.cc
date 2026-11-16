@@ -38,6 +38,7 @@ void UserController::registerUser(const drogon::HttpRequestPtr& req,
         // The unique email index also handles concurrent registrations.
         auto newUser = document{} << "email" << email
             << "emailVerified" << false << "sessionVersion" << 0
+            << "disabled" << false << "deleted" << false
             << "password" << BCrypt::generateHash(password, 12)
             << "role" << (role == "expert" ? "expert_pending" : "patient") << finalize;
         users.insert_one(newUser.view());

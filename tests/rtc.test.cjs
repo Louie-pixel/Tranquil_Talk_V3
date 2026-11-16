@@ -2,14 +2,14 @@ const {test} = require("node:test");
 const assert = require("node:assert/strict");
 const {TranquilCall} = require("../web/rtc.js");
 
-function setup(mediaOverride) {
+function setup(mediaOverride, options={}) {
     const tracks = ["audio", "video"].map(kind => ({kind, enabled: true, stopped: false, stop(){this.stopped = true;}}));
     const stream = {getTracks:()=>tracks, getAudioTracks:()=>[tracks[0]], getVideoTracks:()=>[tracks[1]]};
     const mediaCalls = [], signals = [];
     class Peer {
-        constructor() {this.remoteDescription = null; this.candidates = []; this.tracks = [];}
+        constructor(configuration) {this.configuration=configuration;this.remoteDescription = null; this.candidates = []; this.tracks = [];}
         addTrack(track) {this.tracks.push(track);}
-        async createOffer() {return {type:"offer", sdp:"offer-sdp"};}
+        async createOffer(options) {this.offerOptions=options;return {type:"offer", sdp:"offer-sdp"};}
         async createAnswer() {return {type:"answer", sdp:"answer-sdp"};}
         async setLocalDescription(value) {this.localDescription = value;}
         async setRemoteDescription(value) {this.remoteDescription = value;}
@@ -19,7 +19,7 @@ function setup(mediaOverride) {
     const localVideo = {}, remoteVideo = {};
     const call = new TranquilCall({send:(type,payload)=>signals.push({type,...payload}),status:()=>{},
         localVideo,remoteVideo,PeerConnection:Peer,
-        mediaDevices:{getUserMedia:mediaOverride || (async constraints => {mediaCalls.push(constraints);return stream;})}});
+        mediaDevices:{getUserMedia:mediaOverride || (async constraints => {mediaCalls.push(constraints);return stream;})},...options});
     return {call, tracks, stream, mediaCalls, signals, localVideo, remoteVideo};
 }
 test("audio mode never requests camera access", async () => {
@@ -104,4 +104,22 @@ test("mute and camera choices made during device permission are applied before t
     assert.equal(tracks[0].enabled,false);
     assert.equal(tracks[1].enabled,false);
     call.end();
+});
+
+test("configured TURN credentials and relay-only policy reach the peer connection", async () => {
+    const iceServers=[{urls:'turns:relay.example:5349',username:'temporary-user',credential:'temporary-password'}];
+    const {call}=setup(undefined,{iceServers,iceTransportPolicy:'relay'});
+    await call.prepare('audio');
+    assert.deepEqual(call.peer.configuration,{iceServers,iceTransportPolicy:'relay'});
+    call.end();
+});
+
+test("an offerer restarts failed ICE and ending clears reconnection work", async () => {
+    const {call}=setup();await call.prepare('audio');await call.offer();
+    call.peer.connectionState='failed';call.peer.onconnectionstatechange();
+    assert.ok(call.restartTimer);
+    await new Promise(resolve=>setTimeout(resolve,600));
+    assert.deepEqual(call.peer.offerOptions,{iceRestart:true});assert.equal(call.restarts,1);
+    call.peer.onconnectionstatechange();assert.ok(call.restartTimer);
+    call.end();assert.equal(call.restartTimer,null);
 });

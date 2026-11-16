@@ -9,7 +9,7 @@ Json::Value approved(mongocxx::database db,const std::string& id,mongocxx::clien
     ensure(id.size()==24,"Invalid professional identifier");
     auto user=find(db["users"],objectId(id),s);
     auto p=find(db["expert_profiles"],objectId(id),s);
-    ensure(!user.isNull() && user["role"].asString()=="expert" && !user["disabled"].asBool() && !user["deleted"].asBool() &&
+    ensure(!user.isNull() && user["role"].asString()=="expert" && !user.get("disabled",false).asBool() && !user.get("deleted",false).asBool() &&
         !p.isNull() && p["status"]=="approved" && p["approvedRevision"]==p["revision"],
         "This professional is not currently available.",drogon::k409Conflict);
     if(s) {
@@ -160,3 +160,4 @@ void WorkflowController::rtcConfig(const drogon::HttpRequestPtr& req,Callback&& 
         return result;
     });
 }
+

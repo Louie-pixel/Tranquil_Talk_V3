@@ -18,6 +18,8 @@ test("transactional booking, participant-only rooms, account actions and moderat
     }
     const p1=await user("booking-patient-one"),p2=await user("booking-patient-two"),e1=await user("booking-expert-one","expert"),e2=await user("booking-expert-two","expert");
     const ids=[p1.id,p2.id,e1.id,e2.id];
+    // Exercise legacy accounts without optional flags, plus null flags written by older drafts.
+    database(`d.users.updateOne({_id:ObjectId(${JSON.stringify(p1.id)})},{$set:{disabled:null,deleted:null}});d.users.updateOne({_id:ObjectId(${JSON.stringify(e1.id)})},{$unset:{disabled:'',deleted:''}});`);
     // Trusted fixture setup exercises booking independently of the existing verification-lifecycle suite.
     for(const e of [e1,e2])database(`d.users.updateOne({_id:ObjectId(${JSON.stringify(e.id)})},{$set:{role:'expert',emailVerified:true}});d.expert_profiles.insertOne({_id:ObjectId(${JSON.stringify(e.id)}),name:'Fixture Professional',status:'approved',revision:1,approvedRevision:1,methods:['audio','video','in_person']});`);
     const start=Math.ceil((Date.now()/1000+1200)/1800)*1800;
@@ -35,6 +37,7 @@ test("transactional booking, participant-only rooms, account actions and moderat
     const competing=await Promise.all([p1,p2].map(p=>api("/appointments",p.token,request)));
     assert.deepEqual(competing.map(r=>r.status).sort(),[200,409],"one winner for simultaneous requests");
     const winner=competing[0].status===200 ? p1 : p2,other=winner===p1 ? p2 : p1;
+    for(const user of [winner,other,e1])assert.equal((await api("/me",user.token)).status,200,"booking must not invalidate a valid account");
     let a=competing.find(r=>r.status===200).data;
     assert.ok(!JSON.stringify(a).includes(winner.email));assert.equal(a.patientId,undefined);assert.equal(a.roomId,undefined);
     const otherSlot=(await api("/availability/"+e2.id)).data.items[0];

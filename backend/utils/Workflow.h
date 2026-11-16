@@ -69,7 +69,7 @@ inline std::string text(const Json::Value& b,const char* name,size_t min,size_t 
 inline void verified(mongocxx::database db,const auth::Identity& who,mongocxx::client_session* s=nullptr) {
     auto u=find(db["users"],objectId(who.id),s);
     ensure(!u.isNull() && u["emailVerified"].asBool(),"Verify your email in Account before continuing.",drogon::k403Forbidden);
-    ensure(!u["disabled"].asBool() && !u["deleted"].asBool(),"Account unavailable.",drogon::k403Forbidden);
+    ensure(!u.get("disabled",false).asBool() && !u.get("deleted",false).asBool(),"Account unavailable.",drogon::k403Forbidden);
     if(s){u["workflowFence"]=drogon::utils::getUuid();replace(db["users"],objectId(who.id),u,s);}
 }
 inline std::string hash(const std::string& value) {
@@ -90,3 +90,4 @@ template<class F> inline void respond(Callback cb,F fn) {
 }
 inline Json::Value message(const std::string& text) {Json::Value v;v["message"]=text;return v;}
 }
+

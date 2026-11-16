@@ -56,9 +56,14 @@ inline Identity currentIdentity(const std::string& id) {
         auto filter = document{} << "_id" << bsoncxx::oid(id) << finalize;
         auto user = db.collection("users").find_one(filter.view());
         if (!user) throw std::invalid_argument("Account unavailable");
-        if ((user->view()["disabled"] && user->view()["disabled"].get_bool().value) ||
-            (user->view()["deleted"] && user->view()["deleted"].get_bool().value))
-            throw std::invalid_argument("Account unavailable");
+        for(const auto* field:{"disabled","deleted"}) {
+            const auto flag=user->view()[field];
+            // Older records may omit optional flags; a null flag is the same default.
+            // Other unexpected types fail closed instead of being cast to a boolean.
+            if(flag && flag.type()!=bsoncxx::type::k_null &&
+                (flag.type()!=bsoncxx::type::k_bool || flag.get_bool().value))
+                throw std::invalid_argument("Account unavailable");
+        }
         std::string role(user->view()["role"].get_string().value);
         if (!experts::contains({"patient","expert_pending","expert","admin"},role))
             throw std::invalid_argument("Account unavailable");

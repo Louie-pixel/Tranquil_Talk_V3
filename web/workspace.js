@@ -257,3 +257,4 @@ $("create-room").addEventListener("click",()=>{if(workspace.rtc)closeConsultatio
 $("join-form").addEventListener("submit",()=>{if(workspace.rtc)closeConsultation();});
 // Do not request media, location or notification permissions during navigation.
 appRoute();
+$("forgot-password").addEventListener("click",()=>$("auth-dialog").close());

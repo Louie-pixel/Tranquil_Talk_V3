@@ -15,7 +15,7 @@ void WorkflowController::accountAction(const drogon::HttpRequestPtr& req,Callbac
             if(action=="request-verification") {auto who=auth::require(req);u=find(db["users"],objectId(who.id));}
             else {auto email=validation::email(text(b,"email",3,254));ensure(validation::validEmail(email),"Enter a valid email.");Json::Value q;q["email"]=email;u=find(db["users"],q);}
             const std::string purpose=action=="request-reset" ? "reset" : "verify";
-            if(!u.isNull() && !u["deleted"].asBool() && !u["disabled"].asBool() && !(purpose=="verify" && u["emailVerified"].asBool())) {
+            if(!u.isNull() && !u.get("deleted",false).asBool() && !u.get("disabled",false).asBool() && !(purpose=="verify" && u["emailVerified"].asBool())) {
                 const auto id=u["_id"]["$oid"].asString();
                 // Per-account throttling prevents inbox flooding, including from a signed-in client.
                 if(rate_limit::allow(id+":mail:"+purpose,1)) {
@@ -40,7 +40,7 @@ void WorkflowController::accountAction(const drogon::HttpRequestPtr& req,Callbac
                 auto t=find(db["account_actions"],q,s);
                 ensure(!t.isNull() && t["expiresAt"].asDouble()>now(),"This link is invalid, used or expired. Request another.");
                 auto u=find(db["users"],objectId(t["userId"].asString()),s);
-                ensure(!u.isNull() && !u["deleted"].asBool() && !u["disabled"].asBool() && u.get("sessionVersion",0)==t["version"],"This link is no longer valid.");
+                ensure(!u.isNull() && !u.get("deleted",false).asBool() && !u.get("disabled",false).asBool() && u.get("sessionVersion",0)==t["version"],"This link is no longer valid.");
                 if(action=="verify")u["emailVerified"]=true;
                 else {u["password"]=newHash;u["sessionVersion"]=u.get("sessionVersion",0).asInt()+1;}
                 replace(db["users"],objectId(t["userId"].asString()),u,s);erase(db["account_actions"],key(t["_id"].asString()),s);
@@ -113,3 +113,4 @@ void WorkflowController::reviewReport(const drogon::HttpRequestPtr& req,Callback
         return message("Moderation decision recorded.");
     });
 }
+
