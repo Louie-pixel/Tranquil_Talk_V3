@@ -257,13 +257,12 @@ $("refresh-profile").addEventListener("click",async()=>{
 });
 function openProfessionalSignup() {
     if(account){location.hash="professional";status("professional-gate-status","Sign out first, then create or sign in to a professional account.",true);return;}
-    if(!registering)$("switch-auth").click();
-    $("auth-form").elements.namedItem("role").value="expert";openAuth();
+    $("signup-form").elements.namedItem("role").value="expert";location.hash="signup";
 }
 $("professional-signup").addEventListener("click",openProfessionalSignup);
 $("professional-signin").addEventListener("click",()=>{
     if(account){status("professional-gate-status","Sign out first to switch to a professional account.",true);return;}
-    if(registering)$("switch-auth").click();openAuth();
+    openAuth();
 });
 async function loadReviewQueue(append=false) {
     if(account?.role!=="admin")return;

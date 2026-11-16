@@ -3,6 +3,7 @@
 #include "../utils/Auth.h"
 #include "../utils/Http.h"
 #include "../utils/Validation.h"
+#include "../utils/Workflow.h"
 #include <bsoncxx/builder/stream/document.hpp>
 #include <bsoncxx/json.hpp>
 #include <mongocxx/options/find.hpp>
@@ -39,10 +40,20 @@ void ClinicController::addClinic(const drogon::HttpRequestPtr& req,
     try {
         auto client = DatabaseManager::getInstance().getConnection();
         auto clinics = client->database("tranquil_talk").collection("clinics");
-        auto clinic = document{} << "name" << name
-            << "location" << open_document << "type" << "Point"
-                << "coordinates" << open_array << lng << lat << close_array
-            << close_document << finalize;
+        Json::Value record;record["name"]=name;record["location"]["type"]="Point";
+        record["location"]["coordinates"][0]=lng;record["location"]["coordinates"][1]=lat;
+        for(const auto* field:{"address","suburb","city","country","phone","website"}) {
+            if(json->isMember(field)) {
+                if(!(*json)[field].isString() || !experts::clean((*json)[field].asString(),std::string(field)=="website" ? 512 : 240)) {
+                    callback(http::error(drogon::k400BadRequest,"Clinic contact details must be bounded text"));return;
+                }
+                record[field]=experts::trim((*json)[field].asString());
+            }
+        }
+        if(!record.get("website","").asString().empty() && !experts::httpsUrl(record["website"].asString())) {
+            callback(http::error(drogon::k400BadRequest,"Clinic websites must use HTTPS"));return;
+        }
+        auto clinic=workflow::bson(record);
         clinics.insert_one(clinic.view());
         Json::Value result; result["message"] = "Clinic added";
         auto response = drogon::HttpResponse::newHttpJsonResponse(result);
@@ -55,26 +66,41 @@ void ClinicController::addClinic(const drogon::HttpRequestPtr& req,
 
 void ClinicController::getNearbyClinics(const drogon::HttpRequestPtr& req,
         std::function<void(const drogon::HttpResponsePtr&)>&& callback) {
-    double lat, lng, radius;
+    double lat=0, lng=0, radius=25000;
+    const auto queryText=experts::trim(req->getParameter("q"));
+    const bool nearby=!req->getParameter("lat").empty() || !req->getParameter("lng").empty();
     try {
-        lat = validation::number(req->getParameter("lat"), -90, 90);
-        lng = validation::number(req->getParameter("lng"), -180, 180);
-        radius = validation::number(req->getParameter("radius"), 1, 100000);
+        if(!queryText.empty() && (queryText.size()<2 || !experts::clean(queryText,100)))throw std::invalid_argument("Invalid search");
+        if(nearby) {
+            lat = validation::number(req->getParameter("lat"), -90, 90);
+            lng = validation::number(req->getParameter("lng"), -180, 180);
+            if(!req->getParameter("radius").empty())radius = validation::number(req->getParameter("radius"), 1, 100000);
+        } else if(queryText.empty() || !req->getParameter("radius").empty())throw std::invalid_argument("Choose an area");
     } catch (const std::exception&) {
         callback(http::error(drogon::k400BadRequest,
-            "Use latitude -90..90, longitude -180..180 and radius 1..100000 metres")); return;
+            "Enter an area or clinic name, or provide a valid location")); return;
     }
     try {
         auto client = DatabaseManager::getInstance().getConnection();
         auto clinics = client->database("tranquil_talk").collection("clinics");
-        auto query = document{} << "location" << open_document << "$near" << open_document
-            << "$geometry" << open_document << "type" << "Point"
-                << "coordinates" << open_array << lng << lat << close_array << close_document
-            << "$maxDistance" << radius << close_document << close_document << finalize;
+        Json::Value filter(Json::objectValue);
+        if(nearby) {
+            auto& near=filter["location"]["$near"];
+            near["$geometry"]["type"]="Point";near["$geometry"]["coordinates"][0]=lng;
+            near["$geometry"]["coordinates"][1]=lat;near["$maxDistance"]=radius;
+        }
+        if(!queryText.empty()) {
+            for(const auto* field:{"name","address","suburb","city","country"}) {
+                Json::Value clause;clause[field]["$regex"]=experts::escapeRegex(queryText);clause[field]["$options"]="i";filter["$or"].append(clause);
+            }
+        }
+        auto query=workflow::bson(filter);
         mongocxx::options::find options;
         options.limit(100);
         // Return only public fields, never arbitrary database documents.
-        options.projection(document{} << "name" << 1 << "location" << 1 << "_id" << 0 << finalize);
+        options.projection(document{} << "name" << 1 << "location" << 1 << "address" << 1 << "suburb" << 1
+            << "city" << 1 << "country" << 1 << "phone" << 1 << "website" << 1 << "_id" << 0 << finalize);
+        if(!nearby)options.sort(document{} << "name" << 1 << finalize);
         std::string body = "[";
         bool first = true;
         for (auto&& clinic : clinics.find(query.view(), options)) {
@@ -89,4 +115,7 @@ void ClinicController::getNearbyClinics(const drogon::HttpRequestPtr& req,
     } catch (const std::exception&) {
         callback(http::error(drogon::k503ServiceUnavailable, "Clinic search is temporarily unavailable"));
     }
+}
+void ClinicController::status(const drogon::HttpRequestPtr&,std::function<void(const drogon::HttpResponsePtr&)>&& callback) {
+    Json::Value result;result["mode"]="application";callback(drogon::HttpResponse::newHttpJsonResponse(result));
 }

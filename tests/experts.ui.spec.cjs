@@ -11,13 +11,15 @@ test.beforeEach(async({page})=>{
     await page.route("**/api/events",route=>route.fulfill({json:[]}));
 });
 async function login(page,role){
+    const returnHash=new URL(page.url()).hash;
     await page.route("**/api/login",route=>route.fulfill({json:{id:"aaaaaaaaaaaaaaaaaaaaaaaa",token:"test-only-token",role,expiresIn:3600}}));
     await page.route("**/api/me",route=>route.fulfill({json:{id:"aaaaaaaaaaaaaaaaaaaaaaaa",role}}));
-    await page.locator("#account-button").click();
+    if(!await page.locator("#auth-form").isVisible())await page.locator("#account-button").click();
     await page.locator('#auth-form [name="email"]').fill("fixture@example.com");
     await page.locator("#password").fill("a-test-only-password");
     await page.locator("#auth-submit").click();
     await expect(page.locator("#auth-dialog")).not.toBeVisible();
+    if(returnHash && returnHash!=="#signin")await page.evaluate(hash=>{location.hash=hash;},returnHash);
 }
 test("modern directory fits desktop/mobile, supports filters and opens shareable public profiles without emojis",async({page})=>{
     const errors=[];page.on("pageerror",error=>errors.push(error.message));
@@ -107,7 +109,7 @@ test("administrator reviews a version, must attest registry checking, and record
         approved=true;decisions++;return route.fulfill({json:{profile:{...pending,status:"approved",revision:3}}});
     });
     await page.goto("/");await login(page,"admin");
-    await page.locator("#verification-nav").click();
+    await page.locator("#app-menu summary").click();await page.locator("#verification-nav").click();
     await page.getByRole("button",{name:"Review application: Amara Test"}).click();
     await expect(page.locator("#review-detail")).toContainText("PRIVATE-456");
     await page.locator('#review-decision-form [name="note"]').fill("Matched the applicant registration details against the official register.");

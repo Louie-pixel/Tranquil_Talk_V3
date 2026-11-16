@@ -1,6 +1,6 @@
 "use strict";
 const $ = id => document.getElementById(id);
-let account = null, registering = false, call = null, socket = null, creating = false;
+let account = null, call = null, socket = null, creating = false, previewExploring = false;
 const api = async (path, {method = "GET", body, authenticated = false} = {}) => {
     const headers = {};
     if (body) headers["Content-Type"] = "application/json";
@@ -52,88 +52,41 @@ function signOut() {
     endCall();
 }
 function openAuth() {
-    if (!$("auth-dialog").open) $("auth-dialog").showModal();
+    previewExploring=false;
+    for(const id of ["expert-dialog","booking-dialog"])if($(id)?.open)$(id).close();
+    location.hash="signin";
 }
-$("account-button").addEventListener("click", () => {
-    if (!account) openAuth();
-    else {
-        location.hash = "account";
-    }
-});
-$("logout").addEventListener("click", signOut);
-$("close-auth").addEventListener("click", () => $("auth-dialog").close());
-$("switch-auth").addEventListener("click", () => {
-    registering = !registering;
-    $("auth-title").textContent = registering ? "A place to start." : "Welcome back.";
-    $("auth-description").textContent = registering ? "Use a password of 12-72 bytes. Your email stays private." : "Sign in to create a private conversation room.";
-    $("auth-submit").textContent = registering ? "Create account" : "Sign in";
-    $("switch-auth").textContent = registering ? "Already have an account? Sign in" : "New here? Create an account";
-    $("role-label").hidden = !registering;
-    $("password").minLength = registering ? 12 : 1;
-    $("password").autocomplete = registering ? "new-password" : "current-password";
-    status("auth-status", "");
-});
-$("auth-form").addEventListener("submit", async event => {
-    event.preventDefault();
-    const button = $("auth-submit"); button.disabled = true;
-    const values = Object.fromEntries(new FormData(event.currentTarget));
-    status("auth-status", registering ? "Creating account." : "Signing in.");
+$("account-button").addEventListener("click",()=>account ? location.hash="account" : openAuth());
+$("logout").addEventListener("click",()=>{signOut();previewExploring=false;location.hash="signin";});
+$("auth-form").addEventListener("submit",async event=>{
+    event.preventDefault();const button=$("auth-submit");if(button.disabled)return;button.disabled=true;
+    status("auth-status","Signing in...");
     try {
-        const data = await api(registering ? "/register" : "/login", {method: "POST", body: values});
-        $("password").value = "";
-        if (registering) {
-            status("auth-status", data.message);
-        } else {
-            account = {...data, expiresAt: Date.now() + data.expiresIn * 1000};
-            renderAccount();
-            $("auth-dialog").close();
-            status("room-status", data.role === "expert_pending" ? "Signed in. Professional verification is still pending." : "You're signed in. Create a private room whenever you're ready.");
-        }
-    } catch (error) { status("auth-status", error.message, true); }
-    finally { button.disabled = false; }
+        const data=await api("/login",{method:"POST",body:Object.fromEntries(new FormData(event.currentTarget))});
+        if(typeof data.token!=="string" || typeof data.id!=="string" || !Number.isFinite(data.expiresIn))
+            throw new Error("The sign-in service is not available. Start the full application server.");
+        account={...data,expiresAt:Date.now()+data.expiresIn*1000};$("password").value="";previewExploring=false;
+        renderAccount();location.hash="home";status("auth-status","");
+    }catch(error){status("auth-status",error.message,true);}finally{button.disabled=false;}
 });
-$("locate").addEventListener("click", () => {
-    if (!navigator.geolocation) return status("clinic-status", "Location isn't available. Enter coordinates instead.", true);
-    $("locate").disabled = true; status("clinic-status", "Waiting for location permission.");
-    navigator.geolocation.getCurrentPosition(position => {
-        $("latitude").value = position.coords.latitude.toFixed(6);
-        $("longitude").value = position.coords.longitude.toFixed(6);
-        $("locate").disabled = false;
-        status("clinic-status", "Location ready. Select a radius and search.");
-    }, () => {
-        $("locate").disabled = false;
-        status("clinic-status", "Location could not be obtained. You can enter coordinates instead.", true);
-    }, {enableHighAccuracy: false, timeout: 10000, maximumAge: 60000});
-});
-$("clinic-form").addEventListener("submit", async event => {
-    event.preventDefault();
-    const button = event.currentTarget.querySelector('[type="submit"]'); button.disabled = true;
-    $("clinic-results").replaceChildren();
-    status("clinic-status", "Searching nearby clinics.");
+$("signup-form").addEventListener("submit",async event=>{
+    event.preventDefault();const button=$("signup-submit");if(button.disabled)return;button.disabled=true;
+    status("signup-status","Creating your account...");
     try {
-        const params = new URLSearchParams(new FormData(event.currentTarget));
-        const clinics = await api("/clinics?" + params);
-        if (!Array.isArray(clinics)) throw new Error("Unexpected clinic response. Please try again.");
-        for (const clinic of clinics) {
-            const coordinates = clinic.location?.coordinates;
-            if (!Array.isArray(coordinates) || coordinates.length !== 2 ||
-                !coordinates.every(Number.isFinite)) continue;
-            const card = make("article", undefined, "clinic-card");
-            card.append(make("h3", clinic.name), make("p", "Contact the clinic to confirm available mental health services."));
-            const link = make("a", "Open directions");
-            link.href = "https://www.google.com/maps/dir/?api=1&destination=" +
-                encodeURIComponent(coordinates[1] + "," + coordinates[0]);
-            link.target = "_blank"; link.rel = "noopener noreferrer";
-            card.append(link); $("clinic-results").append(card);
-        }
-        const count = $("clinic-results").childElementCount;
-        status("clinic-status", count ? count + " clinic(s) found." : "No clinics listed within this radius. Try a wider search.");
-        if (!count) $("clinic-results").append(make("p", "No matching clinics are currently listed.", "empty"));
-    } catch (error) {
-        status("clinic-status", error.message, true);
-        $("clinic-results").append(make("p", "We couldn't load clinics. Please try again.", "empty"));
-    } finally { button.disabled = false; }
+        const form=event.currentTarget,values=Object.fromEntries(new FormData(form));
+        const data=await api("/register",{method:"POST",body:values});
+        if(typeof data.message!=="string")throw new Error("Account creation is not available in this preview.");
+        $("auth-form").elements.email.value=values.email;form.reset();location.hash="signin";
+        status("auth-status","Your account is ready. Sign in to continue, then verify your email from Account.");
+    }catch(error){status("signup-status",error.message,true);}finally{button.disabled=false;}
 });
+$("preview-interface").addEventListener("click",()=>{previewExploring=true;location.hash="home";});
+async function checkServerMode(){
+    try {const mode=await api("/status");if(mode.mode==="application")return;}
+    catch {if(!["localhost","127.0.0.1","::1"].includes(location.hostname))return;}
+    $("preview-notice").hidden=false;$("preview-interface").hidden=false;
+}
+checkServerMode();
 $("create-room").addEventListener("click", async () => {
     if (!account || Date.now() >= account.expiresAt) { signOut(); openAuth(); return; }
     $("create-room").disabled = true;
@@ -301,9 +254,5 @@ if (invitation) {
     $("connect").scrollIntoView();
     status("join-status", "Invitation ready. Choose audio or video, then enter when you're comfortable.");
 }
-if (location.hash === "#register") {
-    $("switch-auth").click();
-    openAuth();
-    history.replaceState(null, "", location.pathname + location.search);
-}
+if(location.hash==="#register")history.replaceState(null,"",location.pathname+location.search+"#signup");
 loadBlogs(); loadEvents();

@@ -13,14 +13,14 @@ test.beforeEach(async({page})=>{
         await route.fulfill({json:result});
     });
 });
-async function login(page){await page.locator("#account-button").click();await page.locator('#auth-form [name="email"]').fill("patient@example.com");await page.locator("#password").fill("fixture-long-password");await page.locator("#auth-submit").click();await expect(page.locator("#auth-dialog")).toBeHidden();}
+async function login(page){const returnHash=new URL(page.url()).hash;if(!await page.locator("#auth-form").isVisible())await page.locator("#account-button").click();await page.locator('#auth-form [name="email"]').fill("patient@example.com");await page.locator("#password").fill("fixture-long-password");await page.locator("#auth-submit").click();await expect(page.locator("#auth-dialog")).toBeHidden();if(returnHash && returnHash!=="#signin")await page.evaluate(hash=>{location.hash=hash;},returnHash);}
 test("navigation isolates pages, supports history, and stays within mobile viewport",async({page})=>{
     const errors=[];page.on("pageerror",e=>errors.push(e.message));
     for(const width of [1440,390]){
-        await page.setViewportSize({width,height:900});await page.goto("/");await expect(page.locator("#home")).toBeVisible();
-        await page.getByRole("link",{name:"Appointments",exact:true}).click();await expect(page.locator("#appointments")).toBeVisible();await expect(page.locator("#home")).toBeHidden();
-        await expect(page.locator("#appointments-status")).toContainText("Sign in");
-        await page.getByRole("link",{name:"Resources",exact:true}).click();await expect(page.locator("#stories")).toBeVisible();await expect(page.locator("#experts")).toBeHidden();
+        await page.setViewportSize({width,height:900});await page.goto("/");await login(page);await expect(page.locator("#home")).toBeVisible();
+        await page.locator("#app-menu summary").click();await page.getByRole("link",{name:"Appointments",exact:true}).click();await expect(page.locator("#appointments")).toBeVisible();await expect(page.locator("#home")).toBeHidden();
+        await expect(page.locator("#appointments-status")).toContainText("No appointments");
+        await page.locator("#app-menu summary").click();await page.getByRole("link",{name:"Resources",exact:true}).click();await expect(page.locator("#stories")).toBeVisible();await expect(page.locator("#experts")).toBeHidden();
         await page.goBack();await expect(page.locator("#appointments")).toBeVisible();
         expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
         await page.screenshot({path:`test-results/appointments-${width}.png`,fullPage:true});

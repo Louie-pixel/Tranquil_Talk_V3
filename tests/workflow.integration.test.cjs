@@ -68,6 +68,11 @@ test("transactional booking, participant-only rooms, account actions and moderat
     assert.equal((await api(`/appointments/${a.id}/cancel`,winner.token,{revision:a.revision})).status,200);
     assert.equal((await api(`/appointments/${a.id}/join`,winner.token,{})).status,403);
     assert.equal((await api("/appointments",other.token,{...request,slotId:slots[1].id})).status,200,"cancellation frees both reservations");
+    const area="Workflow District "+Date.now();
+    assert.equal((await api("/clinics",e1.token,{name:"Workflow fixture clinic",lat:-25.75,lng:28.23,address:"Test street",city:area,phone:"+27120000000",website:"https://clinic.example.com"})).status,201);
+    const areaResult=await api("/clinics?q="+encodeURIComponent(area));assert.equal(areaResult.status,200);assert.equal(areaResult.data.length,1);assert.equal(areaResult.data[0].city,area);assert.equal(areaResult.data[0]._id,undefined);
+    assert.equal((await api("/clinics?q="+encodeURIComponent(".*"))).data.length,0,"area queries escape regex syntax");
+    assert.equal((await api("/clinics?q=a")).status,400);
     const report=await api("/reports",p1.token,{targetType:"expert",targetId:e1.id,reason:"Test-only report for a moderation lifecycle."});assert.equal(report.status,200);
     assert.equal((await api("/reports",p1.token)).status,403);
     database(`d.users.updateOne({_id:ObjectId(${JSON.stringify(e2.id)})},{$set:{role:'admin'}});`);
