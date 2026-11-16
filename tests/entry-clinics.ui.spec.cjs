@@ -43,3 +43,14 @@ test("a late location callback cannot overwrite a newer area search",async({page
     await page.goto("/#care");await page.locator("#locate").click();await page.locator("#clinic-query").fill("Pretoria");await page.getByRole("button",{name:"Find care",exact:true}).click();await expect(page.locator("#clinic-area-label")).toHaveText("Pretoria");
     await page.evaluate(()=>window.completeLocation());await expect(page.locator("#locate")).toBeEnabled();await expect(page.locator("#clinic-area-label")).toHaveText("Pretoria");expect(queries).toEqual(["?q=Pretoria"]);
 });
+test("an old offline preview cannot fake a sign-in or an empty live clinic directory",async({page})=>{
+    await page.route("**/api/status",r=>r.fulfill({json:[]}));
+    await page.route("**/api/login",r=>r.fulfill({json:[]}));let searches=0;
+    await page.route("**/api/clinics?**",r=>{++searches;return r.fulfill({json:[]});});
+    await page.goto("/");await expect(page.locator("#preview-notice")).toBeVisible();
+    await page.locator('#auth-form [name="email"]').fill("test@example.com");await page.locator("#password").fill("fixture-password");await page.locator("#auth-submit").click();
+    await expect(page.locator("#auth-status")).toContainText("not available");await expect(page.locator("#home")).toBeHidden();
+    await page.locator("#preview-interface").click();await expect(page.locator("#home")).toBeVisible();expect(await page.evaluate(()=>account)).toBe(null);
+    await page.locator("#app-menu summary").click();await page.getByRole("link",{name:"Clinics",exact:true}).click();await page.locator("#clinic-query").fill("Pretoria");await page.getByRole("button",{name:"Find care",exact:true}).click();
+    await expect(page.locator("#clinic-status")).toContainText("application server is not running");expect(searches).toBe(0);
+});

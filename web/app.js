@@ -1,6 +1,6 @@
 "use strict";
 const $ = id => document.getElementById(id);
-let account = null, call = null, socket = null, creating = false, previewExploring = false;
+let account = null, call = null, socket = null, creating = false, previewExploring = false, backendMode = "unknown";
 const api = async (path, {method = "GET", body, authenticated = false} = {}) => {
     const headers = {};
     if (body) headers["Content-Type"] = "application/json";
@@ -82,11 +82,12 @@ $("signup-form").addEventListener("submit",async event=>{
 });
 $("preview-interface").addEventListener("click",()=>{previewExploring=true;location.hash="home";});
 async function checkServerMode(){
-    try {const mode=await api("/status");if(mode.mode==="application")return;}
-    catch {if(!["localhost","127.0.0.1","::1"].includes(location.hostname))return;}
+    try {const mode=await api("/status");if(mode.mode==="application"){backendMode="application";return;}}
+    catch {if(!["localhost","127.0.0.1","::1"].includes(location.hostname)){backendMode="offline";return;}}
+    backendMode="preview";
     $("preview-notice").hidden=false;$("preview-interface").hidden=false;
 }
-checkServerMode();
+const backendReady=checkServerMode();
 $("create-room").addEventListener("click", async () => {
     if (!account || Date.now() >= account.expiresAt) { signOut(); openAuth(); return; }
     $("create-room").disabled = true;

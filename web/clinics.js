@@ -47,6 +47,8 @@ async function findClinics({q="",origin=null,area="",radius=25000}={}){
     if(origin){params.set("lat",origin.lat);params.set("lng",origin.lng);params.set("radius",radius);}
     $("clinic-maps-link").href="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent("mental health clinics "+(origin ? origin.lat+","+origin.lng : q));
     try {
+        await backendReady;
+        if(backendMode!=="application")throw new Error(backendMode==="preview" ? "The full application server is not running in this layout preview. Start it to search live clinic listings." : "The clinic service could not be reached. Please try again.");
         const data=await api("/clinics?"+params);if(epoch!==clinicState.epoch)return;
         if(!Array.isArray(data))throw new Error("Clinic results could not be read. Please try again.");
         clinicState.items=data.filter(c=>c && typeof c.name==="string" && c.name.trim());renderClinics();
@@ -66,6 +68,7 @@ $("locate").addEventListener("click",async()=>{
     if(!window.isSecureContext){status("clinic-status","Location needs a secure HTTPS connection or localhost. You can search by area instead.",true);$("clinic-query").focus();return;}
     if(!navigator.geolocation){status("clinic-status","Your browser does not support location access. Search by suburb or city instead.",true);$("clinic-query").focus();return;}
     clinicState.locationBusy=true;$("locate").disabled=true;const epoch=++clinicState.epoch;
+    $("clinic-results").removeAttribute("aria-busy");
     status("clinic-status","Allow location access in your browser to find nearby care...");
     try {
         const position=await new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:false,timeout:15000,maximumAge:60000}));
