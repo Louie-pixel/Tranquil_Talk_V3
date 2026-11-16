@@ -1,125 +1,53 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtWebEngine
 
 ApplicationWindow {
-    id: mainWindow
+    id: window
+    width: 1280
+    height: 850
+    minimumWidth: 400
+    minimumHeight: 600
     visible: true
-    width: 450
-    height: 650
-    title: "Tranquil Talk V3"
+    title: "Tranquil Talk — Speak freely, Heal quietly"
+    property string initialRoute: ""
 
-    // Inside ApplicationWindow in LoginView.qml:
-Component {
-    id: videoCallComponent
-    VideoCallView {
+    WebEngineView {
+        id: browser
         anchors.fill: parent
-    }
-}
-
-function loadVideoCall() {
-    viewLoader.sourceComponent = videoCallComponent;
-}
-    // Loader to switch between Login and the Clinic Map
-    Loader {
-        id: viewLoader
-        anchors.fill: parent
-        sourceComponent: loginComponent
-    }
-
-    Component {
-        id: loginComponent
-        Item {
-            anchors.fill: parent
-
-            ColumnLayout {
-                anchors.centerIn: parent
-                width: parent.width * 0.8
-                spacing: 20
-
-                Text {
-                    text: "Tranquil Talk"
-                    font.pixelSize: 28
-                    font.bold: true
-                    Layout.alignment: Qt.AlignHCenter
-                    color: "#1e293b"
-                }
-
-                TextField {
-                    id: emailField
-                    placeholderText: "Email"
-                    text: "test@tranquiltalk.com"
-                    Layout.fillWidth: true
-                    height: 45
-                }
-
-                TextField {
-                    id: passwordField
-                    placeholderText: "Password"
-                    text: "mysecurepassword"
-                    echoMode: TextInput.Password
-                    Layout.fillWidth: true
-                    height: 45
-                }
-
-                Button {
-                    text: "Sign In"
-                    Layout.fillWidth: true
-                    height: 45
-                    onClicked: {
-                        statusText.text = "Authenticating...";
-                        statusText.color = "blue";
-                        
-                        var xhr = new XMLHttpRequest();
-                        xhr.open("POST", "http://localhost:8080/api/login", true);
-                        xhr.setRequestHeader("Content-Type", "application/json");
-                        
-                        xhr.onreadystatechange = function() {
-                            if (xhr.readyState === XMLHttpRequest.DONE) {
-                                if (xhr.status === 200) {
-                                    statusText.text = "Login successful! Loading Clinic Locator...";
-                                    statusText.color = "green";
-                                    
-                                    // Switch view to Clinic Map after a brief pause
-                                    loadTimer.start();
-                                } else {
-                                    statusText.text = "Login failed: " + xhr.status;
-                                    statusText.color = "red";
-                                }
-                            }
-                        };
-                        
-                        var payload = JSON.stringify({
-                            email: emailField.text,
-                            password: passwordField.text
-                        });
-                        xhr.send(payload);
-                    }
-                }
-
-                Text {
-                    id: statusText
-                    text: ""
-                    font.pixelSize: 14
-                    Layout.alignment: Qt.AlignHCenter
-                }
+        url: backendUrl.toString().replace(/\/$/, "") + window.initialRoute
+        onNewWindowRequested: function(request) {
+            if (request.userInitiated && request.requestedUrl.toString().startsWith("https://"))
+                Qt.openUrlExternally(request.requestedUrl);
+        }
+        onFeaturePermissionRequested: function(origin, feature) {
+            if (origin.toString().replace(/\/$/, "") !== backendUrl.toString().replace(/\/$/, "")) {
+                browser.grantFeaturePermission(origin, feature, false);
+                return;
             }
-
-            Timer {
-                id: loadTimer
-                interval: 800
-                repeat: false
-                onTriggered: {
-                    viewLoader.sourceComponent = clinicMapComponent;
-                }
-            }
+            permissionDialog.origin = origin;
+            permissionDialog.feature = feature;
+            permissionDialog.open();
+        }
+        onNavigationRequested: function(request) {
+            var target = request.url.toString();
+            var base = backendUrl.toString().replace(/\/$/, "");
+            if (target === base || target.startsWith(base + "/") || target === "about:blank") return;
+            request.action = WebEngineNavigationRequest.IgnoreRequest;
+            if (target.startsWith("https://")) Qt.openUrlExternally(request.url);
         }
     }
-
-    Component {
-        id: clinicMapComponent
-        ClinicMapView {
-            anchors.fill: parent
-        }
+    Dialog {
+        id: permissionDialog
+        property url origin
+        property int feature
+        anchors.centerIn: parent
+        title: "Device access"
+        modal: true
+        standardButtons: Dialog.Yes | Dialog.No
+        Label { text: "Allow this page to use the requested camera, microphone or location?"; wrapMode: Text.WordWrap; width: 300 }
+        onAccepted: browser.grantFeaturePermission(origin, feature, true)
+        onRejected: browser.grantFeaturePermission(origin, feature, false)
     }
 }
