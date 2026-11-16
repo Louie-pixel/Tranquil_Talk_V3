@@ -9,3 +9,7 @@ node_modules/
 *.log
 test-results/
 playwright-report/
+.vs/
+*.user
+emsdk/
+CMakeUserPresets.json

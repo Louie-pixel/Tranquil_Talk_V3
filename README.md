@@ -47,7 +47,7 @@ cmake --build out-desktop -j2
 ./out-desktop/TranquilFrontend
 ```
 
-Set `TRANQUIL_BASE_URL` to use another server; it defaults to http://localhost:8080. No machine-specific paths or forced media emulation are used.
+Set `TRANQUIL_BASE_URL` to use another server; it defaults to http://localhost:8080. No machine-specific paths or forced media emulation are used. The upstream Main.qml and RegistrationView.qml entry points are retained as wrappers around the shared application; registration opens the same validated web flow.
 
 ## Accounts and content operations
 Public signup accepts `patient` or `expert`. Expert requests are stored as `expert_pending`, with no elevated publishing or clinic permissions. There is no public role-promotion API.

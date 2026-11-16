@@ -11,11 +11,12 @@ ApplicationWindow {
     minimumHeight: 600
     visible: true
     title: "Tranquil Talk — Speak freely, Heal quietly"
+    property string initialRoute: ""
 
     WebEngineView {
         id: browser
         anchors.fill: parent
-        url: backendUrl
+        url: backendUrl.toString().replace(/\/$/, "") + window.initialRoute
         onFeaturePermissionRequested: function(origin, feature) {
             if (origin.toString().replace(/\/$/, "") !== backendUrl.toString().replace(/\/$/, "")) {
                 browser.grantFeaturePermission(origin, feature, false);

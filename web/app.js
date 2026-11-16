@@ -282,4 +282,9 @@ if (invitation) {
     $("connect").scrollIntoView();
     status("join-status", "Invitation ready. Choose audio or video, then enter when you’re comfortable.");
 }
+if (location.hash === "#register") {
+    $("switch-auth").click();
+    openAuth();
+    history.replaceState(null, "", location.pathname + location.search);
+}
 loadBlogs(); loadEvents();
