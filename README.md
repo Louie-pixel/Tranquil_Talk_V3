@@ -37,7 +37,7 @@ cmake --build out -j2
 ./out/TranquilBackend
 ```
 
-Configuration: `JWT_SECRET` (required), `MONGODB_URI`, `BIND_ADDRESS` (default 127.0.0.1), `PORT` (8080), `WEB_ROOT` (web). The binary does not automatically load `.env`; Compose does. Backend Docker build is the reference Linux build.
+Configuration: `JWT_SECRET` (required), `MONGODB_URI`, `BIND_ADDRESS` (default 127.0.0.1), `PORT` (8080), `WEB_ROOT` (web), `UPLOAD_PATH` (/tmp/tranquil-talk-uploads). The binary does not automatically load `.env`; Compose does. Backend Docker build is the reference Linux build.
 
 For the optional desktop shell, install Qt 6.4+ Core/Gui/Quick/Qml/WebEngineQuick and the Qt Quick Controls runtime:
 
@@ -95,4 +95,4 @@ The C++ tests cover malformed numbers, coordinate boundaries, normalized email/p
 
 `npm run test:integration` targets the real running backend at `http://localhost:8080` (override `TEST_BASE_URL`). It checks authentication, role escalation denial, JWT audience isolation, real MongoDB operations, static security headers, malformed coordinate responses and WebSocket authorization/membership/relay behavior. **Use a disposable test database:** it creates test accounts; it does not delete production data.
 
-Drogon 1.9.10 accepts a WebSocket upgrade on the first request of a TCP connection. Browser WebSocket clients open a dedicated connection; the Node integration harness closes its REST sockets so Undici cannot reuse one for an upgrade.\n\nGitHub Actions includes JavaScript/core tests, a Docker backend build with MongoDB integration tests, and a Qt desktop compile. Local JavaScript and standalone C++ tests were run during this update. The Qt desktop build also passed on GitHub Actions. Full backend and browser checks run in CI; consult their results rather than assuming they ran locally.
+Drogon 1.9.10 accepts a WebSocket upgrade on the first request of a TCP connection. Browser WebSocket clients open a dedicated connection; the Node integration harness closes its REST sockets so Undici cannot reuse one for an upgrade.\n\nGitHub Actions includes JavaScript/core tests, a Docker backend build with MongoDB integration tests, and a Qt desktop compile. Local JavaScript and standalone C++ tests were run during this update. GitHub Actions also runs four browser tests at desktop/mobile widths and a two-browser call against the real backend using emulated devices. These check media mode, mute/camera controls, and hangup cleanup without capturing real devices. Qt desktop compilation and responsive browser checks have passed in CI; consult the latest PR checks for the combined backend/integration result.

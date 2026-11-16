@@ -17,6 +17,10 @@ ApplicationWindow {
         id: browser
         anchors.fill: parent
         url: backendUrl.toString().replace(/\/$/, "") + window.initialRoute
+        onNewWindowRequested: function(request) {
+            if (request.userInitiated && request.requestedUrl.toString().startsWith("https://"))
+                Qt.openUrlExternally(request.requestedUrl);
+        }
         onFeaturePermissionRequested: function(origin, feature) {
             if (origin.toString().replace(/\/$/, "") !== backendUrl.toString().replace(/\/$/, "")) {
                 browser.grantFeaturePermission(origin, feature, false);
