@@ -17,8 +17,12 @@ public:
         WS_PATH_ADD("/rtc/signal");
     WS_PATH_LIST_END
 private:
-    struct Membership { std::string room; std::chrono::system_clock::time_point expires; };
+    struct Membership {
+        std::string room; std::chrono::system_clock::time_point expires;
+        std::string token, userId, label, mode;
+    };
     RoomRegistry<WebSocketConnectionPtr> rooms_;
     std::unordered_map<WebSocketConnectionPtr, Membership> members_;
     std::mutex roomMutex_;
 };
+

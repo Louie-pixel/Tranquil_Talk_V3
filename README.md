@@ -1,4 +1,5 @@
 # Tranquil Talk
+Booking, appointment-only calls, account email actions and safety reports are implemented alongside a charcoal/red interface with separate navigation pages. See [complete workflow and deployment instructions](deploy/OPERATIONS.md) for setup, limits and HTTPS/email/TURN configuration. Live production infrastructure and credentials must be supplied by the operator.
 **Speak freely, Heal quietly.**
 
 A mental wellbeing platform for finding nearby clinics, private audio/video conversations, expert articles, reflection and community events.
@@ -60,7 +61,7 @@ Role checks read the current database account and approved profile revision on a
 
 To add a clinic, a verified expert sends a bearer-authenticated `POST /api/clinics` with `{"name":"...","lat":-25.75,"lng":28.23}`. Confirm listing accuracy and services directly; a listing is not an endorsement.
 
-Publish an article in the verified expert UI, or `POST /api/blogs` with `title`, `body` (50–20000 UTF-8 bytes), and a public `author` name. Content renders as text, never injected HTML. A trusted operator can add real event records to MongoDB collection `events` using public `title`, `description`, `location`, and UTC ISO `startsAt` such as `2027-01-15T12:00:00Z`. Only future events appear. No public event write endpoint exists.
+Publish an article in the verified expert UI, or `POST /api/blogs` with `title`, `body` (50-20000 UTF-8 bytes), and a public `author` name. Content renders as text, never injected HTML. A trusted operator can add real event records to MongoDB collection `events` using public `title`, `description`, `location`, and UTC ISO `startsAt` such as `2027-01-15T12:00:00Z`. Only future events appear. No public event write endpoint exists.
 
 ## Administrator setup
 Create the intended operator account through normal signup first. A trusted operator with container/database access can then grant administrator access to that existing account:
@@ -97,7 +98,7 @@ The interface uses a restrained modern visual system without emojis. This projec
 | GET /api/admin/experts | Administrator | Review queue by status/offset |
 | GET /api/admin/experts/{id} | Administrator | Current private application and audit history |
 | POST /api/admin/experts/{id}/review | Administrator | Versioned approve/request_changes/suspend decision |
-| GET /api/clinics?lat=...&lng=...&radius=... | Public | Search 1–100000 metres, up to 100 results |
+| GET /api/clinics?lat=...&lng=...&radius=... | Public | Search 1-100000 metres, up to 100 results |
 | POST /api/clinics | Verified expert | Add a clinic |
 | POST /api/sessions | Signed in, throttled | Create a private 30-minute invitation |
 | GET /api/blogs | Public | Up to 50 latest articles |

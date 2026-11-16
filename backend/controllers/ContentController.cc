@@ -19,7 +19,7 @@ drogon::HttpResponsePtr list(const std::string& name) {
     options.limit(50);
     options.sort(document{} << std::string(name == "events" ? "startsAt" : "createdAt") << (name == "events" ? 1 : -1) << finalize);
     if (name == "blogs")
-        options.projection(document{} << "title" << 1 << "body" << 1 << "author" << 1 << "createdAt" << 1 << "_id" << 0 << finalize);
+        options.projection(document{} << "title" << 1 << "body" << 1 << "author" << 1 << "createdAt" << 1 << "_id" << 1 << finalize);
     else options.projection(document{} << "title" << 1 << "description" << 1 << "startsAt" << 1 << "location" << 1 << "_id" << 0 << finalize);
     auto filter = document{} << finalize;
     // ISO dates are used for events, so filter using the same sortable representation.
@@ -73,7 +73,7 @@ void ContentController::publish(const drogon::HttpRequestPtr& req,
     if (title.find_first_not_of(" \r\n\t") == std::string::npos || title.size() > 200 ||
         body.size() < 50 || body.size() > 20000 ||
         author.find_first_not_of(" \r\n\t") == std::string::npos || author.size() > 100) {
-        callback(http::error(drogon::k400BadRequest, "Use a title up to 200 bytes, article 50–20000 bytes, and author up to 100 bytes")); return;
+        callback(http::error(drogon::k400BadRequest, "Use a title up to 200 bytes, article 50-20000 bytes, and author up to 100 bytes")); return;
     }
     try {
         auto client = DatabaseManager::getInstance().getConnection();

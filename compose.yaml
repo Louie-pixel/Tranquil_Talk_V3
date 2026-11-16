@@ -5,17 +5,23 @@ services:
       - "127.0.0.1:8080:8080"
     environment:
       JWT_SECRET: ${JWT_SECRET:?Set a random JWT_SECRET of at least 32 characters}
-      MONGODB_URI: mongodb://mongo:27017/?serverSelectionTimeoutMS=5000
+      MONGODB_URI: mongodb://mongo:27017/?replicaSet=rs0&serverSelectionTimeoutMS=5000
+      APP_BASE_URL: ${APP_BASE_URL:-http://localhost:8080}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      MAIL_FROM: ${MAIL_FROM:-}
+      TURN_URL: ${TURN_URL:-}
+      TURN_SECRET: ${TURN_SECRET:-}
     depends_on:
       mongo:
         condition: service_healthy
     restart: unless-stopped
   mongo:
     image: mongo:7.0
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
     volumes:
       - tranquil-data:/data/db
     healthcheck:
-      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mongosh", "--quiet", "--eval", "try { if (!db.hello().isWritablePrimary) { rs.status(); quit(1); } } catch(e) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongo:27017'}]}); quit(1); }"]
       interval: 5s
       timeout: 5s
       retries: 15

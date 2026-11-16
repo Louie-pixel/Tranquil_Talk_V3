@@ -19,6 +19,7 @@ test("desktop and mobile pages fit, articles render as text, and reflection clea
         expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
         await page.screenshot({path:"test-results/home-"+width+".png",fullPage:true});
     }
+    await page.getByRole("link",{name:"Resources",exact:true}).click();
     await page.getByText("A little space to reflect",{exact:true}).click();
     await expect(page.locator(".article .body")).toHaveText("<script>window.injected=true</script>");
     expect(await page.evaluate(()=>window.injected)).toBeUndefined();
@@ -34,6 +35,7 @@ test("clinic search shows recoverable errors and safe external directions",async
         route.fulfill({status:503,json:{error:"Search temporarily unavailable"}}):
         route.fulfill({json:[{name:"Test-only clinic",location:{coordinates:[28.23,-25.75]}}]}));
     await page.goto("/");
+    await page.getByRole("link",{name:"Clinics",exact:true}).click();
     await page.locator("#latitude").fill("-25.75");
     await page.locator("#longitude").fill("28.23");
     await page.getByRole("button",{name:"Search clinics"}).click();
@@ -47,6 +49,7 @@ test("sign-in gates room creation, verified expert publication completes, and si
     await page.route("**/api/login",route=>route.fulfill({json:{token:"test-token",role:"expert",expiresIn:3600}}));
     await page.route("**/api/sessions",route=>route.fulfill({status:201,json:{ticket:"part.one.signature",expiresIn:1800}}));
     await page.goto("/");
+    await page.getByRole("link",{name:"Conversations",exact:true}).click();
     await page.getByRole("button",{name:"Create a private room"}).click();
     await expect(page.getByRole("dialog")).toBeVisible();
     await page.getByRole("textbox",{name:"Email",exact:true}).fill("expert@example.com");
@@ -55,6 +58,7 @@ test("sign-in gates room creation, verified expert publication completes, and si
     await expect(page.getByRole("dialog")).not.toBeVisible();
     await page.getByRole("button",{name:"Create a private room"}).click();
     await expect(page.locator("#invitation")).toHaveValue(/#invite=part.one.signature/);
+    await page.getByRole("link",{name:"Resources",exact:true}).click();
     await page.getByRole("textbox",{name:"Public author name"}).fill("Test Contributor");
     await page.getByRole("textbox",{name:"Title",exact:true}).fill("A reflection");
     await page.getByRole("textbox",{name:"Article",exact:true}).fill("This is test-only article content with more than fifty characters.");
@@ -68,5 +72,5 @@ test("an invitation fragment is removed from the address and never auto-starts m
     await page.goto("/#invite=part.one.signature");
     await expect(page.locator("#ticket")).toHaveValue("part.one.signature");
     await expect(page.locator("#call-panel")).toBeHidden();
-    expect(new URL(page.url()).hash).toBe("");
+    expect(new URL(page.url()).hash).toBe("#connect");
 });

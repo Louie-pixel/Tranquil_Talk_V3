@@ -23,9 +23,17 @@ void DatabaseManager::init(const std::string& uri) {
     db.collection("clinics").create_index(document{} << "location" << "2dsphere" << finalize);
     db.collection("expert_profiles").create_index(document{} << "status" << 1 << "updatedAt" << -1 << finalize);
     db.collection("expert_profiles").create_index(document{} << "status" << 1 << "name" << 1 << "_id" << 1 << finalize);
+    db.collection("availability").create_index(document{} << "expertId" << 1 << "startAt" << 1 << finalize);
+    db.collection("appointments").create_index(document{} << "patientId" << 1 << "startAt" << 1 << finalize);
+    db.collection("appointments").create_index(document{} << "expertId" << 1 << "startAt" << 1 << finalize);
+    db.collection("reservations").create_index(document{} << "appointmentId" << 1 << finalize);
+    db.collection("account_actions").create_index(document{} << "hash" << 1 << finalize);
+    db.collection("mail_outbox").create_index(document{} << "state" << 1 << "nextAttempt" << 1 << finalize);
+    db.collection("reports").create_index(document{} << "status" << 1 << "createdAt" << 1 << finalize);
 }
 
 mongocxx::pool::entry DatabaseManager::getConnection() {
     if (!_pool) throw std::runtime_error("Database is not initialized");
     return _pool->acquire();
 }
+

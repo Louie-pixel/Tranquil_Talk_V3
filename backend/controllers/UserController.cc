@@ -30,13 +30,14 @@ void UserController::registerUser(const drogon::HttpRequestPtr& req,
     if (!validation::validEmail(email) || !validation::password(password) ||
         (role != "patient" && role != "expert")) {
         callback(http::error(drogon::k400BadRequest,
-            "Use a valid email, a password of 12–72 bytes, and patient or expert role")); return;
+            "Use a valid email, a password of 12-72 bytes, and patient or expert role")); return;
     }
     try {
         auto client = DatabaseManager::getInstance().getConnection();
         auto users = client->database("tranquil_talk").collection("users");
         // The unique email index also handles concurrent registrations.
         auto newUser = document{} << "email" << email
+            << "emailVerified" << false << "sessionVersion" << 0
             << "password" << BCrypt::generateHash(password, 12)
             << "role" << (role == "expert" ? "expert_pending" : "patient") << finalize;
         users.insert_one(newUser.view());
@@ -83,7 +84,9 @@ void UserController::loginUser(const drogon::HttpRequestPtr& req,
         const auto identity = auth::currentIdentity(user->view()["_id"].get_oid().value.to_string());
         const auto& role = identity.role;
         Json::Value result;
-        result["token"] = auth::issue(identity.id, role);
+        const int version=user->view()["sessionVersion"] ? user->view()["sessionVersion"].get_int32().value : 0;
+        result["token"] = auth::issue(identity.id, role, "tranquil-api",60,version);
+        result["emailVerified"] = user->view()["emailVerified"] && user->view()["emailVerified"].get_bool().value;
         result["role"] = role;
         result["id"] = identity.id;
         result["expiresIn"] = 3600;
@@ -98,6 +101,11 @@ void UserController::me(const drogon::HttpRequestPtr& req,
     try {
         const auto identity = auth::require(req);
         Json::Value result; result["id"] = identity.id; result["role"] = identity.role;
+        auto client=DatabaseManager::getInstance().getConnection();
+        auto user=client->database("tranquil_talk").collection("users").find_one(document{} << "_id" << bsoncxx::oid(identity.id) << finalize);
+        result["emailVerified"] = user && user->view()["emailVerified"] && user->view()["emailVerified"].get_bool().value;
+        result["emailConfigured"] = (std::getenv("RESEND_API_KEY") && std::getenv("MAIL_FROM")) ||
+            (std::getenv("MAIL_MODE") && std::string(std::getenv("MAIL_MODE"))=="outbox");
         callback(drogon::HttpResponse::newHttpJsonResponse(result));
     } catch (const auth::Unavailable&) {
         callback(http::error(drogon::k503ServiceUnavailable,"Account access is temporarily unavailable"));
@@ -105,3 +113,4 @@ void UserController::me(const drogon::HttpRequestPtr& req,
         callback(http::error(drogon::k401Unauthorized,"Sign in required"));
     }
 }
+
