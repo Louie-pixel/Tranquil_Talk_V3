@@ -1,6 +1,6 @@
 const {defineConfig} = require("@playwright/test");
 module.exports = defineConfig({
-    testDir: "./tests",testMatch:"call.spec.cjs",timeout:45000,reporter:"list",
+    testDir: "./tests",testMatch:["call.spec.cjs","appointment-call.spec.cjs"],timeout:60000,reporter:"list",workers:1,
     use:{
         baseURL:process.env.TEST_BASE_URL || "http://127.0.0.1:8080",
         permissions:["microphone","camera"],

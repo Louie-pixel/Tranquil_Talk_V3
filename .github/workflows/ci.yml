@@ -81,7 +81,18 @@ jobs:
           TEST_PROFILES_BASE_URL: http://127.0.0.1:8081
         run: npm run test:experts
       - name: Test real browser calls with emulated devices
+        env:
+          TEST_BASE_URL: http://127.0.0.1:8083
+          TEST_MONGO_CONTAINER: mongo
         run: |
+          docker run -d --name call-app --network tranquil-test -p 8083:8080 \
+            -e JWT_SECRET="$(openssl rand -hex 32)" \
+            -e 'MONGODB_URI=mongodb://mongo:27017/?replicaSet=rs0&serverSelectionTimeoutMS=5000' tranquil-test:ci
+          for i in $(seq 1 30); do
+            if curl --fail http://127.0.0.1:8083/ >/dev/null 2>&1; then break; fi
+            sleep 2
+          done
+          curl --fail http://127.0.0.1:8083/ >/dev/null
           npm install --no-save --package-lock=false @playwright/test@1.56.1
           npx playwright install --with-deps chromium
           npx playwright test --config=playwright.integration.config.cjs
@@ -115,6 +126,7 @@ jobs:
           docker logs app || true
           docker logs profiles-app || true
           docker logs workflow-app || true
+          docker logs call-app || true
   desktop:
     runs-on: ubuntu-24.04
     steps:
