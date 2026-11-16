@@ -10,6 +10,7 @@ public:
         ADD_METHOD_TO(ExpertController::save, "/api/expert-profile", drogon::Put);
         ADD_METHOD_TO(ExpertController::submit, "/api/expert-profile/submit", drogon::Post);
         ADD_METHOD_TO(ExpertController::queue, "/api/admin/experts", drogon::Get);
+        ADD_METHOD_TO(ExpertController::reviewDetail, "/api/admin/experts/{1}", drogon::Get);
         ADD_METHOD_TO(ExpertController::review, "/api/admin/experts/{1}/review", drogon::Post);
     METHOD_LIST_END
     using Callback = std::function<void(const drogon::HttpResponsePtr&)>;
@@ -19,5 +20,6 @@ public:
     void save(const drogon::HttpRequestPtr&, Callback&&);
     void submit(const drogon::HttpRequestPtr&, Callback&&);
     void queue(const drogon::HttpRequestPtr&, Callback&&);
+    void reviewDetail(const drogon::HttpRequestPtr&, Callback&&, std::string);
     void review(const drogon::HttpRequestPtr&, Callback&&, std::string);
 };

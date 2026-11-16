@@ -95,6 +95,7 @@ The interface uses a restrained modern visual system without emojis. This projec
 | PUT /api/expert-profile | Professional account | Save own draft with expected revision |
 | POST /api/expert-profile/submit | Professional account | Submit complete draft/changes with expected revision |
 | GET /api/admin/experts | Administrator | Review queue by status/offset |
+| GET /api/admin/experts/{id} | Administrator | Current private application and audit history |
 | POST /api/admin/experts/{id}/review | Administrator | Versioned approve/request_changes/suspend decision |
 | GET /api/clinics?lat=...&lng=...&radius=... | Public | Search 1–100000 metres, up to 100 results |
 | POST /api/clinics | Verified expert | Add a clinic |

@@ -292,7 +292,19 @@ async function loadReviewQueue(append=false) {
     }
 }
 function credentialRow(list,label,value) {list.append(make("dt",label),make("dd",value || "Not provided"));}
-function openReview(profile) {
+async function openReview(summary) {
+    if(account?.role!=="admin")return;
+    const epoch=expertState.accountEpoch;
+    status("review-queue-status","Loading the current application version...");
+    try {
+        const result=await api("/admin/experts/"+encodeURIComponent(summary.id),{authenticated:true});
+        if(epoch!==expertState.accountEpoch || account?.role!=="admin")return;
+        renderReview(result.profile);status("review-queue-status","");
+    } catch(error) {
+        if(epoch===expertState.accountEpoch)status("review-queue-status",error.message,true);
+    }
+}
+function renderReview(profile) {
     if(account?.role!=="admin")return;
     expertState.selectedReview=profile;
     const root=$("review-detail");root.replaceChildren();

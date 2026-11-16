@@ -346,12 +346,29 @@ void ExpertController::queue(const drogon::HttpRequestPtr& req, Callback&& callb
         Json::Value sort; sort["updatedAt"] = -1; sort["_id"] = 1;
         mongocxx::options::find options; options.limit(21); options.skip(skip);
         options.sort(bsoncxx::from_json(write(sort)));
+        Json::Value projection;
+        for (const auto* key : {"_id","name","professionalTitle","city","country","status","revision","updatedAt"}) projection[key] = 1;
+        options.projection(bsoncxx::from_json(write(projection)));
         Json::Value result; result["items"] = Json::Value(Json::arrayValue); result["nextOffset"] = Json::Value();
         for (auto&& value : profiles.find(bsoncxx::from_json(write(filter)),options)) {
             if (result["items"].size() == 20) { if (skip < 10000) result["nextOffset"] = skip + 20; break; }
             result["items"].append(privateProfile(read(value),true));
         }
         callback(drogon::HttpResponse::newHttpJsonResponse(result));
+    } catch (const std::exception&) { unavailable(callback); }
+}
+
+void ExpertController::reviewDetail(const drogon::HttpRequestPtr& req, Callback&& callback, std::string id) {
+    auth::Identity who; if (!identity(req,callback,who,true)) return;
+    try {
+        const auto filter = idFilter(id);
+        auto client = DatabaseManager::getInstance().getConnection();
+        auto found = client->database("tranquil_talk").collection("expert_profiles").find_one(filter.view());
+        if (!found) { callback(http::error(drogon::k404NotFound,"Professional profile not found")); return; }
+        Json::Value result; result["profile"] = privateProfile(read(found->view()),true);
+        callback(drogon::HttpResponse::newHttpJsonResponse(result));
+    } catch (const bsoncxx::exception&) {
+        callback(http::error(drogon::k404NotFound,"Professional profile not found"));
     } catch (const std::exception&) { unavailable(callback); }
 }
 

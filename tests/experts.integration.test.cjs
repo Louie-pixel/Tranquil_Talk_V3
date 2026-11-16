@@ -63,7 +63,9 @@ test("expert application lifecycle, private credentials, revision reviews and im
     await saveAndSubmit();
     const queue=await api("/api/admin/experts?status=pending",{token:admin.token});
     assert.equal(queue.status,200);
-    assert.equal(queue.data.items.find(item=>item.id===expert.id).registrationNumber,"PRIVATE-REG-123");
+    assert.equal(queue.data.items.find(item=>item.id===expert.id).registrationNumber,undefined);
+    assert.equal((await api("/api/admin/experts/"+expert.id,{token:expert.token})).status,403);
+    assert.equal((await api("/api/admin/experts/"+expert.id,{token:admin.token})).data.profile.registrationNumber,"PRIVATE-REG-123");
     assert.equal((await decision("approve")).status,400);
     assert.equal((await decision("approve",{registryChecked:true,reference:"http://insecure.example"})).status,400);
     assert.equal((await decision("approve",{revision:profile.revision-1,registryChecked:true,reference:"https://register.example.com"})).status,409);

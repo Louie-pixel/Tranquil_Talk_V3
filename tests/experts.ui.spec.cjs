@@ -70,6 +70,7 @@ test("professional saves and submits private registration details, then sign-out
     await page.route("**/api/expert-profile/submit",route=>{
         profile={...profile,revision:2,status:"pending"};return route.fulfill({json:{profile}});
     });
+    await page.setViewportSize({width:390,height:900});
     await page.goto("/#professional");await login(page,"expert_pending");
     await expect(page.locator("#profile-editor-status")).toHaveText("");
     const form=page.locator("#expert-profile-form");
@@ -84,6 +85,7 @@ test("professional saves and submits private registration details, then sign-out
     await form.getByRole("button",{name:"Submit for review"}).click();
     await expect(page.locator("#profile-state")).toHaveText("Awaiting review");
     await expect(page.locator("#profile-editor-status")).toHaveText("Profile submitted for registration review.");
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
     expect(savedBody.registrationNumber).toBe("PRIVATE-123");
     expect(savedBody.status).toBeUndefined();
     await expect(page.locator("#publish-form")).toBeHidden();
@@ -98,6 +100,7 @@ test("administrator reviews a version, must attest registry checking, and record
         updatedAt:"2026-11-16T10:00:00Z",reviews:[]};
     await page.route("**/api/experts**",route=>route.fulfill({json:{items:approved?[professional]:[],nextOffset:null}}));
     await page.route("**/api/admin/experts?**",route=>route.fulfill({json:{items:approved?[]:[pending],nextOffset:null}}));
+    await page.route("**/api/admin/experts/"+professional.id,route=>route.fulfill({json:{profile:pending}}));
     await page.route("**/api/admin/experts/*/review",route=>{
         const body=route.request().postDataJSON();expect(body.revision).toBe(2);expect(body.registryChecked).toBe(true);
         expect(body.reference).toBe("https://official-register.example.com/");
