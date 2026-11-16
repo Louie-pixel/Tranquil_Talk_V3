@@ -81,6 +81,8 @@ jobs:
           TEST_PROFILES_BASE_URL: http://127.0.0.1:8081
         run: npm run test:experts
       - name: Test real browser calls with emulated devices
+        id: call-checks
+        continue-on-error: true
         env:
           TEST_BASE_URL: http://127.0.0.1:8083
           TEST_MONGO_CONTAINER: mongo
@@ -109,11 +111,13 @@ jobs:
           done
           curl --fail http://127.0.0.1:8082/ >/dev/null
       - name: Test booking races, room access, recovery and moderation
+        id: workflow-checks
+        continue-on-error: true
         env:
           TEST_MONGO_CONTAINER: mongo
         run: npm run test:workflows
       - name: Enforce API integration result
-        if: always() && (steps.api-checks.outcome != 'success' || steps.expert-checks.outcome != 'success')
+        if: always() && (steps.api-checks.outcome != 'success' || steps.expert-checks.outcome != 'success' || steps.call-checks.outcome != 'success' || steps.workflow-checks.outcome != 'success')
         run: exit 1
       - uses: actions/upload-artifact@v4
         if: failure()
