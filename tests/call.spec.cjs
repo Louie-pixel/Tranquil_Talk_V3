@@ -21,7 +21,7 @@ test("two invitees connect through the real backend, audio keeps camera off, and
         await Promise.all([first,second].map(page=>page.goto("/#invite="+encodeURIComponent(ticket))));
         await second.getByRole("radio",{name:"Video & audio"}).check();
         await first.getByRole("button",{name:"Enter conversation"}).click();
-        await expect(first.locator("#call-status")).toHaveText("Waiting for the other participant…");
+        await expect(first.locator("#call-status")).toHaveText(/Waiting for the other participant/);
         await second.getByRole("button",{name:"Enter conversation"}).click();
         await expect(first.locator("#call-status")).toHaveText("Connected",{timeout:15000});
         await expect(second.locator("#call-status")).toHaveText("Connected",{timeout:15000});
@@ -38,3 +38,4 @@ test("two invitees connect through the real backend, audio keeps camera off, and
         }
     } finally {await Promise.all(contexts.map(context=>context.close()));}
 });
+

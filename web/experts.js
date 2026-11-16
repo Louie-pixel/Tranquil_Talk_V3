@@ -120,9 +120,11 @@ function renderPublicProfile(profile) {
     const website=safeWebsite(profile.website);
     if(website){const link=make("a","Visit practice website","button secondary");link.href=website;
         link.target="_blank";link.rel="noopener noreferrer";side.append(link);}
-    side.append(make("p","Confirm services and availability directly with the professional. Appointment booking is not available yet."));
-    const options=make("a","Explore conversation options","text-link");options.href="#connect";
-    options.addEventListener("click",()=>{$("expert-dialog").close();});side.append(options);
+    side.append(make("p","Choose a thirty-minute time and request an audio, video or in-person consultation."));
+    const book=make("button","See available times");book.type="button";
+    book.addEventListener("click",()=>window.openBooking(profile));side.append(book);
+    const report=make("button","Report a concern","text-link");report.type="button";
+    report.addEventListener("click",()=>window.reportItem("expert",profile.id));side.append(report);
     side.append(make("h3","Registration review"),
         make("p","Professional registration was manually reviewed on "+dateLabel(profile.verifiedAt)+". This check does not guarantee suitability or availability.","profile-review-note"));
     grid.append(main,side);

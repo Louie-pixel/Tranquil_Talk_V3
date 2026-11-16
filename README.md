@@ -1,4 +1,5 @@
 # Tranquil Talk
+Booking, appointment-only calls, account email actions and safety reports are implemented alongside a charcoal/red interface with separate navigation pages. See [complete workflow and deployment instructions](deploy/OPERATIONS.md) for setup, limits and HTTPS/email/TURN configuration. Live production infrastructure and credentials must be supplied by the operator.
 **Speak freely, Heal quietly.**
 
 A mental wellbeing platform for finding nearby clinics, private audio/video conversations, expert articles, reflection and community events.
@@ -56,11 +57,11 @@ Professional profiles now have an administrator review workflow. Experts sign in
 
 Administrators use **Verification** to approve, request changes, suspend or reopen an application. Approval requires confirmation that the applicant was matched to an official professional register, the HTTPS registry reference actually checked, and a review note. This is a manual, recorded review, not automatic identity or licence verification. There are no uploads or automatic outbound requests to applicant-provided reference URLs. Registration numbers, submitted references, review notes and reviewer IDs never appear in public profile responses.
 
-Role checks read the current database account and approved profile revision on authenticated requests. Existing tokens immediately lose expert write access after an edit, requested change or suspension. Legacy accounts marked expert without an approved profile must complete this workflow. JWT role claims are not the source of current privilege. Appointment scheduling and professional matching remain future work; a private call invitation does not establish a clinician relationship.
+Role checks read the current database account and approved profile revision on authenticated requests. Existing tokens immediately lose expert write access after an edit, requested change or suspension. Legacy accounts marked expert without an approved profile must complete this workflow. JWT role claims are not the source of current privilege. Appointment scheduling and participant-only consultation rooms are implemented. Professional matching remains future work; a private call invitation does not establish a clinician relationship.
 
 To add a clinic, a verified expert sends a bearer-authenticated `POST /api/clinics` with `{"name":"...","lat":-25.75,"lng":28.23}`. Confirm listing accuracy and services directly; a listing is not an endorsement.
 
-Publish an article in the verified expert UI, or `POST /api/blogs` with `title`, `body` (50–20000 UTF-8 bytes), and a public `author` name. Content renders as text, never injected HTML. A trusted operator can add real event records to MongoDB collection `events` using public `title`, `description`, `location`, and UTC ISO `startsAt` such as `2027-01-15T12:00:00Z`. Only future events appear. No public event write endpoint exists.
+Publish an article in the verified expert UI, or `POST /api/blogs` with `title`, `body` (50-20000 UTF-8 bytes), and a public `author` name. Content renders as text, never injected HTML. A trusted operator can add real event records to MongoDB collection `events` using public `title`, `description`, `location`, and UTC ISO `startsAt` such as `2027-01-15T12:00:00Z`. Only future events appear. No public event write endpoint exists.
 
 ## Administrator setup
 Create the intended operator account through normal signup first. A trusted operator with container/database access can then grant administrator access to that existing account:
@@ -97,7 +98,7 @@ The interface uses a restrained modern visual system without emojis. This projec
 | GET /api/admin/experts | Administrator | Review queue by status/offset |
 | GET /api/admin/experts/{id} | Administrator | Current private application and audit history |
 | POST /api/admin/experts/{id}/review | Administrator | Versioned approve/request_changes/suspend decision |
-| GET /api/clinics?lat=...&lng=...&radius=... | Public | Search 1–100000 metres, up to 100 results |
+| GET /api/clinics?lat=...&lng=...&radius=... | Public | Search 1-100000 metres, up to 100 results |
 | POST /api/clinics | Verified expert | Add a clinic |
 | POST /api/sessions | Signed in, throttled | Create a private 30-minute invitation |
 | GET /api/blogs | Public | Up to 50 latest articles |
@@ -111,7 +112,7 @@ WebSocket protocol: send `{"type":"join","ticket":"..."}` after opening. Server 
 - Audio-only is pseudonymous to the other participant, not absolute anonymity. WebRTC peers can learn network information. STUN discovery contacts Google's STUN service. A configured TURN service and relay-only policy are still needed if hiding peer IPs is required; restrictive networks may not connect with STUN alone.
 - There is no recording feature. This does not prevent a participant from recording using other software.
 - JWTs contain an account ID and role, not the email; JWT payloads are signed, not encrypted. Browser API credentials remain in page memory and disappear on reload. Invitations are bearer capabilities: anyone possessing one can occupy a room slot until expiry.
-- Calls and signaling rooms are process-local. Multi-instance routing, TURN provisioning, revocation, reconnection/resume and durable scheduled appointments remain future work.
+- Calls and signaling rooms are process-local. Scheduled appointments, revocation checks, TURN configuration and reconnection controls are implemented; multi-instance routing and provisioning an external relay remain operational work.
 - Set up HTTPS/WSS behind a trusted reverse proxy before remote use. HTTP media permissions work only on localhost. Do not expose the development MongoDB configuration publicly; configure database authentication, backups, retention and access controls for deployment.
 - Rate limits are process-local and peer-IP-based. Add an edge rate limiter and correctly configured proxy IP handling before production; do not trust arbitrary forwarded headers.
 - Account recovery, email verification, moderation/reporting, broader operational audit logging and deletion/export workflows are not implemented. Credential review has a private versioned decision history; it still requires a human reviewer to check authoritative records. This is not ready for clinical production use.
@@ -139,3 +140,4 @@ GitHub Actions includes JavaScript/core tests, a Docker backend build with Mongo
 CI starts a separate application process for these fixtures so authentication throttling remains enabled and independent of the ordinary account/call tests. Tests cover draft saving, incomplete submission rejection, unknown-field rejection, private credential isolation, administrator-only review, registry attestation, stale reviews, approval, edits withdrawing visibility, immediate token permission changes, suspension, reopening and preserved audit history.
 
 Playwright also exercises directory filters, desktop/mobile layout, shareable profile links, private application submission, sign-out cleanup and administrator approval. Professional names and credentials in tests are fixtures only; none are seeded into the production directory.
+

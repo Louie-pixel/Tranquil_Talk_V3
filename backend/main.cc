@@ -2,6 +2,7 @@
 #include "models/DatabaseManager.h"
 #include "utils/Auth.h"
 #include "utils/Validation.h"
+#include "utils/Mail.h"
 #include <cstdlib>
 #include <iostream>
 
@@ -37,6 +38,7 @@ int main(int argc, char* argv[]) {
         }
         const auto port = validation::number(env("PORT", "8080"), 1, 65535);
         if (port != static_cast<int>(port)) throw std::invalid_argument("PORT must be an integer");
+        mail::Worker mailWorker;
         drogon::app()
             .setDocumentRoot(env("WEB_ROOT", "web"))
             .setUploadPath(env("UPLOAD_PATH", "/tmp/tranquil-talk-uploads"))

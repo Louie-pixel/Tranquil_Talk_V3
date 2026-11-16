@@ -2,6 +2,7 @@
 #include "../backend/utils/RoomRegistry.h"
 #include "../backend/utils/RateLimit.h"
 #include "../backend/utils/ExpertRules.h"
+#include "../backend/utils/BookingRules.h"
 #include <cassert>
 #include <iostream>
 #include <memory>
@@ -65,5 +66,20 @@ int main() {
     assert(experts::approved("approved",7,7));
     assert(!experts::approved("approved",8,7));
     assert(!experts::approved("suspended",7,7));
-    std::cout << "Core validation, room isolation/capacity/cleanup and rate-limit tests passed.\n";
+    const double start=1800*1000000.0;
+    assert(booking::validStart(start,start-3600));
+    assert(!booking::validStart(start+1,start-3600));
+    assert(!booking::validStart(start,start-100));
+    assert(!booking::validStart(start,start-91*86400));
+    assert(booking::canJoin("accepted","audio",start,start-600));
+    assert(!booking::canJoin("accepted","audio",start,start-601));
+    assert(!booking::canJoin("accepted","audio",start,start+1800));
+    assert(!booking::canJoin("requested","audio",start,start));
+    assert(!booking::canJoin("accepted","in_person",start,start));
+    assert(booking::canDecide("requested",true,"accept"));
+    assert(!booking::canDecide("requested",false,"accept"));
+    assert(booking::canDecide("proposed",false,"accept"));
+    assert(!booking::canDecide("proposed",true,"accept"));
+    assert(!booking::canDecide("cancelled",true,"propose"));
+    std::cout << "Core validation, booking transitions/window boundaries, room isolation/capacity/cleanup and rate-limit tests passed.\n";
 }

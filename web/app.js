@@ -57,8 +57,7 @@ function openAuth() {
 $("account-button").addEventListener("click", () => {
     if (!account) openAuth();
     else {
-        location.hash = account.role === "admin" ? "verification" :
-            ["expert","expert_pending"].includes(account.role) ? "professional" : "connect";
+        location.hash = "account";
     }
 });
 $("logout").addEventListener("click", signOut);
@@ -66,7 +65,7 @@ $("close-auth").addEventListener("click", () => $("auth-dialog").close());
 $("switch-auth").addEventListener("click", () => {
     registering = !registering;
     $("auth-title").textContent = registering ? "A place to start." : "Welcome back.";
-    $("auth-description").textContent = registering ? "Use a password of 12–72 bytes. Your email stays private." : "Sign in to create a private conversation room.";
+    $("auth-description").textContent = registering ? "Use a password of 12-72 bytes. Your email stays private." : "Sign in to create a private conversation room.";
     $("auth-submit").textContent = registering ? "Create account" : "Sign in";
     $("switch-auth").textContent = registering ? "Already have an account? Sign in" : "New here? Create an account";
     $("role-label").hidden = !registering;
@@ -78,7 +77,7 @@ $("auth-form").addEventListener("submit", async event => {
     event.preventDefault();
     const button = $("auth-submit"); button.disabled = true;
     const values = Object.fromEntries(new FormData(event.currentTarget));
-    status("auth-status", registering ? "Creating account…" : "Signing in…");
+    status("auth-status", registering ? "Creating account." : "Signing in.");
     try {
         const data = await api(registering ? "/register" : "/login", {method: "POST", body: values});
         $("password").value = "";
@@ -88,14 +87,14 @@ $("auth-form").addEventListener("submit", async event => {
             account = {...data, expiresAt: Date.now() + data.expiresIn * 1000};
             renderAccount();
             $("auth-dialog").close();
-            status("room-status", data.role === "expert_pending" ? "Signed in. Professional verification is still pending." : "You’re signed in. Create a private room whenever you’re ready.");
+            status("room-status", data.role === "expert_pending" ? "Signed in. Professional verification is still pending." : "You're signed in. Create a private room whenever you're ready.");
         }
     } catch (error) { status("auth-status", error.message, true); }
     finally { button.disabled = false; }
 });
 $("locate").addEventListener("click", () => {
-    if (!navigator.geolocation) return status("clinic-status", "Location isn’t available. Enter coordinates instead.", true);
-    $("locate").disabled = true; status("clinic-status", "Waiting for location permission…");
+    if (!navigator.geolocation) return status("clinic-status", "Location isn't available. Enter coordinates instead.", true);
+    $("locate").disabled = true; status("clinic-status", "Waiting for location permission.");
     navigator.geolocation.getCurrentPosition(position => {
         $("latitude").value = position.coords.latitude.toFixed(6);
         $("longitude").value = position.coords.longitude.toFixed(6);
@@ -110,7 +109,7 @@ $("clinic-form").addEventListener("submit", async event => {
     event.preventDefault();
     const button = event.currentTarget.querySelector('[type="submit"]'); button.disabled = true;
     $("clinic-results").replaceChildren();
-    status("clinic-status", "Searching nearby clinics…");
+    status("clinic-status", "Searching nearby clinics.");
     try {
         const params = new URLSearchParams(new FormData(event.currentTarget));
         const clinics = await api("/clinics?" + params);
@@ -132,7 +131,7 @@ $("clinic-form").addEventListener("submit", async event => {
         if (!count) $("clinic-results").append(make("p", "No matching clinics are currently listed.", "empty"));
     } catch (error) {
         status("clinic-status", error.message, true);
-        $("clinic-results").append(make("p", "We couldn’t load clinics. Please try again.", "empty"));
+        $("clinic-results").append(make("p", "We couldn't load clinics. Please try again.", "empty"));
     } finally { button.disabled = false; }
 });
 $("create-room").addEventListener("click", async () => {
@@ -183,7 +182,7 @@ $("join-form").addEventListener("submit", async event => {
         const ticket = ticketFrom($("ticket").value);
         if (!/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(ticket) || ticket.length > 4096)
             throw new Error("Paste a valid invitation link or ticket.");
-        status("join-status", "Preparing your devices…");
+        status("join-status", "Preparing your devices.");
         $("call-panel").hidden = false;
         $("mute").textContent = "Mute microphone";
         $("camera").textContent = "Turn camera off"; $("camera").hidden = mode === "audio";
@@ -208,7 +207,7 @@ $("join-form").addEventListener("submit", async event => {
                 if (data.type === "joined") {
                     clearTimeout(timeout);
                     status("join-status", "");
-                    status("call-status", data.peers ? "Connecting…" : "Waiting for the other participant…");
+                    status("call-status", data.peers ? "Connecting." : "Waiting for the other participant.");
                     if (data.peers) await activeCall.offer();
                 } else if (data.type === "peer_left" || data.type === "hangup") {
                     endCall(false, "The other participant left. Your microphone and camera are off.");
@@ -220,7 +219,7 @@ $("join-form").addEventListener("submit", async event => {
                 if (socket === activeSocket) endCall(false, error.message || "The call could not connect.");
             });
         };
-        activeSocket.onerror = () => { clearTimeout(timeout); if (socket === activeSocket) endCall(false, "Couldn’t connect to the room. Please try again."); };
+        activeSocket.onerror = () => { clearTimeout(timeout); if (socket === activeSocket) endCall(false, "Couldn't connect to the room. Please try again."); };
         activeSocket.onclose = () => { clearTimeout(timeout); if (socket === activeSocket) endCall(false, "Room closed or expired. Your devices are off."); };
     } catch (error) { endCall(false, error.message || "Device access was denied. Please try again."); }
     finally { creating = false; if (!call) button.disabled = false; }
@@ -254,7 +253,7 @@ $("clear-reflection").addEventListener("click", () => {
     $("reflection").value = ""; $("reflection").dispatchEvent(new Event("input")); $("reflection").focus();
 });
 async function loadBlogs() {
-    status("blog-status", "Loading articles…");
+    status("blog-status", "Loading articles.");
     try {
         const articles = await api("/blogs");
         if (!Array.isArray(articles)) throw new Error("Unexpected article response.");
@@ -262,6 +261,8 @@ async function loadBlogs() {
         for (const article of articles) {
             const details = make("details", undefined, "article");
             details.append(make("summary", article.title), make("p", "By " + article.author, "meta"), make("p", article.body, "body"));
+            if(article._id?.$oid){const report=make("button","Report article","text-link small");report.type="button";
+                report.addEventListener("click",()=>window.reportItem("article",article._id.$oid));details.append(report);}
             $("blog-list").append(details);
         }
         status("blog-status", articles.length ? "" : "No articles published yet. Verified professionals will be able to share their perspectives here.");
@@ -287,7 +288,7 @@ async function loadEvents() {
             const card = make("article", undefined, "event-card");
             const date = new Date(event.startsAt);
             card.append(make("h3", event.title), make("p", event.description),
-                make("p", (Number.isNaN(date.getTime()) ? "Date to be confirmed" : date.toLocaleString()) + " · " + (event.location || "Location to be confirmed")));
+                make("p", (Number.isNaN(date.getTime()) ? "Date to be confirmed" : date.toLocaleString()) + " � " + (event.location || "Location to be confirmed")));
             $("event-list").append(card);
         }
         status("event-status", events.length ? "" : "No upcoming events listed yet. Check back for community conversations and workshops.");
@@ -296,9 +297,9 @@ async function loadEvents() {
 const invitation = new URLSearchParams(location.hash.slice(1)).get("invite");
 if (invitation) {
     $("ticket").value = invitation;
-    history.replaceState(null, "", location.pathname + location.search);
+    history.replaceState(null, "", location.pathname + location.search + "#connect");
     $("connect").scrollIntoView();
-    status("join-status", "Invitation ready. Choose audio or video, then enter when you’re comfortable.");
+    status("join-status", "Invitation ready. Choose audio or video, then enter when you're comfortable.");
 }
 if (location.hash === "#register") {
     $("switch-auth").click();

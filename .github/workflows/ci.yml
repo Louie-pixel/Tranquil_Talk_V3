@@ -43,14 +43,19 @@ jobs:
       - name: Start MongoDB and the real backend
         run: |
           docker network create tranquil-test
-          docker run -d --name mongo --network tranquil-test mongo:7.0
+          docker run -d --name mongo --network tranquil-test mongo:7.0 --replSet rs0 --bind_ip_all
           for i in $(seq 1 40); do
             if docker exec mongo mongosh --quiet --eval "db.adminCommand('ping')" >/dev/null 2>&1; then break; fi
             sleep 2
           done
+          docker exec mongo mongosh --quiet --eval "rs.initiate({_id:'rs0',members:[{_id:0,host:'mongo:27017'}]})"
+          for i in $(seq 1 40); do
+            if docker exec mongo mongosh --quiet --eval "if (!db.hello().isWritablePrimary) quit(1)" >/dev/null 2>&1; then break; fi
+            sleep 2
+          done
           docker run -d --name app --network tranquil-test -p 8080:8080 \
             -e JWT_SECRET="$(openssl rand -hex 32)" \
-            -e 'MONGODB_URI=mongodb://mongo:27017/?serverSelectionTimeoutMS=5000' tranquil-test:ci
+            -e 'MONGODB_URI=mongodb://mongo:27017/?replicaSet=rs0&serverSelectionTimeoutMS=5000' tranquil-test:ci
           for i in $(seq 1 30); do
             if curl --fail http://localhost:8080/ >/dev/null 2>&1; then break; fi
             sleep 2
@@ -62,7 +67,7 @@ jobs:
         run: |
           docker run -d --name profiles-app --network tranquil-test -p 8081:8080 \
             -e JWT_SECRET="$(openssl rand -hex 32)" \
-            -e 'MONGODB_URI=mongodb://mongo:27017/?serverSelectionTimeoutMS=5000' tranquil-test:ci
+            -e 'MONGODB_URI=mongodb://mongo:27017/?replicaSet=rs0&serverSelectionTimeoutMS=5000' tranquil-test:ci
           for i in $(seq 1 30); do
             if curl --fail http://127.0.0.1:8081/ >/dev/null 2>&1; then break; fi
             sleep 2
@@ -76,12 +81,43 @@ jobs:
           TEST_PROFILES_BASE_URL: http://127.0.0.1:8081
         run: npm run test:experts
       - name: Test real browser calls with emulated devices
+        id: call-checks
+        continue-on-error: true
+        env:
+          TEST_BASE_URL: http://127.0.0.1:8083
+          TEST_MONGO_CONTAINER: mongo
         run: |
+          docker run -d --name call-app --network tranquil-test -p 8083:8080 \
+            -e JWT_SECRET="$(openssl rand -hex 32)" \
+            -e 'MONGODB_URI=mongodb://mongo:27017/?replicaSet=rs0&serverSelectionTimeoutMS=5000' tranquil-test:ci
+          for i in $(seq 1 30); do
+            if curl --fail http://127.0.0.1:8083/ >/dev/null 2>&1; then break; fi
+            sleep 2
+          done
+          curl --fail http://127.0.0.1:8083/ >/dev/null
           npm install --no-save --package-lock=false @playwright/test@1.56.1
           npx playwright install --with-deps chromium
           npx playwright test --config=playwright.integration.config.cjs
+      - name: Start isolated booking and account test process
+        run: |
+          docker run -d --name workflow-app --network tranquil-test -p 8082:8080 \
+            -e JWT_SECRET="$(openssl rand -hex 32)" \
+            -e 'MONGODB_URI=mongodb://mongo:27017/?replicaSet=rs0&serverSelectionTimeoutMS=5000' \
+            -e MAIL_MODE=outbox -e APP_BASE_URL=http://localhost:8080 \
+            -e TURN_URL=turn:turn.test.invalid:3478 -e TURN_SECRET=ci-test-turn-secret tranquil-test:ci
+          for i in $(seq 1 30); do
+            if curl --fail http://127.0.0.1:8082/ >/dev/null 2>&1; then break; fi
+            sleep 2
+          done
+          curl --fail http://127.0.0.1:8082/ >/dev/null
+      - name: Test booking races, room access, recovery and moderation
+        id: workflow-checks
+        continue-on-error: true
+        env:
+          TEST_MONGO_CONTAINER: mongo
+        run: npm run test:workflows
       - name: Enforce API integration result
-        if: always() && (steps.api-checks.outcome != 'success' || steps.expert-checks.outcome != 'success')
+        if: always() && (steps.api-checks.outcome != 'success' || steps.expert-checks.outcome != 'success' || steps.call-checks.outcome != 'success' || steps.workflow-checks.outcome != 'success')
         run: exit 1
       - uses: actions/upload-artifact@v4
         if: failure()
@@ -93,6 +129,8 @@ jobs:
         run: |
           docker logs app || true
           docker logs profiles-app || true
+          docker logs workflow-app || true
+          docker logs call-app || true
   desktop:
     runs-on: ubuntu-24.04
     steps:

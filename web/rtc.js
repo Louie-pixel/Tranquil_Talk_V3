@@ -2,7 +2,7 @@
 (function(root) {
 "use strict";
 class TranquilCall {
-    constructor({send, status, localVideo, remoteVideo, mediaDevices, PeerConnection, iceServers}) {
+    constructor({send, status, localVideo, remoteVideo, mediaDevices, PeerConnection, iceServers, iceTransportPolicy = "all"}) {
         this.send = send;
         this.status = status;
         this.localVideo = localVideo;
@@ -13,6 +13,8 @@ class TranquilCall {
         this.stream = null; this.peer = null; this.candidates = [];
         this.ended = false; this.muted = false; this.cameraOff = false;
         this.generation = 0;
+        this.iceTransportPolicy = iceTransportPolicy;
+        this.offerer = false; this.restarts = 0; this.restartTimer = null;
     }
     async prepare(mode) {
         if (mode !== "audio" && mode !== "video") throw new Error("Choose audio or video");
@@ -29,7 +31,7 @@ class TranquilCall {
         stream.getVideoTracks().forEach(track => {track.enabled = !this.cameraOff;});
         this.localVideo.srcObject = stream;
         this.localVideo.hidden = mode === "audio";
-        const peer = new this.PeerConnection({iceServers: this.iceServers});
+        const peer = new this.PeerConnection({iceServers: this.iceServers, iceTransportPolicy:this.iceTransportPolicy});
         this.peer = peer;
         stream.getTracks().forEach(track => peer.addTrack(track, stream));
         peer.onicecandidate = event => {
@@ -41,9 +43,19 @@ class TranquilCall {
         peer.onconnectionstatechange = () => {
             if (this.ended) return;
             const state = peer.connectionState;
+            if(state === "connected") {clearTimeout(this.restartTimer);this.restartTimer=null;}
+            if(this.offerer && ["disconnected","failed"].includes(state) && !this.restartTimer && this.restarts < 2) {
+                this.restartTimer=setTimeout(async()=>{
+                    this.restartTimer=null;
+                    if(this.ended || this.peer!==peer || peer.connectionState==="connected")return;
+                    ++this.restarts;
+                    try {await this.offer({iceRestart:true});}
+                    catch {this.status("Reconnection failed. Leave and reconnect from your appointment.");}
+                },state==="failed" ? 500 : 4000);
+            }
             this.status(state === "connected" ? "Connected" :
-                state === "failed" ? "Connection failed. End the call and try a new invitation." :
-                state === "disconnected" ? "Connection interrupted. Waiting to reconnect…" : "Connecting…");
+                state === "failed" ? "Connection failed. Reconnecting where possible; otherwise leave and reconnect from your appointment." :
+                state === "disconnected" ? "Connection interrupted. Waiting to reconnect." : "Connecting.");
         };
     }
     async receive(type, payload) {
@@ -64,10 +76,11 @@ class TranquilCall {
             else this.candidates.push(payload.candidate);
         }
     }
-    async offer() {
+    async offer(options) {
         if (this.ended || !this.peer) return;
         const peer = this.peer;
-        const offer = await peer.createOffer();
+        this.offerer = true;
+        const offer = await peer.createOffer(options);
         await peer.setLocalDescription(offer);
         if (!this.ended) this.send("offer", {offer: peer.localDescription});
     }
@@ -86,6 +99,7 @@ class TranquilCall {
         return this.cameraOff;
     }
     end() {
+        clearTimeout(this.restartTimer); this.restartTimer=null;
         this.ended = true; ++this.generation;
         this.stream?.getTracks().forEach(track => track.stop());
         if (this.peer) {
