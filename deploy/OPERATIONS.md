@@ -54,3 +54,14 @@ This is a deployment configuration, not a provisioned public deployment. A real 
 Run `npm test` for syntax and WebRTC lifecycle checks. Compile/run `tests/core_test.cpp` for validation, booking transition and join-window boundaries. CI builds the real backend and runs MongoDB replica-set tests for booking races, patient conflicts across experts, revision conflicts, proposals, protected rooms, single-use email links, recovery revocation, deletion and moderation. Browser tests cover separate-page navigation, mobile layout, alias booking, account links, expert verification and two-browser calls. All test professionals are fixtures, never real seeded directory entries.
 
 Pages: `/#experts`, `/#appointments`, `/#care`, `/#connect`, `/#stories`, `/#events`, `/#account`, `/#professional`, `/#verification`.
+
+## Entry pages and clinic discovery
+
+The root opens a full sign-in page. Create account opens a separate sign-up page; a successful sign-in opens Home. Explore is a keyboard-accessible dropdown. Existing public profile, clinic and invitation links remain usable. Sign-out returns to sign-in.
+
+Clinic discovery accepts a suburb, city or clinic name, or requests the device location and searches immediately. Location errors explain permission, device availability or timeout recovery, and area search stays available. Coordinates and search radius are not exposed as form controls. Distance labels are approximate straight-line distances; hours, ratings and travel times are never invented. Area search matches metadata in the Tranquil Talk directory; it is not an external geocoding service or a complete worldwide provider search. Existing clinic entries should be updated with accurate public address/city/suburb/contact fields for area search to find them. Google Maps is an explicit external fallback.
+
+The public clinic endpoint supports GET /api/clinics?q=AREA alongside the existing coordinate API. Verified expert clinic creation also accepts optional address, suburb, city, country, phone and HTTPS website fields. Only these public listing fields are returned.
+
+For layout-only viewing, run node tools/preview.cjs 8100. This explicitly labels itself as a preview and returns a service-unavailable response for account and directory operations. It never simulates a successful sign-in or makes an offline directory appear empty. For functional sign-in and live clinic results, run the Docker application above.
+

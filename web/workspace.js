@@ -5,15 +5,22 @@ const timeLabel = seconds => new Date(seconds*1000).toLocaleString(undefined,{da
 const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 function appRoute() {
     const raw=location.hash.slice(1);
-    let page=raw.startsWith("expert/") ? "experts" : raw.startsWith("account/") ? "account" : raw.split("?")[0] || "home";
-    if(!["home","experts","care","connect","professional","verification","appointments","stories","events","account"].includes(page))page="home";
+    let page=raw.startsWith("expert/") ? "experts" : raw.startsWith("account/") ? "account" : raw.split("?")[0] || (account ? "home" : "signin");
+    if(page==="register")page="signup";
+    if(!["signin","signup","home","experts","care","connect","professional","verification","appointments","stories","events","account"].includes(page))page=account ? "home" : "signin";
+    if(page==="home" && !account && !previewExploring)page="signin";
+    if(account && ["signin","signup"].includes(page))page="home";
     if(page==="verification" && account?.role!=="admin")page="account";
+    const entry=["signin","signup"].includes(page);document.body.dataset.screen=page;
+    $("app-menu").hidden=entry;$("account-button").hidden=entry;$("logout").hidden=entry || !account;
+    $("auth-navigation").hidden=!entry;$("route-label").hidden=entry;
+    document.querySelector("footer").hidden=entry;document.querySelector(".support-note").hidden=entry;
     for(const section of document.querySelectorAll("main > section"))section.hidden=section.id!==page;
     document.querySelector(".intro-strip").hidden=page!=="home";
     for(const link of document.querySelectorAll("nav a")) {
         if(link.hash==="#"+page)link.setAttribute("aria-current","page");else link.removeAttribute("aria-current");
     }
-    const labels={home:"Home",experts:"Find an expert",care:"Nearby clinics",connect:"Conversations",professional:"Professional profile",verification:"Verification",appointments:"Appointments",stories:"Resources",events:"Community",account:"Account"};
+    const labels={signin:"Sign in",signup:"Create account",home:"Home",experts:"Find an expert",care:"Nearby clinics",connect:"Conversations",professional:"Professional profile",verification:"Verification",appointments:"Appointments",stories:"Resources",events:"Community",account:"Account"};
     $("route-label").textContent="YOUR SPACE / "+labels[page].toUpperCase();
     document.title=labels[page]+" | Tranquil Talk";
     if(page==="appointments")loadAppointments();
@@ -257,4 +264,6 @@ $("create-room").addEventListener("click",()=>{if(workspace.rtc)closeConsultatio
 $("join-form").addEventListener("submit",()=>{if(workspace.rtc)closeConsultation();});
 // Do not request media, location or notification permissions during navigation.
 appRoute();
-$("forgot-password").addEventListener("click",()=>$("auth-dialog").close());
+document.querySelectorAll("#app-menu nav a").forEach(link=>link.addEventListener("click",()=>{$("app-menu").open=false;}));
+document.addEventListener("click",event=>{if(!$("app-menu").contains(event.target))$("app-menu").open=false;});
+$("app-menu").addEventListener("keydown",event=>{if(event.key==="Escape"){$("app-menu").open=false;$("app-menu").querySelector("summary").focus();}});

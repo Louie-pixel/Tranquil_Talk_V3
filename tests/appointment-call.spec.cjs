@@ -25,7 +25,7 @@ test("an accepted appointment connects its two accounts using only the patient a
         for(const [index,user] of [patient,expert].entries()){
             const page=pages[index];await page.goto("/#appointments");await page.locator("#account-button").click();
             await page.locator('#auth-form [name="email"]').fill(user.email);await page.locator("#password").fill(password);await page.locator("#auth-submit").click();
-            await expect(page.locator("#auth-dialog")).toBeHidden();await expect(page.getByRole("button",{name:"Open waiting room"})).toBeEnabled();
+            await expect(page.locator("#auth-dialog")).toBeHidden();await page.locator("#app-menu summary").click();await page.getByRole("link",{name:"Appointments",exact:true}).click();await expect(page.getByRole("button",{name:"Open waiting room"})).toBeEnabled();
             if(index===1){expect(await page.locator("#appointment-list").innerText()).not.toContain(patient.email);await expect(page.locator("#appointment-list h3")).toHaveText("Quiet River");}
             await page.getByRole("button",{name:"Open waiting room"}).click();
             expect(await page.evaluate(()=>document.getElementById("consultation-local").srcObject)).toBe(null);
