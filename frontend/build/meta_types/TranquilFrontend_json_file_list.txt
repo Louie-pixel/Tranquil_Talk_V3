@@ -1,2 +1,0 @@
-/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/TranquilFrontend_autogen/include/../EWIEGA46WW/moc_ApiClient.cpp.json
-/mnt/c/users/louie/Tranquil_Talk_V3/frontend/build/TranquilFrontend_autogen/include/../EWIEGA46WW/moc_WebRTCClient.cpp.json

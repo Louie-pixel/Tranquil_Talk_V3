@@ -3,11 +3,11 @@ project(TranquilFrontend CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_AUTOMOC ON) 
 
 # 1. WebEngineQuick and WebSockets MUST be listed here so CMake knows to find their headers
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Quick Positioning Qml WebSockets WebEngineQuick)
-
-qt_standard_project_setup()
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Quick Positioning Qml WebSockets)
+find_package(Qt6 COMPONENTS WebEngineQuick)
 
 qt_add_executable(TranquilFrontend
     main.cpp
@@ -20,6 +20,7 @@ qt_add_qml_module(TranquilFrontend
     URI TranquilTalk
     VERSION 1.0
     QML_FILES
+        RegistrationView.qml
         LoginView.qml
         ClinicMapView.qml
         VideoCallView.qml
@@ -33,5 +34,9 @@ target_link_libraries(TranquilFrontend PRIVATE
     Qt6::Positioning
     Qt6::Qml
     Qt6::WebSockets
-    Qt6::WebEngineQuick
 )
+
+if(Qt6WebEngineQuick_FOUND)
+    target_link_libraries(TranquilFrontend PRIVATE Qt6::WebEngineQuick)
+    target_compile_definitions(TranquilFrontend PRIVATE HAS_WEBENGINE)
+endif()
