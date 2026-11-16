@@ -118,7 +118,7 @@ void WorkflowController::appointmentAction(const drogon::HttpRequestPtr& req,Cal
                 auto u=find(db["users"],objectId(who.id),s);
                 result["ticket"]=jwt::create().set_issuer("tranquil_talk").set_type("JWT").set_subject(a["roomId"].asString())
                     .set_audience("tranquil-appointment").set_issued_at(std::chrono::system_clock::now()).set_expires_at(expiry)
-                    .set_payload_claim("role",jwt::claim("participant"))
+                    .set_payload_claim("role",jwt::claim(std::string("participant")))
                     .set_payload_claim("userId",jwt::claim(who.id)).set_payload_claim("appointmentId",jwt::claim(id))
                     .set_payload_claim("version",jwt::claim(std::to_string(u.get("sessionVersion",0).asInt())))
                     .sign(jwt::algorithm::hs256{auth::secret()});
