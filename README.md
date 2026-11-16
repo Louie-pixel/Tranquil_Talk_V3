@@ -84,7 +84,7 @@ WebSocket protocol: send `{"type":"join","ticket":"..."}` after opening. Server 
 - The interface directs urgent situations to local emergency services without presenting unverified hotline numbers.
 
 ## Tests
-`npm test` runs JavaScript syntax checks and nine WebRTC lifecycle tests, without downloads or npm dependencies.
+`npm test` runs JavaScript syntax checks and ten WebRTC lifecycle tests, without downloads or npm dependencies.
 
 ```sh
 g++ -std=c++17 -Wall -Wextra -Werror tests/core_test.cpp -o core_test
@@ -95,4 +95,4 @@ The C++ tests cover malformed numbers, coordinate boundaries, normalized email/p
 
 `npm run test:integration` targets the real running backend at `http://localhost:8080` (override `TEST_BASE_URL`). It checks authentication, role escalation denial, JWT audience isolation, real MongoDB operations, static security headers, malformed coordinate responses and WebSocket authorization/membership/relay behavior. **Use a disposable test database:** it creates test accounts; it does not delete production data.
 
-GitHub Actions includes JavaScript/core tests, a Docker backend build with MongoDB integration tests, and a Qt desktop compile. Local JavaScript and standalone C++ tests were run during this update. The Qt desktop build also passed on GitHub Actions. Full backend and browser checks run in CI; consult their results rather than assuming they ran locally.
+Drogon 1.9.10 accepts a WebSocket upgrade on the first request of a TCP connection. Browser WebSocket clients open a dedicated connection; the Node integration harness closes its REST sockets so Undici cannot reuse one for an upgrade.\n\nGitHub Actions includes JavaScript/core tests, a Docker backend build with MongoDB integration tests, and a Qt desktop compile. Local JavaScript and standalone C++ tests were run during this update. The Qt desktop build also passed on GitHub Actions. Full backend and browser checks run in CI; consult their results rather than assuming they ran locally.

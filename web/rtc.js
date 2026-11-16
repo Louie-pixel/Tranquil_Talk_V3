@@ -25,6 +25,8 @@ class TranquilCall {
             throw new Error("Call ended before device access completed");
         }
         this.stream = stream;
+        stream.getAudioTracks().forEach(track => {track.enabled = !this.muted;});
+        stream.getVideoTracks().forEach(track => {track.enabled = !this.cameraOff;});
         this.localVideo.srcObject = stream;
         this.localVideo.hidden = mode === "audio";
         const peer = new this.PeerConnection({iceServers: this.iceServers});

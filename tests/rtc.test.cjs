@@ -94,3 +94,14 @@ test("invalid call modes are rejected before requesting devices", async () => {
     await assert.rejects(call.prepare("other"),/Choose audio or video/);
     assert.equal(mediaCalls.length,0);
 });
+
+test("mute and camera choices made during device permission are applied before tracks are sent", async () => {
+    let resolve;
+    const {call,stream,tracks} = setup(()=>new Promise(r=>{resolve=r;}));
+    const preparing = call.prepare("video");
+    call.toggleMute(); call.toggleCamera();
+    resolve(stream); await preparing;
+    assert.equal(tracks[0].enabled,false);
+    assert.equal(tracks[1].enabled,false);
+    call.end();
+});

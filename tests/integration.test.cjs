@@ -3,6 +3,8 @@ const assert = require("node:assert/strict");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8080";
 async function request(path, method="GET", body, token) {
     return fetch(base + path, {method, headers:{
+        // Keep REST sockets out of Undici\'s global WebSocket connection pool.
+        connection:"close",
         ...(body ? {"content-type":"application/json"} : {}),
         ...(token ? {authorization:"Bearer " + token} : {})
     }, body:body ? JSON.stringify(body) : undefined});
@@ -65,9 +67,6 @@ test("real backend: authentication, public resources, room capabilities and sign
         req.on("error",reject);req.end();
     });
     assert.equal(handshake.status,101,JSON.stringify(handshake));
-    require("node:diagnostics_channel").channel("undici:request:headers").subscribe(({request,response})=>{
-        if(request.path === "/rtc/signal") console.log("WebSocket HTTP status:",response.statusCode);
-    });
     const sockets=[];
     async function connect() {
         const ws=new WebSocket(base.replace(/^http/,"ws")+"/rtc/signal");
@@ -80,7 +79,7 @@ test("real backend: authentication, public resources, room capabilities and sign
         const opened=Promise.withResolvers();
         ws.addEventListener("open",()=>opened.resolve(),{once:true});
         ws.addEventListener("error",event=>opened.reject(new Error("WebSocket open failed: "+(event.message || event.error?.message || "unknown error"))),{once:true});
-        await opened.promise; sockets.push(ws); console.log("WebSocket connected:",sockets.length);
+        await opened.promise; sockets.push(ws);
         return {
             ws,
             send(body){ws.send(JSON.stringify(body));},

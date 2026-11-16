@@ -20,8 +20,12 @@ void SignalingController::handleNewConnection(const HttpRequestPtr&, const WebSo
     std::weak_ptr<WebSocketConnection> weak = conn;
     drogon::app().getLoop()->runAfter(10.0, [this, weak] {
         if (auto socket = weak.lock()) {
-            std::lock_guard<std::mutex> lock(roomMutex_);
-            if (members_.find(socket) == members_.end()) socket->shutdown();
+            bool joined;
+            {
+                std::lock_guard<std::mutex> lock(roomMutex_);
+                joined = members_.find(socket) != members_.end();
+            }
+            if (!joined) socket->shutdown();
         }
     });
 }
