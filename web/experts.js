@@ -254,12 +254,15 @@ $("refresh-profile").addEventListener("click",async()=>{
     catch(error){status("profile-editor-status",error.message,true);}
 });
 function openProfessionalSignup() {
-    if(account){location.hash="professional";status("profile-editor-status","Use a professional account to create an application.",true);return;}
+    if(account){location.hash="professional";status("professional-gate-status","Sign out first, then create or sign in to a professional account.",true);return;}
     if(!registering)$("switch-auth").click();
     $("auth-form").elements.namedItem("role").value="expert";openAuth();
 }
 $("professional-signup").addEventListener("click",openProfessionalSignup);
-$("professional-signin").addEventListener("click",()=>{if(registering)$("switch-auth").click();openAuth();});
+$("professional-signin").addEventListener("click",()=>{
+    if(account){status("professional-gate-status","Sign out first to switch to a professional account.",true);return;}
+    if(registering)$("switch-auth").click();openAuth();
+});
 async function loadReviewQueue(append=false) {
     if(account?.role!=="admin")return;
     const epoch=++expertState.reviewEpoch,accountEpoch=expertState.accountEpoch;
@@ -334,7 +337,7 @@ function renderReview(profile) {
     const action=$("review-action");action.replaceChildren();
     const actions=profile.status==="pending" ? [["approve","Approve registration"],["request_changes","Request changes"],["suspend","Suspend profile"]] :
         profile.status==="suspended" ? [["request_changes","Reopen for changes"]] :
-        profile.status==="draft" ? [["suspend","Suspend profile"]] :
+        ["draft","changes_requested"].includes(profile.status) ? [["suspend","Suspend profile"]] :
         [["request_changes","Request changes"],["suspend","Suspend profile"]];
     for(const [value,label] of actions){const option=make("option",label);option.value=value;action.append(option);}
     reviewActionFields();status("review-decision-status","");
@@ -379,6 +382,7 @@ function accountChanged() {
     if($("review-dialog").open)$("review-dialog").close();
     $("profile-workspace").hidden=!professionalAccount();
     $("professional-gate").hidden=Boolean(professionalAccount());
+    status("professional-gate-status",account && !professionalAccount() ? "Use a separate professional account for a registration application. Sign out before switching accounts." : "");
     $("profile-nav").hidden=!professionalAccount();
     $("verification-nav").hidden=account?.role!=="admin";
     $("verification").hidden=account?.role!=="admin";
