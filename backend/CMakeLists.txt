@@ -30,7 +30,7 @@ target_include_directories(tranquil_bcrypt PUBLIC ${bcrypt_source_SOURCE_DIR}/in
 
 add_executable(TranquilBackend main.cc
     controllers/ClinicController.cc controllers/UserController.cc
-    controllers/SignalingController.cc controllers/SessionController.cc controllers/ContentController.cc
+    controllers/SignalingController.cc controllers/SessionController.cc controllers/ContentController.cc controllers/ExpertController.cc
     models/DatabaseManager.cc)
 target_link_libraries(TranquilBackend PRIVATE Drogon::Drogon
     mongo::mongocxx_shared mongo::bsoncxx_shared jwt-cpp::jwt-cpp tranquil_bcrypt)

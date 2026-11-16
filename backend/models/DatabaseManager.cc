@@ -21,6 +21,8 @@ void DatabaseManager::init(const std::string& uri) {
     unique.unique(true);
     db.collection("users").create_index(document{} << "email" << 1 << finalize, unique);
     db.collection("clinics").create_index(document{} << "location" << "2dsphere" << finalize);
+    db.collection("expert_profiles").create_index(document{} << "status" << 1 << "updatedAt" << -1 << finalize);
+    db.collection("expert_profiles").create_index(document{} << "status" << 1 << "name" << 1 << "_id" << 1 << finalize);
 }
 
 mongocxx::pool::entry DatabaseManager::getConnection() {

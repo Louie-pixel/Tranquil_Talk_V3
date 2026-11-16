@@ -52,7 +52,9 @@ void ContentController::publish(const drogon::HttpRequestPtr& req,
         std::function<void(const drogon::HttpResponsePtr&)>&& callback) {
     auth::Identity identity;
     try { identity = auth::require(req); }
-    catch (const std::exception&) {
+    catch (const auth::Unavailable&) {
+        callback(http::error(drogon::k503ServiceUnavailable, "Account access is temporarily unavailable")); return;
+    } catch (const std::exception&) {
         callback(http::error(drogon::k401Unauthorized, "Sign in required")); return;
     }
     if (identity.role != "expert") {
