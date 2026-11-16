@@ -80,13 +80,28 @@ void UserController::loginUser(const drogon::HttpRequestPtr& req,
         if (!user || !valid) {
             callback(http::error(drogon::k401Unauthorized, "Invalid credentials")); return;
         }
-        const std::string role(user->view()["role"].get_string().value);
+        const auto identity = auth::currentIdentity(user->view()["_id"].get_oid().value.to_string());
+        const auto& role = identity.role;
         Json::Value result;
-        result["token"] = auth::issue(user->view()["_id"].get_oid().value.to_string(), role);
+        result["token"] = auth::issue(identity.id, role);
         result["role"] = role;
+        result["id"] = identity.id;
         result["expiresIn"] = 3600;
         callback(drogon::HttpResponse::newHttpJsonResponse(result));
     } catch (const std::exception&) {
         callback(http::error(drogon::k503ServiceUnavailable, "Sign in is temporarily unavailable"));
+    }
+}
+
+void UserController::me(const drogon::HttpRequestPtr& req,
+        std::function<void(const drogon::HttpResponsePtr&)>&& callback) {
+    try {
+        const auto identity = auth::require(req);
+        Json::Value result; result["id"] = identity.id; result["role"] = identity.role;
+        callback(drogon::HttpResponse::newHttpJsonResponse(result));
+    } catch (const auth::Unavailable&) {
+        callback(http::error(drogon::k503ServiceUnavailable,"Account access is temporarily unavailable"));
+    } catch (const std::exception&) {
+        callback(http::error(drogon::k401Unauthorized,"Sign in required"));
     }
 }

@@ -1,6 +1,8 @@
 const {test,expect} = require("@playwright/test");
 
 test.beforeEach(async ({page})=>{
+    await page.route("**/api/experts**",route=>route.fulfill({json:{items:[],nextOffset:null}}));
+    await page.route("**/api/expert-profile",route=>route.fulfill({json:{profile:null}}));
     await page.route("**/api/blogs",route=>{
         if(route.request().method()==="POST") return route.fulfill({status:201,json:{message:"Published"}});
         return route.fulfill({json:[{title:"A little space to reflect",author:"Test Contributor",body:"<script>window.injected=true</script>"}]});

@@ -11,11 +11,30 @@ std::string env(const char* name, const std::string& fallback) {
     return value ? value : fallback;
 }
 }
-int main() {
+int main(int argc, char* argv[]) {
+    if (argc != 1 && !(argc == 3 && std::string(argv[1]) == "--grant-admin")) {
+        std::cerr << "Usage: TranquilBackend [--grant-admin existing-account-email]\n";
+        return 2;
+    }
     try {
         auth::secret(); // Fail closed before opening a listening socket.
         DatabaseManager::getInstance().init(env("MONGODB_URI",
             "mongodb://localhost:27017/?serverSelectionTimeoutMS=5000"));
+        if (argc == 3) {
+            const auto email = validation::email(argv[2]);
+            if (!validation::validEmail(email)) throw std::invalid_argument("Invalid account email");
+            auto connection = DatabaseManager::getInstance().getConnection();
+            using namespace bsoncxx::builder::stream;
+            auto result = connection->database("tranquil_talk").collection("users").update_one(
+                document{} << "email" << email << finalize,
+                document{} << "$set" << open_document << "role" << "admin" << close_document << finalize);
+            if (!result || result->matched_count() != 1) {
+                std::cerr << "No existing account matched. Create the operator account first.\n";
+                return 2;
+            }
+            std::cout << "Administrator access granted. Sign in and open Verification.\n";
+            return 0;
+        }
         const auto port = validation::number(env("PORT", "8080"), 1, 65535);
         if (port != static_cast<int>(port)) throw std::invalid_argument("PORT must be an integer");
         drogon::app()

@@ -2,8 +2,9 @@
   "name": "tranquil-talk-checks",
   "private": true,
   "scripts": {
-    "test": "node --check web/app.js && node --check web/rtc.js && node --test tests/rtc.test.cjs",
-    "test:integration": "node --test tests/integration.test.cjs"
+    "test": "node --check web/app.js && node --check web/rtc.js && node --check web/experts.js && node --test tests/rtc.test.cjs",
+    "test:integration": "node --test tests/integration.test.cjs",
+    "test:experts": "node --test tests/experts.integration.test.cjs"
   },
   "engines": {"node": ">=22"}
 }

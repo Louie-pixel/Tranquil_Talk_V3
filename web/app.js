@@ -15,7 +15,10 @@ const api = async (path, {method = "GET", body, authenticated = false} = {}) => 
         credentials: "omit", cache: "no-store", signal: AbortSignal.timeout(15000)
     });
     const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(data.error || "The service is unavailable. Please try again.");
+    if (!response.ok) {
+        const error = new Error(data.error || "The service is unavailable. Please try again.");
+        error.status = response.status; throw error;
+    }
     return data;
 };
 function status(id, message, error = false) {
@@ -28,11 +31,24 @@ function make(tag, text, className) {
     if (className) node.className = className;
     return node;
 }
+function renderAccount() {
+    $("account-button").textContent = !account ? "Sign in" : account.role === "admin" ? "Administrator" :
+        account.role === "expert" ? "Verified professional" : "Your account";
+    $("logout").hidden = !account;
+    $("publish-form").hidden = account?.role !== "expert";
+    window.dispatchEvent(new CustomEvent("tranquil-account", {detail: account ? {id:account.id,role:account.role} : null}));
+}
+async function refreshAccount() {
+    if (!account) return;
+    const token = account.token;
+    const identity = await api("/me", {authenticated:true});
+    if (account?.token !== token) return;
+    account = {...account,...identity};
+    renderAccount();
+}
 function signOut() {
     account = null;
-    $("account-button").textContent = "Sign in";
-    $("logout").hidden = true;
-    $("publish-form").hidden = true;
+    renderAccount();
     endCall();
 }
 function openAuth() {
@@ -40,7 +56,10 @@ function openAuth() {
 }
 $("account-button").addEventListener("click", () => {
     if (!account) openAuth();
-    else status("room-status", "Signed in. You can create a private room below.");
+    else {
+        location.hash = account.role === "admin" ? "verification" :
+            ["expert","expert_pending"].includes(account.role) ? "professional" : "connect";
+    }
 });
 $("logout").addEventListener("click", signOut);
 $("close-auth").addEventListener("click", () => $("auth-dialog").close());
@@ -67,9 +86,7 @@ $("auth-form").addEventListener("submit", async event => {
             status("auth-status", data.message);
         } else {
             account = {...data, expiresAt: Date.now() + data.expiresIn * 1000};
-            $("account-button").textContent = data.role === "expert" ? "Verified expert" : "Signed in";
-            $("logout").hidden = false;
-            $("publish-form").hidden = data.role !== "expert";
+            renderAccount();
             $("auth-dialog").close();
             status("room-status", data.role === "expert_pending" ? "Signed in. Professional verification is still pending." : "You’re signed in. Create a private room whenever you’re ready.");
         }
@@ -104,7 +121,7 @@ $("clinic-form").addEventListener("submit", async event => {
                 !coordinates.every(Number.isFinite)) continue;
             const card = make("article", undefined, "clinic-card");
             card.append(make("h3", clinic.name), make("p", "Contact the clinic to confirm available mental health services."));
-            const link = make("a", "Open directions ↗");
+            const link = make("a", "Open directions");
             link.href = "https://www.google.com/maps/dir/?api=1&destination=" +
                 encodeURIComponent(coordinates[1] + "," + coordinates[0]);
             link.target = "_blank"; link.rel = "noopener noreferrer";
@@ -218,6 +235,7 @@ $("camera").addEventListener("click", () => {
 window.addEventListener("pagehide", () => {
     endCall();
     account = null;
+    renderAccount();
     $("reflection").value = "";
     $("reflection-count").textContent = "0 words";
     $("ticket").value = "";

@@ -5,6 +5,13 @@
 #include <cstdlib>
 #include <stdexcept>
 #include <string>
+#include "../models/DatabaseManager.h"
+#include "ExpertRules.h"
+#include <bsoncxx/builder/stream/document.hpp>
+#include <bsoncxx/oid.hpp>
+#include <mongocxx/client.hpp>
+#include <mongocxx/database.hpp>
+#include <mongocxx/collection.hpp>
 
 namespace auth {
 inline const std::string& secret() {
@@ -37,9 +44,35 @@ inline Identity verify(const std::string& token, const std::string& audience = "
         throw std::invalid_argument("Invalid token");
     return {decoded.get_subject(), decoded.get_payload_claim("role").as_string()};
 }
+class Unavailable : public std::runtime_error {
+public: Unavailable() : std::runtime_error("Account service unavailable") {}
+};
+inline Identity currentIdentity(const std::string& id) {
+    try {
+        using namespace bsoncxx::builder::stream;
+        auto client = DatabaseManager::getInstance().getConnection();
+        auto db = client->database("tranquil_talk");
+        auto filter = document{} << "_id" << bsoncxx::oid(id) << finalize;
+        auto user = db.collection("users").find_one(filter.view());
+        if (!user) throw std::invalid_argument("Account unavailable");
+        std::string role(user->view()["role"].get_string().value);
+        if (!experts::contains({"patient","expert_pending","expert","admin"},role))
+            throw std::invalid_argument("Account unavailable");
+        if (role == "expert") {
+            auto profile = db.collection("expert_profiles").find_one(filter.view());
+            if (!profile || !profile->view()["approvedRevision"] ||
+                !experts::approved(std::string(profile->view()["status"].get_string().value),
+                    profile->view()["revision"].get_int32().value,
+                    profile->view()["approvedRevision"].get_int32().value))
+                role = "expert_pending";
+        }
+        return {id,role};
+    } catch (const std::invalid_argument&) { throw; }
+    catch (const std::exception&) { throw Unavailable(); }
+}
 inline Identity require(const drogon::HttpRequestPtr& request) {
     const auto header = request->getHeader("authorization");
     if (header.rfind("Bearer ", 0) != 0) throw std::invalid_argument("Sign in required");
-    return verify(header.substr(7));
+    return currentIdentity(verify(header.substr(7)).id);
 }
 }

@@ -1,6 +1,7 @@
 #include "../backend/utils/Validation.h"
 #include "../backend/utils/RoomRegistry.h"
 #include "../backend/utils/RateLimit.h"
+#include "../backend/utils/ExpertRules.h"
 #include <cassert>
 #include <iostream>
 #include <memory>
@@ -48,5 +49,21 @@ int main() {
     assert(rate_limit::allow("test", 2));
     assert(rate_limit::allow("test", 2));
     assert(!rate_limit::allow("test", 2));
+    assert(experts::httpsUrl("https://register.example.com/check?id=123"));
+    assert(!experts::httpsUrl("javascript:alert(1)"));
+    assert(!experts::httpsUrl("http://register.example.com"));
+    assert(!experts::httpsUrl(std::string("https://register.example.com/") + char(0)));
+    assert(!experts::httpsUrl("https://user:password@register.example.com"));
+    assert(!experts::httpsUrl("https://register.example.com/has space"));
+    assert(experts::escapeRegex(".*[name]") == "\\.\\*\\[name\\]");
+    assert(experts::canReview("pending","approve"));
+    assert(!experts::canReview("draft","approve"));
+    assert(!experts::canReview("suspended","approve"));
+    assert(experts::canReview("suspended","request_changes"));
+    assert(experts::canSubmit("changes_requested"));
+    assert(!experts::canSubmit("suspended"));
+    assert(experts::approved("approved",7,7));
+    assert(!experts::approved("approved",8,7));
+    assert(!experts::approved("suspended",7,7));
     std::cout << "Core validation, room isolation/capacity/cleanup and rate-limit tests passed.\n";
 }
