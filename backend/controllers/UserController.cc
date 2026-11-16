@@ -1,117 +1,92 @@
 #include "UserController.h"
 #include "../models/DatabaseManager.h"
+#include "../utils/Auth.h"
+#include "../utils/Http.h"
+#include "../utils/RateLimit.h"
+#include "../utils/Validation.h"
+#include <bsoncxx/builder/stream/document.hpp>
 #include <mongocxx/client.hpp>
 #include <mongocxx/database.hpp>
 #include <mongocxx/collection.hpp>
-#include <bsoncxx/builder/stream/document.hpp>
-#include <bsoncxx/json.hpp>
-#include <jwt-cpp/jwt.h>
-#include <bcrypt/BCrypt.hpp> // Our new library
+#include <mongocxx/exception/operation_exception.hpp>
+#include <bcrypt/BCrypt.hpp>
 
 using namespace bsoncxx::builder::stream;
 
-void UserController::registerUser(const drogon::HttpRequestPtr& req, std::function<void(const drogon::HttpResponsePtr&)>&& callback) {
-    auto json = req->getJsonObject();
-    if (!json || !(*json)["email"].isString() || !(*json)["password"].isString() || !(*json)["role"].isString()) {
-        auto resp = drogon::HttpResponse::newHttpResponse();
-        resp->setStatusCode(drogon::k400BadRequest);
-        resp->setBody("Missing required fields");
-        callback(resp);
-        return;
+void UserController::registerUser(const drogon::HttpRequestPtr& req,
+        std::function<void(const drogon::HttpResponsePtr&)>&& callback) {
+    if (!rate_limit::allow(req->peerAddr().toIp() + ":register", 5)) {
+        callback(http::error(drogon::k429TooManyRequests, "Please try again in a minute")); return;
     }
-
-    std::string email = (*json)["email"].asString();
-    std::string raw_password = (*json)["password"].asString();
-    std::string role = (*json)["role"].asString();
-
+    auto json = req->getJsonObject();
+    if (!json || !json->isObject() || !(*json)["email"].isString() ||
+        !(*json)["password"].isString() ||
+        (json->isMember("role") && !(*json)["role"].isString())) {
+        callback(http::error(drogon::k400BadRequest, "Email and password are required")); return;
+    }
+    const auto email = validation::email((*json)["email"].asString());
+    const auto password = (*json)["password"].asString();
+    const auto role = json->isMember("role") ? (*json)["role"].asString() : "patient";
+    if (!validation::validEmail(email) || !validation::password(password) ||
+        (role != "patient" && role != "expert")) {
+        callback(http::error(drogon::k400BadRequest,
+            "Use a valid email, a password of 12–72 bytes, and patient or expert role")); return;
+    }
     try {
         auto client = DatabaseManager::getInstance().getConnection();
-        auto collection = client->database("tranquil_talk").collection("users");
-        auto existing_user = collection.find_one(document{} << "email" << email << finalize);
-        
-        if (existing_user) {
-            auto resp = drogon::HttpResponse::newHttpResponse();
-            resp->setStatusCode(drogon::k409Conflict);
-            resp->setBody("User already exists");
-            callback(resp);
-            return;
-        }
-
-        // HASH THE PASSWORD (Automatically handles salting internally)
-        std::string hashed_password = BCrypt::generateHash(raw_password);
-
-        bsoncxx::document::value new_user = document{} 
-            << "email" << email 
-            << "password" << hashed_password 
-            << "role" << role 
-            << finalize;
-            
-        collection.insert_one(new_user.view());
-        auto resp = drogon::HttpResponse::newHttpResponse();
-        resp->setStatusCode(drogon::k201Created);
-        resp->setBody("User registered securely!");
-        callback(resp);
-    } catch (const std::exception& e) {
-        auto resp = drogon::HttpResponse::newHttpResponse();
-        resp->setStatusCode(drogon::k500InternalServerError);
-        resp->setBody(std::string("Database error: ") + e.what());
-        callback(resp);
+        auto users = client->database("tranquil_talk").collection("users");
+        // The unique email index also handles concurrent registrations.
+        auto newUser = document{} << "email" << email
+            << "password" << BCrypt::generateHash(password, 12)
+            << "role" << (role == "expert" ? "expert_pending" : "patient") << finalize;
+        users.insert_one(newUser.view());
+        Json::Value result;
+        result["message"] = role == "expert" ? "Account created. Expert verification is pending." : "Account created. Please sign in.";
+        auto response = drogon::HttpResponse::newHttpJsonResponse(result);
+        response->setStatusCode(drogon::k201Created);
+        callback(response);
+    } catch (const mongocxx::operation_exception& e) {
+        if (e.code().value() == 11000) {
+            callback(http::error(drogon::k409Conflict, "An account with this email already exists"));
+        } else callback(http::error(drogon::k503ServiceUnavailable, "Registration is temporarily unavailable"));
+    } catch (const std::exception&) {
+        callback(http::error(drogon::k503ServiceUnavailable, "Registration is temporarily unavailable"));
     }
 }
 
-void UserController::loginUser(const drogon::HttpRequestPtr& req, std::function<void(const drogon::HttpResponsePtr&)>&& callback) {
-    auto json = req->getJsonObject();
-    if (!json || !(*json)["email"].isString() || !(*json)["password"].isString()) {
-        auto resp = drogon::HttpResponse::newHttpResponse();
-        resp->setStatusCode(drogon::k400BadRequest);
-        resp->setBody("Missing credentials");
-        callback(resp);
-        return;
+void UserController::loginUser(const drogon::HttpRequestPtr& req,
+        std::function<void(const drogon::HttpResponsePtr&)>&& callback) {
+    if (!rate_limit::allow(req->peerAddr().toIp() + ":login", 10)) {
+        callback(http::error(drogon::k429TooManyRequests, "Please try again in a minute")); return;
     }
-
-    std::string email = (*json)["email"].asString();
-    std::string raw_password = (*json)["password"].asString();
-
+    auto json = req->getJsonObject();
+    if (!json || !json->isObject() || !(*json)["email"].isString() || !(*json)["password"].isString()) {
+        callback(http::error(drogon::k400BadRequest, "Email and password are required")); return;
+    }
+    const auto email = validation::email((*json)["email"].asString());
+    const auto password = (*json)["password"].asString();
+    if (!validation::validEmail(email) || password.empty() || password.size() > 72 ||
+        password.find('\0') != std::string::npos) {
+        callback(http::error(drogon::k401Unauthorized, "Invalid credentials")); return;
+    }
     try {
         auto client = DatabaseManager::getInstance().getConnection();
-        auto collection = client->database("tranquil_talk").collection("users");
-        auto user = collection.find_one(document{} << "email" << email << finalize);
-
-        if (!user) {
-            auto resp = drogon::HttpResponse::newHttpResponse();
-            resp->setStatusCode(drogon::k401Unauthorized);
-            resp->setBody("Invalid credentials");
-            callback(resp);
-            return;
+        auto users = client->database("tranquil_talk").collection("users");
+        auto user = users.find_one(document{} << "email" << email << finalize);
+        // A fixed valid dummy hash makes absent-user verification consume bcrypt work too.
+        const std::string hash = user ? std::string(user->view()["password"].get_string().value) :
+            "$2a$12$R9h/cIPz0gi.URNNX3kh2OPST9/PgBkqquzi.Ss7KIUgO2t0jWMUW";
+        const bool valid = BCrypt::validatePassword(password, hash);
+        if (!user || !valid) {
+            callback(http::error(drogon::k401Unauthorized, "Invalid credentials")); return;
         }
-
-        // VERIFY THE BCRYPT HASH
-        std::string db_hash(user->view()["password"].get_string().value);
-        if (!BCrypt::validatePassword(raw_password, db_hash)) {
-            auto resp = drogon::HttpResponse::newHttpResponse();
-            resp->setStatusCode(drogon::k401Unauthorized);
-            resp->setBody("Invalid credentials");
-            callback(resp);
-            return;
-        }
-
-        std::string role(user->view()["role"].get_string().value);
-        auto token = jwt::create()
-            .set_issuer("tranquil_talk")
-            .set_type("JWS")
-            .set_payload_claim("email", jwt::claim(email))
-            .set_payload_claim("role", jwt::claim(role))
-            .sign(jwt::algorithm::hs256{"super_secret_key_change_me"}); // Consider pulling this key from an env variable later!
-
-        Json::Value ret;
-        ret["token"] = token;
-        ret["role"] = role;
-        auto resp = drogon::HttpResponse::newHttpJsonResponse(ret);
-        callback(resp);
-    } catch (const std::exception& e) {
-        auto resp = drogon::HttpResponse::newHttpResponse();
-        resp->setStatusCode(drogon::k500InternalServerError);
-        resp->setBody(std::string("Database error: ") + e.what());
-        callback(resp);
+        const std::string role(user->view()["role"].get_string().value);
+        Json::Value result;
+        result["token"] = auth::issue(user->view()["_id"].get_oid().value.to_string(), role);
+        result["role"] = role;
+        result["expiresIn"] = 3600;
+        callback(drogon::HttpResponse::newHttpJsonResponse(result));
+    } catch (const std::exception&) {
+        callback(http::error(drogon::k503ServiceUnavailable, "Sign in is temporarily unavailable"));
     }
 }

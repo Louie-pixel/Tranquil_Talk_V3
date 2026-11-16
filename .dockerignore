@@ -1,0 +1,8 @@
+**/build
+**/node_modules
+.git
+.env
+.env.*
+*.exe
+outputs
+work

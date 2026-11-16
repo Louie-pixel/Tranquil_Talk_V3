@@ -1,0 +1,24 @@
+services:
+  app:
+    build: .
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      JWT_SECRET: ${JWT_SECRET:?Set a random JWT_SECRET of at least 32 characters}
+      MONGODB_URI: mongodb://mongo:27017/?serverSelectionTimeoutMS=5000
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: unless-stopped
+  mongo:
+    image: mongo:7.0
+    volumes:
+      - tranquil-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+    restart: unless-stopped
+volumes:
+  tranquil-data:

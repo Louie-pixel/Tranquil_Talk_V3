@@ -1,27 +1,22 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QtWebEngineQuick> // Add this import
+#include <QQmlContext>
+#include <QtWebEngineQuick>
 #include <QUrl>
-#include "WebRTCClient.h"
 
-int main(int argc, char *argv[]) {
-    // Inject Chromium flags to bypass WSL2 webcam limitations for testing
-    // Update this line at the top of your main() function:
-qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--use-fake-ui-for-media-stream --use-fake-device-for-media-stream --disable-gpu --disable-gpu-compositing");
-    // Must be called BEFORE QGuiApplication
+int main(int argc, char* argv[]) {
+    // Real devices and the normal permission UI are used unless the developer
+    // explicitly supplies testing flags in their own environment.
     QtWebEngineQuick::initialize();
-
     QGuiApplication app(argc, argv);
-    
-    qmlRegisterType<WebRTCClient>("TranquilTalk.WebRTC", 1, 0, "WebRTCClient");
-
     QQmlApplicationEngine engine;
-    
+    const auto url = qEnvironmentVariable("TRANQUIL_BASE_URL", "http://localhost:8080");
+    const QUrl baseUrl(url);
+    if (!baseUrl.isValid() ||
+        (baseUrl.scheme() != "http" && baseUrl.scheme() != "https")) return 1;
+    engine.rootContext()->setContextProperty("backendUrl", baseUrl);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
-        &app, []() { QCoreApplication::exit(-1); },
-        Qt::QueuedConnection);
-        
+        &app, [] { QCoreApplication::exit(1); }, Qt::QueuedConnection);
     engine.load(QUrl(QStringLiteral("qrc:/TranquilTalk/LoginView.qml")));
-
     return app.exec();
 }
