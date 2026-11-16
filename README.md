@@ -1,143 +1,106 @@
 # Tranquil Talk
-Booking, appointment-only calls, account email actions and safety reports are implemented alongside a charcoal/red interface with separate navigation pages. See [complete workflow and deployment instructions](deploy/OPERATIONS.md) for setup, limits and HTTPS/email/TURN configuration. Live production infrastructure and credentials must be supplied by the operator.
-**Speak freely, Heal quietly.**
 
-A mental wellbeing platform for finding nearby clinics, private audio/video conversations, expert articles, reflection and community events.
+**Speak freely. Heal quietly.**
 
-## What is implemented
-- Responsive HTML/CSS/JavaScript browser application served by the existing C++17/Drogon backend.
-- MongoDB-backed registration and bcrypt password verification; normalized emails, a unique email index, bounded input, process-local authentication throttling, one-hour JWTs, and a required environment signing secret.
-- Clinic search with GeoJSON longitude/latitude order, coordinate/radius validation, a startup 2dsphere index, and a 100-result limit. Only verified experts can add clinic records.
-- Private two-person WebRTC rooms. Authenticated users create 30-minute invitation capabilities; invitees do not need to disclose an account identity to their peer. Signaling requires a valid room ticket, strips unrelated fields, prevents cross-room relay and duplicate membership, caps rooms at two participants, and cleans up disconnected/expired sockets.
-- User-selected audio-only or video mode; media access begins only on Enter conversation. Mute, camera toggle and hangup work on actual tracks. Early ICE is queued until remote SDP is installed.
-- MongoDB articles published only by verified expert accounts. Public article and upcoming-event lists return only public fields. No fabricated clinics, professionals, articles or events are seeded.
-- A reflection space held only in the open page: no server submission, browser storage or autosave.
-- Optional Qt 6.4+ desktop shell uses the same web application, explicit permission prompts and configurable server URL. Obsolete duplicate views, fake device flags, absolute WSL paths and generated build products have been removed.
+Tranquil Talk uses a C++17/Drogon API, MongoDB replica-set database, a shared browser interface and an optional Qt desktop shell. The server serves both the interface and APIs from the same origin. Node is used for tests and the explicitly labelled layout preview.
 
-The repository previously used C++/Drogon and Qt, despite the original project description mentioning Node/Express. This update retains the working architecture rather than silently replacing its backend. Node is used only for tests.
+## Run the complete application on Windows
 
-## Run with Docker Compose
-Install Docker with Compose. From this repository:
+Install and open Docker Desktop with Linux containers, then run from this repository:
 
-1. Copy `.env.example` to `.env`.
-2. Generate a key using `node -e "console.log(require('node:crypto').randomBytes(48).toString('base64url'))"` and put it in `JWT_SECRET` in `.env`.
-3. Run `docker compose up --build`.
-4. Open http://localhost:8080.
-
-The first build compiles pinned Drogon, MongoDB C/C++ driver, jwt-cpp and bcrypt dependencies. MongoDB is on the internal Compose network; only the application port is published, bound to localhost. Records persist in the `tranquil-data` volume. This is a local development configuration. Environment files are not committed.
-
-The server refuses to start without a JWT secret of at least 32 characters, reachable MongoDB or required indexes. If an existing database contains duplicate email values, reconcile those records before starting. Existing mixed-case email records must be normalized before relying on case-insensitive sign-in. Previously issued tokens are intentionally invalid under the new signing key/required expiry and audience.
-
-## Native builds
-Backend requires CMake 3.24+, a C/C++17 toolchain, OpenSSL, Drogon and MongoDB C++ driver 3.11-compatible packages. CMake fetches pinned jwt-cpp and bcrypt sources; outbound access is needed for first configuration.
-
-```sh
-cmake -S backend -B out
-cmake --build out -j2
-# Export JWT_SECRET first. Run from repository root so WEB_ROOT=web resolves.
-./out/TranquilBackend
+```powershell
+.\tools\start.ps1
 ```
 
-Configuration: `JWT_SECRET` (required), `MONGODB_URI`, `BIND_ADDRESS` (default 127.0.0.1), `PORT` (8080), `WEB_ROOT` (web), `UPLOAD_PATH` (/tmp/tranquil-talk-uploads). The binary does not automatically load `.env`; Compose does. Backend Docker build is the reference Linux build.
+The launcher checks Docker, generates a signing key in a private `.env` if needed, builds the application, starts MongoDB and a local email inbox, and checks API readiness. It preserves existing configuration and data. The first build compiles pinned C++ dependencies and can take several minutes.
 
-For the optional desktop shell, install Qt 6.4+ Core/Gui/Quick/Qml/WebEngineQuick and the Qt Quick Controls runtime:
+- Application: http://localhost:8080
+- Local development email inbox: http://localhost:8025
+- Readiness: http://localhost:8080/api/health
 
-```sh
-cmake -S frontend -B out-desktop
-cmake --build out-desktop -j2
-./out-desktop/TranquilFrontend
-```
+Create an account, sign in and request verification from Account. Open the verification email in the **local test inbox** and confirm its link. Password recovery uses the same inbox. These development messages are captured locally, not delivered to real email addresses. No email-provider account is needed for this local flow.
 
-Set `TRANQUIL_BASE_URL` to use another server; it defaults to http://localhost:8080. No machine-specific paths or forced media emulation are used. The upstream Main.qml and RegistrationView.qml entry points are retained as wrappers around the shared application; registration opens the same validated web flow.
+Use `tools/start.ps1 -Port 8101` to choose another application port. `tools/status.ps1` checks services and API readiness. `tools/stop.ps1` stops services while preserving data volumes. These scripts require PowerShell 5.1 or later and Docker Compose v2. They do not install Docker or request administrative access.
 
-## Accounts and content operations
-Public signup accepts `patient` or `expert`. Expert requests are stored as `expert_pending`, with no elevated publishing or clinic permissions. There is no public role-promotion API.
+On Linux/macOS, copy `.env.example` to `.env`, replace `JWT_SECRET` with a random string of at least 32 characters, then run `docker compose up -d --build --wait`. Compose supplies the internal MongoDB URI and local mail provider configuration. Never commit `.env` or actual credentials.
 
-Professional profiles now have an administrator review workflow. Experts sign in, open **My profile**, save their public information and private registration details, then submit for review. Only the exact approved revision appears in the public directory. Editing a published profile hides it until the new version is approved.
+## Supported workflows
 
-Administrators use **Verification** to approve, request changes, suspend or reopen an application. Approval requires confirmation that the applicant was matched to an official professional register, the HTTPS registry reference actually checked, and a review note. This is a manual, recorded review, not automatic identity or licence verification. There are no uploads or automatic outbound requests to applicant-provided reference URLs. Registration numbers, submitted references, review notes and reviewer IDs never appear in public profile responses.
+- Sign-up and bcrypt sign-in; one-hour JWTs, current database role checks and session-version revocation.
+- Email verification and single-use password recovery links; private durable delivery outbox with retries.
+- Expert draft profiles, manual credential review, revision-specific approval, suspension and private review history.
+- Clinic search by device location or area/name, with public address/contact fields and no fabricated providers.
+- Verified experts manage their own clinic listings; administrators can manage all listings, including legacy records. Archive and restore preserve records while controlling public visibility.
+- Thirty-minute availability, patient alias booking, accept/decline, expert counterproposal, patient confirmation and cancellation. Transactions and unique per-person reservations prevent double bookings.
+- Accepted appointment rooms require the matching signed-in participant, current session, join window and approved expert. Audio-only mode avoids the camera. Device checks, temporary TURN credentials, relay-only policy when configured, bounded ICE restart and explicit reconnect are included.
+- Verified expert articles, administrator-managed community events and a reflection space held only in the open page.
+- Password-confirmed account deletion and private reports reviewed by administrators. Clinic/event management uses role/owner checks, transactions and revision conflicts.
 
-Role checks read the current database account and approved profile revision on authenticated requests. Existing tokens immediately lose expert write access after an edit, requested change or suspension. Legacy accounts marked expert without an approved profile must complete this workflow. JWT role claims are not the source of current privilege. Appointment scheduling and participant-only consultation rooms are implemented. Professional matching remains future work; a private call invitation does not establish a clinician relationship.
-
-To add a clinic, a verified expert sends a bearer-authenticated `POST /api/clinics` with `{"name":"...","lat":-25.75,"lng":28.23}`. Confirm listing accuracy and services directly; a listing is not an endorsement.
-
-Publish an article in the verified expert UI, or `POST /api/blogs` with `title`, `body` (50-20000 UTF-8 bytes), and a public `author` name. Content renders as text, never injected HTML. A trusted operator can add real event records to MongoDB collection `events` using public `title`, `description`, `location`, and UTC ISO `startsAt` such as `2027-01-15T12:00:00Z`. Only future events appear. No public event write endpoint exists.
+The first page is sign-in, signup has its own page, and a successful login opens Home. Explore provides the other pages. Public clinic, profile and invitation links remain accessible.
 
 ## Administrator setup
-Create the intended operator account through normal signup first. A trusted operator with container/database access can then grant administrator access to that existing account:
 
-```sh
-docker compose exec app /app/TranquilBackend --grant-admin operator@example.com
+Create and verify the intended operator account first. A trusted operator who has confirmed ownership can grant administrator access to that existing account:
+
+```powershell
+.\tools\grant-admin.ps1 -Email operator@example.com
 ```
 
-No public signup field or HTTP endpoint grants administrator privileges. The command updates an existing account only and does not create credentials. Grant access only to an account whose ownership you have confirmed. The operator can sign in to access **Verification**. A reviewer cannot approve their own profile. Administrator access can be revoked by a trusted database operator by restoring the account's appropriate non-admin role; current-request database checks enforce the change.
+Equivalent Docker command:
 
-The first administrator is not created automatically. Review decisions and audit history are written atomically into the profile document, with a compare-and-set revision check. Stale decisions return 409; suspended profiles cannot be edited or resubmitted until an administrator reopens them. Approval's account-role update is ordered before the atomic profile decision, and privileges additionally require the exact approved profile revision, so a failed or racing decision does not expose an unapproved profile.
+```sh
+docker compose exec -T app /app/TranquilBackend --grant-admin operator@example.com
+```
 
-## Profile links and navigation
-- Directory: `/#experts`
-- Public profile: `/#expert/ACCOUNT_OBJECT_ID` (available only while approved)
-- Professional workspace: `/#professional`
-- Administrator workspace: `/#verification` (administrator access required)
+Public signup cannot create administrator or approved professional accounts. An administrator cannot approve their own professional profile. Review requires matching the applicant against an official professional register and recording a source and notes. Approval is a manual review, not an automated identity/licence check. Changes to an approved profile withdraw it from public listings until reapproved.
 
-Public profiles provide a copyable link, reviewed registration date, qualifications, languages, consultation methods and optional practice website. They do not display account emails or private credential evidence. Public lists are paginated in batches of 20, with keyword, specialty, exact-language and consultation-method filters. User search strings are escaped before regex matching.
-
-The interface uses a restrained modern visual system without emojis. This project preference is also recorded in `AGENTS.md` for future builds.
+In Account, verified experts see Clinic listings. Administrators additionally see Community events and the safety review queue. Record coordinates in the professional clinic editor refer to the actual practice location; the patient locator uses a place-search interface.
 
 ## API
-| Endpoint | Access | Purpose |
+
+| Route | Access | Purpose |
 | --- | --- | --- |
-| POST /api/register | Public, throttled | Create patient or pending-expert account |
-| POST /api/login | Public, throttled | Obtain one-hour API bearer token |
-| GET /api/me | Signed in | Read current account role |
-| GET /api/experts | Public | Approved directory, q/specialty/language/method/offset filters |
-| GET /api/experts/{id} | Public | Current approved profile only |
-| GET /api/expert-profile | Professional account | Own private profile and feedback |
-| PUT /api/expert-profile | Professional account | Save own draft with expected revision |
-| POST /api/expert-profile/submit | Professional account | Submit complete draft/changes with expected revision |
-| GET /api/admin/experts | Administrator | Review queue by status/offset |
-| GET /api/admin/experts/{id} | Administrator | Current private application and audit history |
-| POST /api/admin/experts/{id}/review | Administrator | Versioned approve/request_changes/suspend decision |
-| GET /api/clinics?lat=...&lng=...&radius=... | Public | Search 1-100000 metres, up to 100 results |
-| POST /api/clinics | Verified expert | Add a clinic |
-| POST /api/sessions | Signed in, throttled | Create a private 30-minute invitation |
-| GET /api/blogs | Public | Up to 50 latest articles |
-| POST /api/blogs | Verified expert, throttled | Publish an article |
-| GET /api/events | Public | Up to 50 upcoming events |
-| WS /rtc/signal | Room capability required | Two-person signaling |
+| `GET /api/health`, `GET /api/status` | Public | Readiness and application-mode discovery |
+| `POST /api/register`, `POST /api/login` | Public, throttled | Account creation and sign-in |
+| `GET /api/me` | Signed in | Current account role and email state |
+| `POST /api/account/request-verification` | Signed in | Queue verification email |
+| `POST /api/account/request-reset` | Public, throttled | Queue recovery email without account enumeration |
+| `POST /api/account/verify`, `POST /api/account/reset` | Valid single-use token | Confirm verification or set a new password |
+| `POST /api/account/delete` | Signed in, current password | Delete account and owned private/public records |
+| `GET /api/experts`, `GET /api/experts/{id}` | Public | Approved profiles only |
+| `GET/PUT /api/expert-profile`, `POST /api/expert-profile/submit` | Professional account | Private draft/application workflow |
+| `/api/admin/experts` and review routes | Administrator | Versioned credential review |
+| `GET /api/clinics` | Public | Area/name or nearby-location search |
+| `POST /api/clinics` | Approved expert | Compatible clinic creation endpoint |
+| `GET/POST /api/manage/clinics` | Approved expert/admin, verified email | List own/all records or create a listing |
+| `PUT/DELETE /api/manage/clinics/{id}` | Owner/admin, verified email | Versioned update or archive |
+| `GET /api/blogs`, `GET /api/events` | Public | Published articles and upcoming active events |
+| `POST /api/blogs` | Approved expert | Publish an owned article |
+| `GET/POST /api/manage/events` | Administrator, verified email | List/manage community events |
+| `PUT/DELETE /api/manage/events/{id}` | Administrator, verified email | Versioned update or archive |
+| `GET/POST /api/availability/{expertId}` | Public read / approved expert write | Thirty-minute slots |
+| `GET/POST /api/appointments` | Signed in / verified patient for creation | Own appointments and booking |
+| `POST /api/appointments/{id}/{action}` | Participant | Accept, decline, propose, cancel or join |
+| `GET /api/rtc-config` | Signed in | Temporary relay credentials |
+| `POST /api/sessions`, `/rtc/signal` | Room/participant authorization | Separate invitation or appointment calling |
+| `GET/POST /api/reports`, `POST /api/reports/{id}` | Reporter/admin as appropriate | Private reporting and recorded moderation |
 
-WebSocket protocol: send `{"type":"join","ticket":"..."}` after opening. Server acknowledges `joined` with the peer count. The second participant creates the offer. Supported relay messages are `offer` with an `offer` SDP object, `answer` with an `answer` SDP object, `ice_candidate` with a `candidate` object, and `hangup`. Notifications include `peer_joined`, `peer_left` and `error`. Invitations travel in URL fragments and join messages, never query parameters.
+Management creates return an ID and revision. Updates and archive requests require that revision. Management lists return 50 records per page with `nextOffset`; pass `?offset=` to continue. DELETE on a clinic/event archives it rather than permanently deleting it. PUT with `archived:false` restores a valid record. Public responses omit ownership/account fields. Event requests use numeric UTC `startAt` seconds; public event responses retain ISO UTC `startsAt`.
 
-## Privacy and production limitations
-- Audio-only is pseudonymous to the other participant, not absolute anonymity. WebRTC peers can learn network information. STUN discovery contacts Google's STUN service. A configured TURN service and relay-only policy are still needed if hiding peer IPs is required; restrictive networks may not connect with STUN alone.
-- There is no recording feature. This does not prevent a participant from recording using other software.
-- JWTs contain an account ID and role, not the email; JWT payloads are signed, not encrypted. Browser API credentials remain in page memory and disappear on reload. Invitations are bearer capabilities: anyone possessing one can occupy a room slot until expiry.
-- Calls and signaling rooms are process-local. Scheduled appointments, revocation checks, TURN configuration and reconnection controls are implemented; multi-instance routing and provisioning an external relay remain operational work.
-- Set up HTTPS/WSS behind a trusted reverse proxy before remote use. HTTP media permissions work only on localhost. Do not expose the development MongoDB configuration publicly; configure database authentication, backups, retention and access controls for deployment.
-- Rate limits are process-local and peer-IP-based. Add an edge rate limiter and correctly configured proxy IP handling before production; do not trust arbitrary forwarded headers.
-- Account recovery, email verification, moderation/reporting, broader operational audit logging and deletion/export workflows are not implemented. Credential review has a private versioned decision history; it still requires a human reviewer to check authoritative records. This is not ready for clinical production use.
-- The interface directs urgent situations to local emergency services without presenting unverified hotline numbers.
+## Production and privacy
 
-## Tests
-`npm test` runs JavaScript syntax checks and ten WebRTC lifecycle tests, without downloads or npm dependencies.
+Use `compose.production.yaml` with a real domain, verified mail sender and TURN relay. Production forces Resend delivery, rejects local/outbox mail modes, requires an HTTPS origin and excludes the development inbox unless its profile is explicitly selected. The inbox must never be publicly exposed. Caddy handles HTTPS and WebSocket proxying. See [operations and deployment instructions](deploy/OPERATIONS.md).
 
-```sh
-g++ -std=c++17 -Wall -Wextra -Werror tests/core_test.cpp -o core_test
-./core_test
-```
+The supplied isolated MongoDB single-node replica set is a development baseline. Production needs authenticated database access, encrypted storage, backups/restore, retention and a privacy notice. Runtime refuses a standalone/non-writable database because booking and account workflows need transactions. No clinical-production certification, encryption-at-rest configuration or live public deployment is claimed.
 
-The C++ tests cover malformed numbers, coordinate boundaries, normalized email/password validation, room isolation, two-person capacity, duplicate joins, disconnect cleanup, room resource limits and throttling.
+Patient aliases and omitted emails provide pseudonymity, not guaranteed anonymity from voice or disclosed information. Configured TURN calls use relay-only transport; real cross-network relay operation requires operator testing. There is no recording feature, but a peer may record externally. General invitation rooms remain shareable bearer capabilities, separate from participant-bound appointments.
 
-`npm run test:integration` targets the real running backend at `http://localhost:8080` (override `TEST_BASE_URL`). It checks authentication, role escalation denial, JWT audience isolation, real MongoDB operations, static security headers, malformed coordinate responses and WebSocket authorization/membership/relay behavior. **Use a disposable test database:** it creates test accounts; it does not delete production data.
+Sign-in tokens remain in page memory. Reflection text and location searches are not persisted to accounts or browser storage. Signaling and rate limits remain single-instance; scaling needs shared signaling and edge throttling. Calls require HTTPS outside localhost. Appointment requests remain reserved until accepted/declined/cancelled; reminders, payments, recurring scheduling, data export and automated clinical matching are outside this build.
 
-Drogon 1.9.10 accepts a WebSocket upgrade on the first request of a TCP connection. Browser WebSocket clients open a dedicated connection; the Node integration harness closes its REST sockets so Undici cannot reuse one for an upgrade.
+## Validation
 
-GitHub Actions includes JavaScript/core tests, a Docker backend build with MongoDB integration tests, and a Qt desktop compile. Local JavaScript and standalone C++ tests were run during this update. GitHub Actions also runs four browser tests at desktop/mobile widths and a two-browser call against the real backend using emulated devices. These check media mode, mute/camera controls, and hangup cleanup without capturing real devices. Qt desktop compilation and responsive browser checks have passed in CI; consult the latest PR checks for the combined backend/integration result.
+`npm test` runs syntax and twelve call lifecycle/configuration/reconnection tests. C++ core tests cover input validation, room isolation and booking boundaries. CI compiles the real backend, runs MongoDB replica-set suites for accounts, verification, booking races, room access and moderation, plus real local email delivery and clinic/event ownership/archive/revision tests. It also checks Compose configuration, rejects development mail in production, runs responsive browser tests and two-browser calls with emulated devices, and compiles Qt.
 
-## Expert verification checks
-`npm run test:experts` runs the real MongoDB profile lifecycle, privacy, access-control and review-revision tests. It requires `TEST_PROFILES_BASE_URL` and `TEST_ADMIN_CONTAINER` for an explicitly disposable running application container; without the operator fixture container it is skipped. The test grants an administrator role to a test account using the operator command, never a public bypass. Do not point it at production.
+Integration tests require explicitly disposable Docker containers and create test-only accounts/listings. Never run them against production data. Local email tests use Mailpit's official HTTP API; no public endpoint returns private account links. Native backend build details and pinned dependencies are in `backend/CMakeLists.txt` and `Dockerfile`.
 
-CI starts a separate application process for these fixtures so authentication throttling remains enabled and independent of the ordinary account/call tests. Tests cover draft saving, incomplete submission rejection, unknown-field rejection, private credential isolation, administrator-only review, registry attestation, stale reviews, approval, edits withdrawing visibility, immediate token permission changes, suspension, reopening and preserved audit history.
-
-Playwright also exercises directory filters, desktop/mobile layout, shareable profile links, private application submission, sign-out cleanup and administrator approval. Professional names and credentials in tests are fixtures only; none are seeded into the production directory.
-
+For a **layout preview only**, run `node tools/preview.cjs 8100`. It cannot authenticate users or search live records; use the Docker stack for those workflows.

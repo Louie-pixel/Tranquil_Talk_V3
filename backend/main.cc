@@ -19,6 +19,10 @@ int main(int argc, char* argv[]) {
     }
     try {
         auth::secret(); // Fail closed before opening a listening socket.
+        if(env("APP_ENV","")=="production") {
+            if(mail::mode()!="resend" || !mail::ready() || mail::baseUrl().rfind("https://",0)!=0)
+                throw std::runtime_error("Configure production email and HTTPS origin");
+        }
         DatabaseManager::getInstance().init(env("MONGODB_URI",
             "mongodb://localhost:27017/?serverSelectionTimeoutMS=5000"));
         if (argc == 3) {
@@ -45,6 +49,19 @@ int main(int argc, char* argv[]) {
             .setClientMaxBodySize(65536)
             .setClientMaxWebSocketMessageSize(65536)
             .setThreadNum(2)
+            .registerHandler("/api/health",[](const drogon::HttpRequestPtr&,std::function<void(const drogon::HttpResponsePtr&)>&& callback){
+                Json::Value result;result["service"]="tranquil-talk";
+                try{
+                    auto client=DatabaseManager::getInstance().getConnection();
+                    using namespace bsoncxx::builder::stream;
+                    client->database("tranquil_talk").run_command(document{} << "ping" << 1 << finalize);
+                    result["ready"]=true;result["database"]="connected";
+                    callback(drogon::HttpResponse::newHttpJsonResponse(result));
+                }catch(const std::exception&){
+                    result["ready"]=false;result["database"]="unavailable";
+                    auto response=drogon::HttpResponse::newHttpJsonResponse(result);response->setStatusCode(drogon::k503ServiceUnavailable);callback(response);
+                }
+            },{drogon::Get})
             .registerPreSendingAdvice([](const drogon::HttpRequestPtr&, const drogon::HttpResponsePtr& res) {
                 res->addHeader("X-Content-Type-Options", "nosniff");
                 res->addHeader("Referrer-Policy", "no-referrer");

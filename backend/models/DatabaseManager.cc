@@ -17,6 +17,9 @@ void DatabaseManager::init(const std::string& uri) {
     auto connection = getConnection();
     auto db = connection->database("tranquil_talk");
     using namespace bsoncxx::builder::stream;
+    const auto hello=db.run_command(document{} << "hello" << 1 << finalize);
+    if(!hello.view()["setName"] || !hello.view()["isWritablePrimary"] || !hello.view()["isWritablePrimary"].get_bool().value)
+        throw std::runtime_error("A writable MongoDB replica set is required for transactional workflows");
     mongocxx::options::index unique;
     unique.unique(true);
     db.collection("users").create_index(document{} << "email" << 1 << finalize, unique);
@@ -30,6 +33,8 @@ void DatabaseManager::init(const std::string& uri) {
     db.collection("account_actions").create_index(document{} << "hash" << 1 << finalize);
     db.collection("mail_outbox").create_index(document{} << "state" << 1 << "nextAttempt" << 1 << finalize);
     db.collection("reports").create_index(document{} << "status" << 1 << "createdAt" << 1 << finalize);
+    db.collection("clinics").create_index(document{} << "ownerId" << 1 << "updatedAt" << -1 << finalize);
+    db.collection("events").create_index(document{} << "startsAt" << 1 << finalize);
 }
 
 mongocxx::pool::entry DatabaseManager::getConnection() {

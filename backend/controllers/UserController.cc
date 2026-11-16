@@ -4,6 +4,7 @@
 #include "../utils/Http.h"
 #include "../utils/RateLimit.h"
 #include "../utils/Validation.h"
+#include "../utils/Mail.h"
 #include <bsoncxx/builder/stream/document.hpp>
 #include <mongocxx/client.hpp>
 #include <mongocxx/database.hpp>
@@ -88,6 +89,7 @@ void UserController::loginUser(const drogon::HttpRequestPtr& req,
         const int version=user->view()["sessionVersion"] ? user->view()["sessionVersion"].get_int32().value : 0;
         result["token"] = auth::issue(identity.id, role, "tranquil-api",60,version);
         result["emailVerified"] = user->view()["emailVerified"] && user->view()["emailVerified"].get_bool().value;
+        result["developmentMailbox"] = mail::mode()=="mailpit" && mail::localMailbox();
         result["role"] = role;
         result["id"] = identity.id;
         result["expiresIn"] = 3600;
@@ -105,8 +107,8 @@ void UserController::me(const drogon::HttpRequestPtr& req,
         auto client=DatabaseManager::getInstance().getConnection();
         auto user=client->database("tranquil_talk").collection("users").find_one(document{} << "_id" << bsoncxx::oid(identity.id) << finalize);
         result["emailVerified"] = user && user->view()["emailVerified"] && user->view()["emailVerified"].get_bool().value;
-        result["emailConfigured"] = (std::getenv("RESEND_API_KEY") && std::getenv("MAIL_FROM")) ||
-            (std::getenv("MAIL_MODE") && std::string(std::getenv("MAIL_MODE"))=="outbox");
+        result["emailConfigured"] = mail::ready();
+        result["developmentMailbox"] = mail::mode()=="mailpit" && mail::localMailbox();
         callback(drogon::HttpResponse::newHttpJsonResponse(result));
     } catch (const auth::Unavailable&) {
         callback(http::error(drogon::k503ServiceUnavailable,"Account access is temporarily unavailable"));

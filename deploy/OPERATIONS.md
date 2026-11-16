@@ -1,6 +1,6 @@
 # Complete application and deployment
 
-The static layout preview does not run real accounts, booking or calls. For the complete application, copy `.env.example` to `.env`, generate a random `JWT_SECRET`, then run `docker compose up -d --build` and open `http://localhost:8080`.
+The static layout preview does not run real accounts, booking or calls. On Windows, install/open Docker Desktop with Linux containers and run `tools/start.ps1` from the repository. The launcher generates local configuration, starts the real API/database and local email inbox, and checks readiness. The application opens at http://localhost:8080; captured development emails are available at http://localhost:8025. See README.md for complete setup commands.
 
 ## Booking and consultation journey
 
@@ -23,7 +23,7 @@ The current scope is thirty-minute sessions, up to 200 returned appointments and
 
 ## Email delivery and account actions
 
-Set `APP_BASE_URL` to the exact site origin without a trailing slash, `RESEND_API_KEY` to a private provider key and `MAIL_FROM` to an address on a verified sender domain. The current email adapter uses Resend. Public production origins must use HTTPS; the local `http://localhost:8080` and `http://127.0.0.1:8080` origins are allowed for development.
+For production, set `APP_BASE_URL` to the exact site origin without a trailing slash, `RESEND_API_KEY` to a private provider key and `MAIL_FROM` to an address on a verified sender domain. The production email adapter uses Resend. Local Compose instead uses `MAIL_MODE=mailpit`, `APP_ENV=development` and the fixed internal `MAILPIT_URL=http://mailpit:8025`; verification/reset emails arrive in a loopback-only local inbox without being delivered externally. Production refuses development mail modes. Public production origins must use HTTPS; the local `http://localhost:8080` and `http://127.0.0.1:8080` origins are allowed for development.
 
 The private durable outbox retries failed requests once per minute until link expiry, using provider idempotency keys. Successful delivery removes the pending email. Account tokens are SHA-256 digests in the action collection; their raw links are temporarily present only in pending email records. Links expire after thirty minutes, can be used once and are invalidated by a password reset. Public APIs never return the links. Resetting the password increases a session version checked by API requests and consultation sockets.
 
@@ -64,4 +64,11 @@ Clinic discovery accepts a suburb, city or clinic name, or requests the device l
 The public clinic endpoint supports GET /api/clinics?q=AREA alongside the existing coordinate API. Verified expert clinic creation also accepts optional address, suburb, city, country, phone and HTTPS website fields. Only these public listing fields are returned.
 
 For layout-only viewing, run node tools/preview.cjs 8100. This explicitly labels itself as a preview and returns a service-unavailable response for account and directory operations. It never simulates a successful sign-in or makes an offline directory appear empty. For functional sign-in and live clinic results, run the Docker application above.
+
+
+## Backend management and readiness
+
+GET /api/health checks database connectivity. Startup requires a writable replica set. Clinic and event management are available in Account with transaction-backed ownership/role checks and revision conflicts. Experts manage owned clinic listings; administrators manage all clinics and community events. DELETE archives a listing/event, which removes it from public responses. PUT can restore a valid record. Management lists support fifty records per page and nextOffset pagination. Account deletion also removes owned clinic listings. Legacy clinic records without owners are manageable only by administrators.
+
+Use tools/status.ps1 to check readiness, tools/stop.ps1 to stop without deleting volumes and tools/grant-admin.ps1 only for an existing operator account whose ownership is confirmed. Development mail mode accepts only the fixed local Mailpit service/loopback origins. Do not expose the local inbox or enable it in production. Mailpit API reference: https://mailpit.axllent.org/docs/api-v1/ .
 

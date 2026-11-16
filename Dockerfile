@@ -28,7 +28,7 @@ RUN cmake -S backend -B out -DCMAKE_BUILD_TYPE=Release && \
 
 FROM debian:bookworm-slim AS runtime
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates libssl3 zlib1g libjsoncpp25 libuuid1 && \
+    ca-certificates curl libssl3 zlib1g libjsoncpp25 libuuid1 && \
     rm -rf /var/lib/apt/lists/* && useradd --system --uid 10001 --create-home tranquil
 COPY --from=build /usr/local/lib/ /usr/local/lib/
 RUN ldconfig
