@@ -215,7 +215,19 @@ $("mute").addEventListener("click", () => {
 $("camera").addEventListener("click", () => {
     if (call) $("camera").textContent = call.toggleCamera() ? "Turn camera on" : "Turn camera off";
 });
-window.addEventListener("pagehide", () => endCall());
+window.addEventListener("pagehide", () => {
+    endCall();
+    account = null;
+    $("reflection").value = "";
+    $("reflection-count").textContent = "0 words";
+    $("ticket").value = "";
+    $("invitation").value = "";
+    $("invitation-panel").hidden = true;
+    $("password").value = "";
+});
+window.addEventListener("pageshow", event => {
+    if (event.persisted) signOut();
+});
 $("reflection").addEventListener("input", () => {
     const text = $("reflection").value.trim();
     $("reflection-count").textContent = (text ? text.split(/\s+/).length : 0) + " words";
