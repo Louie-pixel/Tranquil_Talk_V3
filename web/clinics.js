@@ -1,5 +1,5 @@
 "use strict";
-const clinicState={epoch:0,origin:null,items:[],radius:25000,area:"",locationBusy:false};
+const clinicState={epoch:0,origin:null,items:[],visible:[],selected:null,radius:25000,area:"",locationBusy:false};
 function clinicCoordinates(clinic){
     const c=clinic.location?.coordinates;
     return Array.isArray(c) && c.length===2 && c.every(Number.isFinite) && Math.abs(c[0])<=180 && Math.abs(c[1])<=90 ? c : null;
@@ -11,20 +11,26 @@ function clinicDistance(c){
     return 6371*2*Math.atan2(Math.sqrt(Math.min(1,a)),Math.sqrt(Math.max(0,1-a)));
 }
 function clinicEmpty(title,description){const root=make("div",undefined,"clinic-empty");root.append(make("div",undefined,"empty-location-mark"),make("h3",title),make("p",description));return root;}
+function clinicHasContact(clinic){if(typeof clinic.phone==="string" && /^[+0-9 ()-]{5,40}$/.test(clinic.phone))return true;try{const u=new URL(clinic.website);return u.protocol==="https:" && !u.username && !u.password;}catch{return false;}}
 function renderClinics(){
     const root=$("clinic-results");root.replaceChildren();
-    const items=[...clinicState.items];
+    const category=$("clinic-category").value,contact=$("clinic-contact-only").checked;
+    const items=clinicState.items.filter(c=>(!category || c.category===category) && (!contact || clinicHasContact(c)));
     if($("clinic-sort").value==="name")items.sort((a,b)=>a.name.localeCompare(b.name));
     else if(clinicState.origin)items.sort((a,b)=>(clinicDistance(clinicCoordinates(a)) ?? Infinity)-(clinicDistance(clinicCoordinates(b)) ?? Infinity));
-    for(const clinic of items){
+    clinicState.visible=items;
+    for(const [index,clinic] of items.entries()){
         const card=make("article",undefined,"clinic-place"),mark=make("div",undefined,"clinic-place-mark");mark.setAttribute("aria-hidden","true");
+        card.id="clinic-card-"+index;card.tabIndex=-1;card.classList.toggle("selected",clinicState.selected===clinic);mark.textContent=String(index+1);
         const content=make("div",undefined,"clinic-place-content"),top=make("div",undefined,"clinic-place-top");
-        const identity=make("div");identity.append(make("span","LISTED CLINIC","eyebrow"),make("h3",clinic.name));top.append(identity);
+        const categories={mental_health:"MENTAL HEALTH SERVICES",general_clinic:"GENERAL CLINIC",hospital:"HOSPITAL"};
+        const identity=make("div");identity.append(make("span",categories[clinic.category] || "LISTED CLINIC","eyebrow"),make("h3",clinic.name));top.append(identity);
         const coordinates=clinicCoordinates(clinic),distance=clinicDistance(coordinates);
         if(distance!==null)top.append(make("span",distance<1 ? Math.round(distance*1000)+" m away" : distance.toFixed(1)+" km away","distance-pill"));
         const address=[clinic.address,clinic.suburb,clinic.city,clinic.country].filter(v=>typeof v==="string" && v.trim()).join(", ");
         content.append(top,make("p",address || "Contact this clinic to confirm its address.","clinic-address"),make("p","Confirm mental health services and availability directly with the clinic.","fine"));
         const actions=make("div",undefined,"clinic-place-actions"),directions=make("a","Get directions","button secondary small");
+        if(coordinates){const show=make("button","Show on map","secondary small");show.type="button";show.addEventListener("click",()=>{clinicState.selected=clinic;window.dispatchEvent(new CustomEvent("tranquil-clinic-select",{detail:{index,fromList:true}}));document.querySelectorAll(".clinic-place").forEach(c=>c.classList.toggle("selected",c===card));});actions.append(show);}
         directions.href="https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(coordinates ? coordinates[1]+","+coordinates[0] : clinic.name+" "+address);
         directions.target="_blank";directions.rel="noopener noreferrer";actions.append(directions);
         if(typeof clinic.phone==="string" && /^[+0-9 ()-]{5,40}$/.test(clinic.phone)){
@@ -41,11 +47,15 @@ function renderClinics(){
         }
         card.append(mark,content);root.append(card);
     }
-    if(!items.length)root.append(clinicEmpty("No listed clinics here yet.","Try another area or look further afield. You can also explore other providers on Google Maps."));
+    if(!items.length)root.append(clinicEmpty(clinicState.items.length ? "No clinics match these filters." : "No listed clinics here yet.",clinicState.items.length ? "Try another type of care or turn off the contact filter." : "Try another area or look further afield. You can also explore other providers on Google Maps."));
+    $("clinic-filter-count").textContent=items.length+" shown"+(clinicState.items.length!==items.length ? " of "+clinicState.items.length+" listed clinics" : "");
+    window.dispatchEvent(new CustomEvent("tranquil-clinic-results",{detail:{items,origin:clinicState.origin,selected:items.indexOf(clinicState.selected)}}));
     $("expand-clinic-search").hidden=!clinicState.origin || clinicState.radius>=100000;
 }
 async function findClinics({q="",origin=null,area="",radius=25000}={}){
-    const epoch=++clinicState.epoch;clinicState.origin=origin;clinicState.area=area;clinicState.radius=radius;
+    const epoch=++clinicState.epoch;clinicState.origin=origin;clinicState.area=area;clinicState.radius=radius;clinicState.items=[];clinicState.visible=[];clinicState.selected=null;
+    window.dispatchEvent(new CustomEvent("tranquil-clinic-results",{detail:{items:[],origin,selected:-1}}));
+    $("clinic-filter-count").textContent="";
     $("clinic-area-label").textContent=area || "Your current area";$("clinic-results").setAttribute("aria-busy","true");
     $("clinic-results").replaceChildren(clinicEmpty("Finding places to start...","Checking the clinics listed for your area."));
     status("clinic-status","Finding care near "+(area || "you")+"...");$("expand-clinic-search").hidden=true;
@@ -90,5 +100,6 @@ $("locate").addEventListener("click",async()=>{
     }finally{clinicState.locationBusy=false;$("locate").disabled=false;}
 });
 $("clinic-sort").addEventListener("change",renderClinics);
+$("clinic-category").addEventListener("change",renderClinics);$("clinic-contact-only").addEventListener("change",renderClinics);
 $("expand-clinic-search").addEventListener("click",()=>{if(clinicState.origin)findClinics({origin:clinicState.origin,area:clinicState.area,radius:Math.min(100000,clinicState.radius*2)});});
 window.addEventListener("pagehide",()=>{++clinicState.epoch;clinicState.origin=null;clinicState.items=[];$("clinic-query").value="";$("clinic-area-label").textContent="Choose an area";$("clinic-results").replaceChildren();$("clinic-maps-link").href="https://www.google.com/maps/search/mental+health+clinics/";});

@@ -111,4 +111,12 @@ Appointment changes now queue separate participant emails and accepted-appointme
 
 Verified administrators can preview OpenStreetMap clinic data and transactionally import reviewed directory batches with stable identifiers, source attribution, archive preservation and manual-edit protection. Patient searches stay within the app database. Source links appear on imported clinic cards.
 
-These additions have not been built, tested or deployed yet, following the requested implementation-first order. Frontend preference and import-management controls are still a later task. The [backend rollout guide](deploy/BACKEND-ROLLOUT.md) documents APIs, scripts, production requirements and the final validation work. Previous passing CI runs apply to the earlier implementation.
+These additions have not been built, tested or deployed yet, following the requested implementation-first order. Frontend timezone/email preference controls are now implemented; administrator source imports remain available through the documented CLI/API. The [backend rollout guide](deploy/BACKEND-ROLLOUT.md) documents APIs, scripts, production requirements and the final validation work. Previous passing CI runs apply to the earlier implementation.
+
+## Updated care and appointment interface
+
+Clinic discovery combines real listing search and filters with an optional linked OpenStreetMap tile map. The map loads only after explicit user opt-in. Booking uses an available-day calendar, offset-labelled time buttons and a clear request summary. Appointment management adds date/status/search filters, response prompts, cancellation confirmation and private calendar downloads.
+
+The waiting room supports early local device checks, device selection, microphone activity and speaker checks, with participant-bound entry still controlled by the backend. Account controls connect named timezones and appointment email/reminder preferences to the new APIs. Mobile layouts, keyboard controls, route focus/announcements, reduced-motion and forced-color styles are included.
+
+This frontend has not been browser-reviewed or tested yet. See [frontend rollout and final validation notes](deploy/FRONTEND-ROLLOUT.md). Rebuild an existing Docker image to include changed frontend files; uploading source does not update a running deployment.
