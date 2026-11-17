@@ -2,6 +2,7 @@ const {test,expect}=require('@playwright/test');
 const AxeBuilder=require('@axe-core/playwright').default;
 const id='0123456789abcdef01234567';
 const start=Math.ceil((Date.now()/1000+3*86400)/1800)*1800;
+test.use({launchOptions:{args:['--use-fake-device-for-media-stream','--use-fake-ui-for-media-stream']}});
 const appointments=[{id:'fixture-accepted',expertId:id,expertName:'Fixture Professional',alias:'Quiet River',status:'accepted',mode:'audio',startAt:start,revision:2},{id:'fixture-proposal',expertId:id,expertName:'Fixture Professional',alias:'Quiet River',status:'proposed',mode:'video',startAt:start+1800,revision:3},{id:'fixture-past',expertId:id,expertName:'Fixture Professional',alias:'Quiet River',status:'cancelled',mode:'audio',startAt:start-8*86400,revision:4}];
 test.beforeEach(async({page})=>{
     await page.route('**/api/**',async r=>{const p=new URL(r.request().url()).pathname;
@@ -29,7 +30,7 @@ test('appointment filtering, private calendar download, confirmation and timezon
     await page.locator('#appointment-calendar .calendar-day:not(:disabled)').first().focus();await page.keyboard.press('End');await page.keyboard.press('Enter');await expect(page.locator('#clear-appointment-day')).toBeVisible();await page.locator('#clear-appointment-day').click();
     const card=page.locator('[data-appointment="fixture-accepted"]');const download=page.waitForEvent('download');await card.getByRole('button',{name:'Add to calendar',exact:true}).click();expect((await download).suggestedFilename()).toBe('private-appointment.ics');
     await card.getByRole('button',{name:'Cancel appointment',exact:true}).click();await expect(page.locator('#appointment-confirmation')).toBeVisible();await page.keyboard.press('Escape');expect(mutation).toBeUndefined();
-    await card.getByRole('button',{name:'Cancel appointment',exact:true}).click();await page.locator('#appointment-confirm-proceed').click();expect(mutation).toEqual({revision:2});
+    await card.getByRole('button',{name:'Cancel appointment',exact:true}).click();await page.locator('#appointment-confirm-proceed').click();await expect.poll(()=>mutation).toEqual({revision:2});
     await page.goto('/#account');await page.locator('#preference-zone').selectOption('America/New_York');await page.getByRole('button',{name:'Save preferences',exact:true}).click();await expect(page.locator('#preference-status')).toContainText('Preferences saved');await page.goto('/#appointments');await expect(page.locator('#appointments-zone')).toHaveText('America/New_York');
 });
 test('new care/appointment/account screens have keyboard focus, mobile reflow and no axe WCAG AA violations',async({page})=>{
@@ -40,4 +41,27 @@ test('new care/appointment/account screens have keyboard focus, mobile reflow an
         for(const width of [390,320]){await page.setViewportSize({width,height:900});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);}
     }
     await page.locator('.skip').focus();await page.keyboard.press('Enter');await expect(page.locator('#main')).toBeFocused();
+});
+test('booking calendar and early waiting room reflow, keyboard operation, accessibility and device cleanup',async({page,context})=>{
+    await context.grantPermissions(['microphone','camera']);let joins=0;
+    await page.route('**/api/appointments/*/join',r=>{++joins;return r.fulfill({status:403,json:{error:'Join window closed'}});});
+    await page.route('**/api/rtc-config',r=>r.fulfill({json:{relayAvailable:false,iceServers:[],iceTransportPolicy:'all'}}));
+    await page.route('**/api/availability/**',r=>r.fulfill({json:{items:[{id:'slot-a',startAt:start},{id:'slot-b',startAt:start+1800}]}}));
+    await login(page);await page.evaluate(id=>window.openBooking({id,name:'Fixture Professional',methods:['audio','video']}),id);await expect(page.locator('#booking-times [role=radio]')).toHaveCount(2);
+    await page.locator('#booking-times [role=radio]').first().focus();await page.keyboard.press('ArrowRight');await expect(page.locator('#booking-times [role=radio]').nth(1)).toHaveAttribute('aria-checked','true');
+    let results=await new AxeBuilder({page}).include('#booking-dialog').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect(results.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)}))).toEqual([]);
+    for(const width of [1280,390,320]){await page.setViewportSize({width,height:900});const box=await page.locator('#booking-dialog').boundingBox();expect(box.width).toBeLessThanOrEqual(width);expect(box.height).toBeLessThanOrEqual(900);await page.locator('#booking-dialog').evaluate(el=>{el.scrollTop=0;});await page.screenshot({path:`test-results/booking-${width}.png`});}
+    await page.locator('#close-booking').click();await page.goto('/#appointments');await page.locator('#appointment-list').getByRole('button',{name:'Open waiting room',exact:true}).click();await page.getByRole('button',{name:'Check microphone',exact:true}).click();await expect(page.locator('#device-confirmation')).toBeVisible();await page.locator('#devices-ready').check();await expect(page.locator('#enter-consultation')).toBeDisabled();expect(joins).toBe(0);
+    expect(await page.evaluate(()=>workspace.rtc.stream.getVideoTracks().length)).toBe(0);await page.evaluate(()=>{globalThis.__fixtureTracks=workspace.rtc.stream.getTracks();});
+    results=await new AxeBuilder({page}).include('#consultation-dialog').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect(results.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)}))).toEqual([]);
+    for(const width of [1280,390,320]){await page.setViewportSize({width,height:900});const box=await page.locator('#consultation-dialog').boundingBox();expect(box.width).toBeLessThanOrEqual(width);expect(box.height).toBeLessThanOrEqual(900);await page.locator('#consultation-dialog').evaluate(el=>{el.scrollTop=0;});await page.screenshot({path:`test-results/waiting-${width}.png`});}
+    await page.locator('#close-consultation').click();expect(await page.evaluate(()=>__fixtureTracks.every(t=>t.readyState==='ended'))).toBe(true);
+});
+test('availability accepts a valid half-hour independently of the minimum-time minute',async({page})=>{
+    let saved;await page.route('**/api/login',r=>r.fulfill({json:{id,token:'fixture-token',role:'expert',emailVerified:true,expiresIn:3600}}));
+    await page.route('**/api/availability/**',r=>{if(r.request().method()==='POST')saved=r.request().postDataJSON();return r.fulfill({json:{items:[]}});});
+    await login(page);await page.goto('/#appointments');await page.locator('#availability-zone').selectOption('UTC');
+    const date=new Date((Date.now()/1000+5*86400)*1000).toISOString().slice(0,10),input=page.locator('#availability-form [name=start]');
+    await input.evaluate((el,date)=>{el.min=date+'T09:17';el.max=date+'T23:59';},date);await input.fill(date+'T12:00');expect(await input.evaluate(el=>el.validity.stepMismatch)).toBe(false);
+    await page.getByRole('button',{name:'Add available time',exact:true}).click();await expect.poll(()=>saved?.localStart).toBe(date+'T12:00');expect(saved.timeZone).toBe('UTC');
 });

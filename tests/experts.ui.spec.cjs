@@ -49,7 +49,7 @@ test("modern directory fits desktop/mobile, supports filters and opens shareable
     await page.getByRole("link",{name:"View profile: Amara Test"}).click();
     await expect(page.locator("#expert-dialog")).toBeVisible();
     await expect(page.locator("#expert-dialog-title")).toHaveText("Amara Test");
-    await expect(page.getByRole("textbox",{name:"Public profile link"})).toHaveValue("http://127.0.0.1:8099/#expert/"+professional.id);
+    await expect(page.getByRole("textbox",{name:"Public profile link"})).toHaveValue(new URL(page.url()).origin+"/#expert/"+professional.id);
     expect(await page.locator("#expert-detail").innerText()).not.toContain("MUST-NOT-RENDER");
     await page.locator("#close-expert").click();
     await page.goto("/#expert/"+professional.id);
