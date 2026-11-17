@@ -19,7 +19,7 @@ test("navigation isolates pages, supports history, and stays within mobile viewp
     for(const width of [1440,390]){
         await page.setViewportSize({width,height:900});await page.goto("/");await login(page);await expect(page.locator("#home")).toBeVisible();
         await page.locator("#app-menu summary").click();await page.getByRole("link",{name:"Appointments",exact:true}).click();await expect(page.locator("#appointments")).toBeVisible();await expect(page.locator("#home")).toBeHidden();
-        await expect(page.locator("#appointments-status")).toContainText("No appointments");
+        await expect(page.locator("#appointments-status")).toContainText("0 appointments");
         await page.locator("#app-menu summary").click();await page.getByRole("link",{name:"Resources",exact:true}).click();await expect(page.locator("#stories")).toBeVisible();await expect(page.locator("#experts")).toBeHidden();
         await page.goBack();await expect(page.locator("#appointments")).toBeVisible();
         expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
@@ -33,6 +33,7 @@ test("patient books an expert with alias and a selected method, then sees appoin
     await page.getByRole("link",{name:"View profile: Fixture Professional"}).click();
     await page.getByRole("button",{name:"See available times"}).click();await expect(page.locator("#booking-dialog")).toBeVisible();
     await page.locator("#booking-mode").selectOption("audio");await page.locator('#booking-form [name="alias"]').fill("Quiet River");
+    await page.locator('#booking-times [role="radio"]').first().click();
     await page.getByRole("button",{name:"Request this time"}).click();await expect(page.locator("#booking-dialog")).toBeHidden();await expect(page.locator("#appointments")).toBeVisible();
     expect(request).toEqual({expertId:id,slotId:"slot-one",mode:"audio",alias:"Quiet River"});
 });
