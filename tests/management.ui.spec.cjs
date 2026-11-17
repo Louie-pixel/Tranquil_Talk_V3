@@ -33,11 +33,11 @@ test('an administrator publishes a real event through the account workspace',asy
     await page.route('**/api/manage/clinics**',r=>r.fulfill({json:{items:[]}}));
     await page.route('**/api/manage/events**',r=>{
         if(r.request().method()==='GET')return r.fulfill({json:{items:event ? [event] : [],nextOffset:null}});
-        const b=r.request().postDataJSON();event={...b,id:'1123456789abcdef01234567',revision:1,startsAt:new Date(b.startAt*1000).toISOString()};return r.fulfill({json:event});
+        const b=r.request().postDataJSON();event={...b,id:'1123456789abcdef01234567',revision:1,startsAt:new Date(b.localStart+'Z').toISOString()};return r.fulfill({json:event});
     });
     await page.route('**/api/events',r=>r.fulfill({json:event ? [event] : []}));
     await login(page,'admin');await expect(page.locator('#event-management')).toBeVisible();const form=page.locator('#managed-event-form');
     await form.locator('[name="title"]').fill('Test community workshop');await form.locator('[name="description"]').fill('An event fixture for a supportive community conversation.');await form.locator('[name="location"]').fill('Test venue');await form.locator('[name="start"]').fill('2027-01-20T14:00');
-    await form.getByRole('button',{name:'Save event',exact:true}).click();await expect(page.locator('#managed-event-status')).toHaveText('Community event saved.');expect(Number.isFinite(event.startAt)).toBe(true);
+    await form.getByRole('button',{name:'Save event',exact:true}).click();await expect(page.locator('#managed-event-status')).toHaveText('Community event saved.');expect(event.localStart).toBe('2027-01-20T14:00');expect(event.timeZone).toBeTruthy();
     await page.locator('#app-menu summary').click();await page.getByRole('link',{name:'Community',exact:true}).click();await expect(page.locator('#event-list h3')).toHaveText('Test community workshop');
 });

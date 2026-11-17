@@ -3,6 +3,7 @@ const http = require("node:http");
 const fs = require("node:fs");
 const path = require("node:path");
 const root = path.resolve(__dirname, "../web");
+const port=Number(process.env.TEST_UI_PORT || 8099);
 http.createServer((req,res)=>{
     const url = new URL(req.url, "http://localhost");
     const file = path.resolve(root, "." + (url.pathname === "/" ? "/index.html" : url.pathname));
@@ -14,4 +15,4 @@ http.createServer((req,res)=>{
         })[path.extname(file)] || "application/octet-stream"});
         res.end(data);
     });
-}).listen(8099,"127.0.0.1");
+}).listen(port,"127.0.0.1");

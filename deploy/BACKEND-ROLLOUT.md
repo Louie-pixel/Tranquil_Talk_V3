@@ -1,6 +1,6 @@
 # Appointment delivery, timezones, directory integration and production
 
-Implementation is prepared. Build, integration, browser and deployment tests are intentionally deferred until the final project testing phase. These additions have not been deployed or exercised against a real email account, relay, directory or production database.
+The combined final testing phase is now active. Backend/API, local email delivery, browser journeys and isolated production configuration/restore are covered by the [validation record](VALIDATION.md) and current PR #9 checks. No public deployment or real provider account, relay or patient database has been used.
 
 ## Appointment emails
 

@@ -2,7 +2,6 @@
 #include "Workflow.h"
 #include "AppointmentMail.h"
 #include <mongocxx/options/find_one_and_update.hpp>
-#include <mongocxx/options/return_document.hpp>
 #include <algorithm>
 #include <atomic>
 #include <thread>
