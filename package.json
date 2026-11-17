@@ -2,10 +2,11 @@
   "name": "tranquil-talk-checks",
   "private": true,
   "scripts": {
-    "test": "node --check web/app.js && node --check web/rtc.js && node --check web/experts.js && node --check web/workspace.js && node --check web/clinics.js && node --test tests/rtc.test.cjs",
+    "test": "node --check web/app.js && node --check web/rtc.js && node --check web/experts.js && node --check web/workspace.js && node --check web/clinics.js && node --check web/management.js && node --test tests/rtc.test.cjs",
     "test:integration": "node --test tests/integration.test.cjs",
     "test:experts": "node --test tests/experts.integration.test.cjs",
-    "test:workflows": "node --test tests/workflow.integration.test.cjs"
+    "test:workflows": "node --test tests/workflow.integration.test.cjs",
+    "test:operations": "node --test tests/operations.integration.test.cjs"
   },
   "engines": {"node": ">=22"}
 }

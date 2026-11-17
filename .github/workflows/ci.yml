@@ -116,8 +116,39 @@ jobs:
         env:
           TEST_MONGO_CONTAINER: mongo
         run: npm run test:workflows
+      - name: Start local mail delivery and operations test process
+        run: |
+          docker run -d --name mailpit --network tranquil-test -p 127.0.0.1:8025:8025 axllent/mailpit:v1.33.1
+          docker run -d --name operations-app --network tranquil-test -p 8084:8080 \
+            -e JWT_SECRET="$(openssl rand -hex 32)" \
+            -e 'MONGODB_URI=mongodb://mongo:27017/?replicaSet=rs0&serverSelectionTimeoutMS=5000' \
+            -e APP_ENV=development -e MAIL_MODE=mailpit -e MAILPIT_URL=http://mailpit:8025 \
+            -e APP_BASE_URL=http://localhost:8084 tranquil-test:ci
+          for i in $(seq 1 30); do
+            if curl --fail http://127.0.0.1:8084/api/health >/dev/null 2>&1; then break; fi
+            sleep 2
+          done
+          curl --fail http://127.0.0.1:8084/api/health
+          JWT_SECRET=temporary-compose-validation-secret docker compose config --quiet
+          JWT_SECRET=temporary-compose-validation-secret DOMAIN=example.com RESEND_API_KEY=test MAIL_FROM=noreply@example.com TURN_URL=turn:example.com TURN_SECRET=test \
+            docker compose -f compose.yaml -f compose.production.yaml config --quiet
+      - name: Test real email delivery and authorised clinic/event management
+        id: operations-checks
+        continue-on-error: true
+        env:
+          TEST_MONGO_CONTAINER: mongo
+          TEST_ADMIN_CONTAINER: operations-app
+        run: npm run test:operations
+      - name: Production must reject development email modes
+        run: |
+          if docker run --rm --network tranquil-test -e JWT_SECRET=ci-production-guard-key-at-least-32-characters \
+            -e APP_ENV=production -e MAIL_MODE=mailpit -e MAILPIT_URL=http://mailpit:8025 \
+            -e APP_BASE_URL=https://example.com tranquil-test:ci; then
+            echo "Production incorrectly accepted development mail"
+            exit 1
+          fi
       - name: Enforce API integration result
-        if: always() && (steps.api-checks.outcome != 'success' || steps.expert-checks.outcome != 'success' || steps.call-checks.outcome != 'success' || steps.workflow-checks.outcome != 'success')
+        if: always() && (steps.api-checks.outcome != 'success' || steps.expert-checks.outcome != 'success' || steps.call-checks.outcome != 'success' || steps.workflow-checks.outcome != 'success' || steps.operations-checks.outcome != 'success')
         run: exit 1
       - uses: actions/upload-artifact@v4
         if: failure()
@@ -131,6 +162,8 @@ jobs:
           docker logs profiles-app || true
           docker logs workflow-app || true
           docker logs call-app || true
+          docker logs operations-app || true
+          docker logs mailpit || true
   desktop:
     runs-on: ubuntu-24.04
     steps:

@@ -39,8 +39,10 @@ void ClinicController::addClinic(const drogon::HttpRequestPtr& req,
     }
     try {
         auto client = DatabaseManager::getInstance().getConnection();
+        workflow::verified(client->database("tranquil_talk"),identity);
         auto clinics = client->database("tranquil_talk").collection("clinics");
         Json::Value record;record["name"]=name;record["location"]["type"]="Point";
+        record["ownerId"]=identity.id;record["revision"]=1;record["createdAt"]=workflow::now();record["updatedAt"]=workflow::now();record["archived"]=false;
         record["location"]["coordinates"][0]=lng;record["location"]["coordinates"][1]=lat;
         for(const auto* field:{"address","suburb","city","country","phone","website"}) {
             if(json->isMember(field)) {
@@ -59,6 +61,8 @@ void ClinicController::addClinic(const drogon::HttpRequestPtr& req,
         auto response = drogon::HttpResponse::newHttpJsonResponse(result);
         response->setStatusCode(drogon::k201Created);
         callback(response);
+    } catch (const workflow::Error& e) {
+        callback(http::error(e.code,e.what()));
     } catch (const std::exception&) {
         callback(http::error(drogon::k503ServiceUnavailable, "Clinic service is temporarily unavailable"));
     }
@@ -84,6 +88,7 @@ void ClinicController::getNearbyClinics(const drogon::HttpRequestPtr& req,
         auto client = DatabaseManager::getInstance().getConnection();
         auto clinics = client->database("tranquil_talk").collection("clinics");
         Json::Value filter(Json::objectValue);
+        filter["archived"]["$ne"]=true;
         if(nearby) {
             auto& near=filter["location"]["$near"];
             near["$geometry"]["type"]="Point";near["$geometry"]["coordinates"][0]=lng;

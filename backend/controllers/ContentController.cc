@@ -23,7 +23,7 @@ drogon::HttpResponsePtr list(const std::string& name) {
     else options.projection(document{} << "title" << 1 << "description" << 1 << "startsAt" << 1 << "location" << 1 << "_id" << 0 << finalize);
     auto filter = document{} << finalize;
     // ISO dates are used for events, so filter using the same sortable representation.
-    if (name == "events") filter = document{} << "startsAt" << open_document << "$gte"
+    if (name == "events") filter = document{} << "archived" << open_document << "$ne" << true << close_document << "startsAt" << open_document << "$gte"
         << trantor::Date::now().toCustomFormattedString("%Y-%m-%dT%H:%M:%SZ", false)
         << close_document << finalize;
     std::string body = "[";

@@ -64,6 +64,7 @@ void WorkflowController::accountAction(const drogon::HttpRequestPtr& req,Callbac
                 Json::Value q;q["expertId"]=who.id;erase(db["availability"],q,s);
                 q=Json::Value();q["userId"]=who.id;for(const auto* collection:{"account_actions","mail_outbox","reservations"})erase(db[collection],q,s);
                 q=Json::Value();q["authorId"]=who.id;erase(db["blogs"],q,s);
+                q=Json::Value();q["ownerId"]=who.id;erase(db["clinics"],q,s);
                 q=Json::Value();q["reporterId"]=who.id;erase(db["reports"],q,s);
                 erase(db["users"],objectId(who.id),s);
             });
