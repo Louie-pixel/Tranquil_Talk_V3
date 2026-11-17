@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
                 res->addHeader("Cache-Control", "no-store");
                 res->addHeader("Permissions-Policy", "camera=(self), microphone=(self), geolocation=(self)");
                 res->addHeader("Content-Security-Policy",
-                    "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; "
+                    "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https://tile.openstreetmap.org; "
                     "connect-src 'self'; media-src 'self' blob:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
             })
             .addListener(env("BIND_ADDRESS", "127.0.0.1"), static_cast<unsigned short>(port))

@@ -26,7 +26,7 @@ UTC epoch seconds remain the booking authority. Existing numeric `startAt` reque
 {"timeZone":"Africa/Johannesburg","appointmentEmails":true,"appointmentReminders":true}
 ```
 
-Appointment emails/reminders default to enabled for verified accounts. Disabling appointment emails also suppresses reminders; account verification and password recovery remain available. Changing delivery preferences regenerates future accepted-appointment reminders for that user. Opting back in schedules future reminder times only. The preferences API, login and `/api/me` expose the chosen values to the frontend. Frontend preference controls are a subsequent task.
+Appointment emails/reminders default to enabled for verified accounts. Disabling appointment emails also suppresses reminders; account verification and password recovery remain available. Changing delivery preferences regenerates future accepted-appointment reminders for that user. Opting back in schedules future reminder times only. The preferences API, login and `/api/me` expose the chosen values to the frontend. The new Account page provides preference controls; see [FRONTEND-ROLLOUT.md](FRONTEND-ROLLOUT.md).
 
 `GET /api/timezones` lists supported named zones from ICU. ICU's installed timezone rules are used, rather than a hardcoded country-to-offset table. Rebuild dependencies as timezone rules change.
 
@@ -47,7 +47,7 @@ The existing 30-minute duration, UTC half-hour grid, five-minute notice and 90-d
 
 Public clinic search stays database-backed. It does not send patient searches or device locations to a third-party directory. The operator can populate that database from a reviewed data file or an OpenStreetMap preview.
 
-Set `CLINIC_OSM_ENABLED=true` only when the operator wants to use the external source. `POST /api/admin/clinics/osm-preview` requires a verified administrator and numeric `lat`, `lng`, `radius` (100-10000 metres). It calls the fixed HTTPS Overpass endpoint with generated parameters, a bounded server query, a 25-second client timeout and a maximum of 50 preview items. No arbitrary URLs or raw queries are accepted. Its area-level external request is explicit and separate from patient searches. Public Overpass availability/quotas are outside this application's control.
+Set `CLINIC_OSM_ENABLED=true` only when the operator wants to use the external source. `POST /api/admin/clinics/osm-preview` requires a verified administrator and numeric `lat`, `lng`, `radius` (100–10000 metres). It calls the fixed HTTPS Overpass endpoint with generated parameters, a bounded server query, a 25-second client timeout and a maximum of 50 preview items. No arbitrary URLs or raw queries are accepted. Its area-level external request is explicit and separate from patient searches. Public Overpass availability/quotas are outside this application's control.
 
 The preview includes mental-health-tagged providers and general clinics/hospitals; the category is source data, not a verified clinical endorsement. Missing addresses remain missing for the administrator to investigate. No opening hours, ratings, availability or practitioners are fabricated.
 
@@ -65,7 +65,7 @@ node tools/clinic-directory.cjs import --file clinic-review.json
 Remove-Item Env:TRANQUIL_ADMIN_TOKEN
 ```
 
-The API accepts batches of 1-50 items under the existing 64 KiB request limit; use smaller batches for long addresses. An empty preview is not importable. For a production service, add `--base https://YOUR_HOSTNAME` to each command. Tokens are never printed by the tool and redirects are rejected.
+The API accepts batches of 1–50 items under the existing 64 KiB request limit; use smaller batches for long addresses. An empty preview is not importable. For a production service, add `--base https://YOUR_HOSTNAME` to each command. Tokens are never printed by the tool and redirects are rejected.
 
 `POST /api/admin/clinics/import` also accepts a vetted directory from another permitted source. Its JSON envelope requires `sourceId` (lowercase letters/digits/underscore/hyphen), `sourceName`, HTTPS `sourceUrl`, `reviewed: true`, and `items`. Each item requires `externalId`, `name`, `lat`, `lng`, `address`, `city`, `country`; optional fields are `suburb`, `phone`, HTTPS `website`, and `category` (`mental_health`, `general_clinic`, `hospital`). Check the source's permission/licence before importing.
 
@@ -109,6 +109,6 @@ The root-authenticated maintenance container writes an archive without printing 
 
 ## Final validation phase
 
-Before launch, execute the deferred build/test work: backend compilation with ICU; timezone DST gap/repeat cases and legacy UTC records; separate-recipient emails, short-notice reminders, lease recovery and retry exhaustion; reschedule/cancel/delete and preference races; source preview/import permissions, invalid data, idempotent reimport, attribution and manual-edit preservation; fresh authenticated production initialization, restart, HTTPS/WebSocket/TURN/email operation, backups and isolated restore. Add frontend controls and exercise patient/expert/admin journeys before accepting real appointments. The earlier CI results predate these changes and are not evidence for this implementation.
+Before launch, execute the deferred build/test work: backend compilation with ICU; timezone DST gap/repeat cases and legacy UTC records; separate-recipient emails, short-notice reminders, lease recovery and retry exhaustion; reschedule/cancel/delete and preference races; source preview/import permissions, invalid data, idempotent reimport, attribution and manual-edit preservation; fresh authenticated production initialization, restart, HTTPS/WebSocket/TURN/email operation, backups and isolated restore. Exercise the new frontend controls and patient/expert/admin journeys before accepting real appointments. The earlier CI results predate these changes and are not evidence for this implementation.
 
 References used for implementation: [ICU calendar API](https://unicode-org.github.io/icu-docs/apidoc/dev/icu4c/ucal_8h.html), [Overpass usage and resource limits](https://dev.overpass-api.de/overpass-doc/en/preface/commons.html), [OpenStreetMap copyright and licence](https://www.openstreetmap.org/copyright).
