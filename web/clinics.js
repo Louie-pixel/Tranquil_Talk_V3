@@ -33,7 +33,13 @@ function renderClinics(){
         if(typeof clinic.website==="string"){
             try {const u=new URL(clinic.website);if(u.protocol==="https:" && !u.username && !u.password){const website=make("a","Visit website","text-link small");website.href=u.href;website.target="_blank";website.rel="noopener noreferrer";actions.append(website);}}catch{}
         }
-        content.append(actions);card.append(mark,content);root.append(card);
+        content.append(actions);
+        if(typeof clinic.sourceName==="string" && typeof clinic.sourceUrl==="string"){
+            try{const u=new URL(clinic.sourceUrl);if(u.protocol==="https:" && !u.username && !u.password){
+                const source=make("a","Source: "+clinic.sourceName,"fine text-link");source.href=u.href;source.target="_blank";source.rel="noopener noreferrer";content.append(source);
+            }}catch{}
+        }
+        card.append(mark,content);root.append(card);
     }
     if(!items.length)root.append(clinicEmpty("No listed clinics here yet.","Try another area or look further afield. You can also explore other providers on Google Maps."));
     $("expand-clinic-search").hidden=!clinicState.origin || clinicState.radius>=100000;

@@ -13,3 +13,5 @@ playwright-report/
 *.user
 emsdk/
 CMakeUserPresets.json
+deploy/secrets/
+backups/

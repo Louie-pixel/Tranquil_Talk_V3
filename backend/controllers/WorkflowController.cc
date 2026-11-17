@@ -2,6 +2,7 @@
 #include "../utils/Workflow.h"
 #include "../utils/BookingRules.h"
 #include "../utils/RateLimit.h"
+#include "../utils/AppointmentMail.h"
 #include <cmath>
 using namespace workflow;
 namespace {
@@ -39,12 +40,14 @@ Json::Value selectSlot(mongocxx::database db,mongocxx::client_session* s,const s
     if(mode=="in_person")ensure(slot["location"].isString() && !slot["location"].asString().empty(),"This slot has no in-person location.");
     return slot;
 }
-Json::Value publicAppointment(mongocxx::database db,Json::Value a) {
+Json::Value publicAppointment(mongocxx::database db,Json::Value a,const std::string& viewer) {
     Json::Value result;
     for(const auto* f:{"status","mode","alias","startAt","revision","location","expertId","createdAt"})result[f]=a[f];
     result["id"]=a["_id"];result["durationMinutes"]=30;
     auto p=find(db["expert_profiles"],objectId(a["expertId"].asString()));
     result["expertName"]=p.isNull() ? "Professional unavailable" : p["name"];
+    auto u=find(db["users"],objectId(viewer));result["time"]=timezones::describe(a["startAt"].asDouble(),timezones::forUser(u));
+    result["sourceTimeZone"]=a.get("sourceTimeZone","UTC");
     return result;
 }
 }
@@ -54,10 +57,11 @@ void WorkflowController::availability(const drogon::HttpRequestPtr& req,Callback
         approved(db,id);
         if(req->method()==drogon::Post) {
             auto who=auth::require(req);ensure(who.id==id && who.role=="expert","Only this professional can manage their availability.",drogon::k403Forbidden);
-            verified(db,who);auto b=body(req);ensure(b["startAt"].isNumeric(),"Choose a time");
-            const double start=b["startAt"].asDouble();ensure(booking::validStart(start,now()),"Choose a half-hour boundary at least five minutes ahead, within 90 days.");
+            verified(db,who);auto b=body(req);auto u=find(db["users"],objectId(who.id));
+            const double start=timezones::start(b,timezones::forUser(u));ensure(booking::validStart(start,now()),"Choose a half-hour boundary at least five minutes ahead, within 90 days.");
             Json::Value slot=key(reservation(id,start));slot["expertId"]=id;slot["startAt"]=start;
             slot["location"]=b.isMember("location") ? text(b,"location",0,240) : "";
+            slot["timeZone"]=b.isMember("timeZone") ? timezones::validate(text(b,"timeZone",1,99)) : timezones::forUser(u);
             auto session=client->start_session();
             session.with_transaction([&](mongocxx::client_session* s){
                 ensure(find(db["reservations"],key(reservation(id,start)),s).isNull(),"This time is reserved. Manage its appointment first.",drogon::k409Conflict);
@@ -82,8 +86,8 @@ void WorkflowController::appointments(const drogon::HttpRequestPtr& req,Callback
         if(req->method()==drogon::Get) {
             Json::Value q;q["$or"][0]["patientId"]=who.id;q["$or"][1]["expertId"]=who.id;
             Json::Value out;out["items"]=Json::Value(Json::arrayValue);
-            for(auto a:list(db["appointments"],q,"startAt",200))out["items"].append(publicAppointment(db,a));
-            out["serverNow"]=now();return out;
+            for(auto a:list(db["appointments"],q,"startAt",200))out["items"].append(publicAppointment(db,a,who.id));
+            out["serverNow"]=now();out["timeZone"]=timezones::forUser(find(db["users"],objectId(who.id)));return out;
         }
         ensure(who.role=="patient","Patient account required to request support.",drogon::k403Forbidden);
         ensure(rate_limit::allow(who.id+":booking",10),"Please wait before making another request.",drogon::k429TooManyRequests);
@@ -95,10 +99,11 @@ void WorkflowController::appointments(const drogon::HttpRequestPtr& req,Callback
         session.with_transaction([&](mongocxx::client_session* s){
             verified(db,who,s);auto slot=selectSlot(db,s,slotId,expert,mode);
             a["startAt"]=slot["startAt"];a["slotId"]=slotId;a["location"]=mode=="in_person" ? slot["location"] : Json::Value("");
+            a["sourceTimeZone"]=slot.get("timeZone","UTC");
             slot["touch"]=drogon::utils::getUuid();replace(db["availability"],key(slotId),slot,s);
-            reserve(db,s,a);insert(db["appointments"],a,s);
+            reserve(db,s,a);insert(db["appointments"],a,s);appointment_mail::schedule(db,s,a);
         });
-        return publicAppointment(db,a);
+        return publicAppointment(db,a,who.id);
     });
 }
 void WorkflowController::appointmentAction(const drogon::HttpRequestPtr& req,Callback&& cb,std::string id,std::string action) {
@@ -134,13 +139,15 @@ void WorkflowController::appointmentAction(const drogon::HttpRequestPtr& req,Cal
                 verified(db,who,s);const auto slotId=text(b,"slotId",1,100);
                 auto slot=selectSlot(db,s,slotId,a["expertId"].asString(),a["mode"].asString());
                 release(db,s,id);a["startAt"]=slot["startAt"];a["slotId"]=slotId;
+                a["sourceTimeZone"]=slot.get("timeZone","UTC");
                 a["location"]=a["mode"]=="in_person" ? slot["location"] : Json::Value("");
                 a["status"]="proposed";slot["touch"]=drogon::utils::getUuid();replace(db["availability"],key(slotId),slot,s);reserve(db,s,a);
             } else {a["status"]=action=="decline" ? "declined" : "cancelled";release(db,s,id);}
             a["revision"]=a["revision"].asInt()+1;a["updatedAt"]=now();replace(db["appointments"],expected,a,s);
+            appointment_mail::schedule(db,s,a);
             result=a;
         });
-        return action=="join" ? result : publicAppointment(db,result);
+        return action=="join" ? result : publicAppointment(db,result,who.id);
     });
 }
 void WorkflowController::rtcConfig(const drogon::HttpRequestPtr& req,Callback&& cb) {

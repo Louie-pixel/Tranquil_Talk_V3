@@ -1,0 +1,110 @@
+# Standalone production stack. Do not combine with the development Compose files.
+# docker compose --env-file .env.production -f compose.live.yaml up -d --build --wait
+services:
+  app:
+    build: .
+    environment:
+      APP_ENV: production
+      APP_BASE_URL: https://${DOMAIN:?Set your DNS hostname}
+      JWT_SECRET_FILE: /run/secrets/jwt_secret
+      MONGODB_URI_FILE: /run/secrets/mongo_uri
+      RESEND_API_KEY_FILE: /run/secrets/resend_key
+      TURN_SECRET_FILE: /run/secrets/turn_secret
+      TURN_URL: ${TURN_URL:?Set the URL of your configured TURN relay}
+      MAIL_MODE: resend
+      MAIL_FROM: ${MAIL_FROM:?Set your verified email sender}
+      CLINIC_OSM_ENABLED: ${CLINIC_OSM_ENABLED:-false}
+      TRUST_PROXY_HEADERS: "true"
+    secrets: [jwt_secret, mongo_uri, resend_key, turn_secret]
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks: [database, edge]
+    read_only: true
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=64m"]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test: [CMD, curl, --fail, --silent, http://127.0.0.1:8080/api/health]
+      interval: 15s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: "3"}
+    restart: unless-stopped
+  mongo:
+    image: mongo:7.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/mongo_root_user
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/mongo_root_password
+    entrypoint: [/bin/bash, -ec]
+    command:
+      - |
+        install -m 400 -o 999 -g 999 /run/secrets/mongo_cluster_key /tmp/mongo-cluster-key
+        exec /usr/local/bin/docker-entrypoint.sh mongod --auth --replSet rs0 --keyFile /tmp/mongo-cluster-key --bind_ip_all
+    secrets: [mongo_root_user, mongo_root_password, mongo_app_user, mongo_app_password, mongo_cluster_key]
+    volumes:
+      - production-data:/data/db
+      - ./deploy/mongo-init.js:/docker-entrypoint-initdb.d/10-tranquil.js:ro
+    healthcheck:
+      test:
+        - CMD
+        - mongosh
+        - --quiet
+        - --eval
+        - >-
+          const fs=require('fs');const a=db.getSiblingDB('admin');
+          if(!a.auth(fs.readFileSync('/run/secrets/mongo_root_user','utf8').trim(),fs.readFileSync('/run/secrets/mongo_root_password','utf8').trim()).ok)quit(1);
+          try{rs.status();}catch(e){if(e.code===94){rs.initiate({_id:'rs0',members:[{_id:0,host:'mongo:27017'}]});}quit(1);}
+          if(!db.hello().isWritablePrimary)quit(1);
+      interval: 10s
+      timeout: 8s
+      retries: 30
+      start_period: 30s
+    networks: [database]
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: "3"}
+    restart: unless-stopped
+  proxy:
+    image: caddy:2.10.2-alpine
+    environment:
+      DOMAIN: ${DOMAIN:?Set your DNS hostname}
+    ports: ["80:80", "443:443", "443:443/udp"]
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - production-caddy-data:/data
+      - production-caddy-config:/config
+    depends_on:
+      app:
+        condition: service_healthy
+    networks: [edge]
+    restart: unless-stopped
+  backup:
+    image: mongo:7.0
+    profiles: [maintenance]
+    secrets: [mongo_root_user, mongo_root_password]
+    volumes:
+      - ./backups:/backups
+      - ./deploy/backup.sh:/opt/backup.sh:ro
+    entrypoint: [/bin/bash, /opt/backup.sh]
+    networks: [database]
+secrets:
+  jwt_secret: {file: ./deploy/secrets/jwt-secret}
+  mongo_uri: {file: ./deploy/secrets/mongo-uri}
+  resend_key: {file: ./deploy/secrets/resend-key}
+  turn_secret: {file: ./deploy/secrets/turn-secret}
+  mongo_root_user: {file: ./deploy/secrets/mongo-root-user}
+  mongo_root_password: {file: ./deploy/secrets/mongo-root-password}
+  mongo_app_user: {file: ./deploy/secrets/mongo-app-user}
+  mongo_app_password: {file: ./deploy/secrets/mongo-app-password}
+  mongo_cluster_key: {file: ./deploy/secrets/mongo-cluster-key}
+networks:
+  database: {internal: true}
+  edge:
+volumes:
+  production-data:
+  production-caddy-data:
+  production-caddy-config:

@@ -89,9 +89,9 @@ Management creates return an ID and revision. Updates and archive requests requi
 
 ## Production and privacy
 
-Use `compose.production.yaml` with a real domain, verified mail sender and TURN relay. Production forces Resend delivery, rejects local/outbox mail modes, requires an HTTPS origin and excludes the development inbox unless its profile is explicitly selected. The inbox must never be publicly exposed. Caddy handles HTTPS and WebSocket proxying. See [operations and deployment instructions](deploy/OPERATIONS.md).
+Use standalone `compose.live.yaml` with a real domain, verified mail sender and TURN relay. It provides an authenticated MongoDB replica set, mounted secrets, an app-scoped database account, internal database networking and Caddy HTTPS/WebSocket proxying. Development Mailpit and published app/database ports are absent. See [backend rollout instructions](deploy/BACKEND-ROLLOUT.md) for setup, clinic imports, queue operations and backups. The older `compose.production.yaml` development overlay is deprecated; the application now refuses its unauthenticated database URI.
 
-The supplied isolated MongoDB single-node replica set is a development baseline. Production needs authenticated database access, encrypted storage, backups/restore, retention and a privacy notice. Runtime refuses a standalone/non-writable database because booking and account workflows need transactions. No clinical-production certification, encryption-at-rest configuration or live public deployment is claimed.
+The development database remains a local baseline. The new production stack is an authenticated single-node replica set; host storage encryption, off-host backups, restore validation, retention and a privacy notice remain deployment responsibilities. Runtime refuses a standalone/non-writable database because booking and account workflows need transactions. No clinical-production certification, encryption-at-rest configuration, high availability or live public deployment is claimed.
 
 Patient aliases and omitted emails provide pseudonymity, not guaranteed anonymity from voice or disclosed information. Configured TURN calls use relay-only transport; real cross-network relay operation requires operator testing. There is no recording feature, but a peer may record externally. General invitation rooms remain shareable bearer capabilities, separate from participant-bound appointments.
 
@@ -104,3 +104,11 @@ Sign-in tokens remain in page memory. Reflection text and location searches are 
 Integration tests require explicitly disposable Docker containers and create test-only accounts/listings. Never run them against production data. Local email tests use Mailpit's official HTTP API; no public endpoint returns private account links. Native backend build details and pinned dependencies are in `backend/CMakeLists.txt` and `Dockerfile`.
 
 For a **layout preview only**, run `node tools/preview.cjs 8100`. It cannot authenticate users or search live records; use the Docker stack for those workflows.
+
+## Backend expansion awaiting final testing
+
+Appointment changes now queue separate participant emails and accepted-appointment reminders at 24 hours and one hour before the start. Durable leases, retries and expiry handling support delivery workers. Account preferences control appointment emails/reminders and named timezones. UTC timestamps remain authoritative; ICU handles named-zone conversion and rejects nonexistent or ambiguous local times without explicit disambiguation.
+
+Verified administrators can preview OpenStreetMap clinic data and transactionally import reviewed directory batches with stable identifiers, source attribution, archive preservation and manual-edit protection. Patient searches stay within the app database. Source links appear on imported clinic cards.
+
+These additions have not been built, tested or deployed yet, following the requested implementation-first order. Frontend preference and import-management controls are still a later task. The [backend rollout guide](deploy/BACKEND-ROLLOUT.md) documents APIs, scripts, production requirements and the final validation work. Previous passing CI runs apply to the earlier implementation.

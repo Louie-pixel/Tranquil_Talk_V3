@@ -3,12 +3,13 @@
 #include "../utils/Mail.h"
 #include "../utils/RateLimit.h"
 #include "../utils/Validation.h"
+#include "../utils/ClientAddress.h"
 #include <bcrypt/BCrypt.hpp>
 using namespace workflow;
 void WorkflowController::accountAction(const drogon::HttpRequestPtr& req,Callback&& cb,std::string action) {
     respond(std::move(cb),[&]{
         auto b=body(req);auto client=DatabaseManager::getInstance().getConnection();auto db=client->database("tranquil_talk");
-        ensure(rate_limit::allow(req->peerAddr().toIp()+":account-action",10),"Please wait before trying again.",drogon::k429TooManyRequests);
+        ensure(rate_limit::allow(client_address::key(req)+":account-action",10),"Please wait before trying again.",drogon::k429TooManyRequests);
         if(action=="request-verification" || action=="request-reset") {
             ensure(mail::ready(),"Email delivery is not configured. Contact the site operator.",drogon::k503ServiceUnavailable);
             const auto base=mail::baseUrl();Json::Value u;
@@ -58,7 +59,7 @@ void WorkflowController::accountAction(const drogon::HttpRequestPtr& req,Callbac
                 ensure(!current.isNull() && current["password"]==u["password"],"Account changed. Sign in again.",drogon::k409Conflict);
                 Json::Value member;member["$or"][0]["patientId"]=who.id;member["$or"][1]["expertId"]=who.id;
                 auto f=bson(member);for(auto raw:db["appointments"].find(*s,f.view())) {
-                    auto a=decode(raw);Json::Value r;r["appointmentId"]=a["_id"];erase(db["reservations"],r,s);
+                    auto a=decode(raw);Json::Value r;r["appointmentId"]=a["_id"];erase(db["reservations"],r,s);erase(db["mail_outbox"],r,s);
                 }
                 erase(db["appointments"],member,s);erase(db["expert_profiles"],objectId(who.id),s);
                 Json::Value q;q["expertId"]=who.id;erase(db["availability"],q,s);

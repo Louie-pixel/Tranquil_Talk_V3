@@ -104,7 +104,8 @@ void ClinicController::getNearbyClinics(const drogon::HttpRequestPtr& req,
         options.limit(100);
         // Return only public fields, never arbitrary database documents.
         options.projection(document{} << "name" << 1 << "location" << 1 << "address" << 1 << "suburb" << 1
-            << "city" << 1 << "country" << 1 << "phone" << 1 << "website" << 1 << "_id" << 0 << finalize);
+            << "city" << 1 << "country" << 1 << "phone" << 1 << "website" << 1
+            << "category" << 1 << "sourceName" << 1 << "sourceUrl" << 1 << "sourceUpdatedAt" << 1 << "_id" << 0 << finalize);
         if(!nearby)options.sort(document{} << "name" << 1 << finalize);
         std::string body = "[";
         bool first = true;

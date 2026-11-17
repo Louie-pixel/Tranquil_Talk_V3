@@ -5,6 +5,7 @@
 #include "../utils/RateLimit.h"
 #include "../utils/Validation.h"
 #include "../utils/Mail.h"
+#include "../utils/ClientAddress.h"
 #include <bsoncxx/builder/stream/document.hpp>
 #include <mongocxx/client.hpp>
 #include <mongocxx/database.hpp>
@@ -16,7 +17,7 @@ using namespace bsoncxx::builder::stream;
 
 void UserController::registerUser(const drogon::HttpRequestPtr& req,
         std::function<void(const drogon::HttpResponsePtr&)>&& callback) {
-    if (!rate_limit::allow(req->peerAddr().toIp() + ":register", 5)) {
+    if (!rate_limit::allow(client_address::key(req) + ":register", 5)) {
         callback(http::error(drogon::k429TooManyRequests, "Please try again in a minute")); return;
     }
     auto json = req->getJsonObject();
@@ -59,7 +60,7 @@ void UserController::registerUser(const drogon::HttpRequestPtr& req,
 
 void UserController::loginUser(const drogon::HttpRequestPtr& req,
         std::function<void(const drogon::HttpResponsePtr&)>&& callback) {
-    if (!rate_limit::allow(req->peerAddr().toIp() + ":login", 10)) {
+    if (!rate_limit::allow(client_address::key(req) + ":login", 10)) {
         callback(http::error(drogon::k429TooManyRequests, "Please try again in a minute")); return;
     }
     auto json = req->getJsonObject();
@@ -90,6 +91,8 @@ void UserController::loginUser(const drogon::HttpRequestPtr& req,
         result["token"] = auth::issue(identity.id, role, "tranquil-api",60,version);
         result["emailVerified"] = user->view()["emailVerified"] && user->view()["emailVerified"].get_bool().value;
         result["developmentMailbox"] = mail::mode()=="mailpit" && mail::localMailbox();
+        const auto preferences=workflow::decode(user->view());
+        result["timeZone"]=timezones::forUser(preferences);result["appointmentEmails"]=preferences.get("appointmentEmails",true);result["appointmentReminders"]=preferences.get("appointmentReminders",true);
         result["role"] = role;
         result["id"] = identity.id;
         result["expiresIn"] = 3600;
@@ -108,6 +111,8 @@ void UserController::me(const drogon::HttpRequestPtr& req,
         auto user=client->database("tranquil_talk").collection("users").find_one(document{} << "_id" << bsoncxx::oid(identity.id) << finalize);
         result["emailVerified"] = user && user->view()["emailVerified"] && user->view()["emailVerified"].get_bool().value;
         result["emailConfigured"] = mail::ready();
+        const auto preferences=user ? workflow::decode(user->view()) : Json::Value();
+        result["timeZone"]=timezones::forUser(preferences);result["appointmentEmails"]=preferences.get("appointmentEmails",true);result["appointmentReminders"]=preferences.get("appointmentReminders",true);
         result["developmentMailbox"] = mail::mode()=="mailpit" && mail::localMailbox();
         callback(drogon::HttpResponse::newHttpJsonResponse(result));
     } catch (const auth::Unavailable&) {

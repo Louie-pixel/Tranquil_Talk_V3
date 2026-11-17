@@ -1,7 +1,7 @@
 FROM debian:bookworm-slim AS dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential cmake git ca-certificates pkg-config libssl-dev \
-    zlib1g-dev libjsoncpp-dev uuid-dev && rm -rf /var/lib/apt/lists/*
+    zlib1g-dev libjsoncpp-dev uuid-dev libicu-dev && rm -rf /var/lib/apt/lists/*
 RUN git clone --depth 1 --branch 1.28.0 https://github.com/mongodb/mongo-c-driver.git /tmp/mongo-c && \
     cmake -S /tmp/mongo-c -B /tmp/mongo-c-build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local \
       -DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_SASL=OFF \
@@ -28,7 +28,7 @@ RUN cmake -S backend -B out -DCMAKE_BUILD_TYPE=Release && \
 
 FROM debian:bookworm-slim AS runtime
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates curl libssl3 zlib1g libjsoncpp25 libuuid1 && \
+    ca-certificates curl libssl3 zlib1g libjsoncpp25 libuuid1 libicu72 && \
     rm -rf /var/lib/apt/lists/* && useradd --system --uid 10001 --create-home tranquil
 COPY --from=build /usr/local/lib/ /usr/local/lib/
 RUN ldconfig

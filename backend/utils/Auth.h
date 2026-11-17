@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <stdexcept>
 #include <string>
+#include "RuntimeConfig.h"
 #include "../models/DatabaseManager.h"
 #include "ExpertRules.h"
 #include <bsoncxx/builder/stream/document.hpp>
@@ -16,11 +17,10 @@
 namespace auth {
 inline const std::string& secret() {
     static const std::string key = [] {
-        const char* value = std::getenv("JWT_SECRET");
-        if (!value || std::string(value).size() < 32 ||
-            std::string(value) == "super_secret_key_change_me")
+        const auto value = config::value("JWT_SECRET");
+        if (value.size() < 32 || value == "super_secret_key_change_me")
             throw std::runtime_error("Set JWT_SECRET to a random secret of at least 32 characters");
-        return std::string(value);
+        return value;
     }();
     return key;
 }

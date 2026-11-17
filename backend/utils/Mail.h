@@ -1,5 +1,9 @@
 #pragma once
 #include "Workflow.h"
+#include "AppointmentMail.h"
+#include <mongocxx/options/find_one_and_update.hpp>
+#include <mongocxx/options/return_document.hpp>
+#include <algorithm>
 #include <atomic>
 #include <thread>
 namespace mail {
@@ -23,17 +27,25 @@ inline std::thread start(std::atomic<bool>& running) {
             if(mode()!="outbox" && ready()) {
                 try {
                     auto c=DatabaseManager::getInstance().getConnection();auto db=c->database("tranquil_talk");
+                    Json::Value expired;expired["expiresAt"]["$lte"]=workflow::now();workflow::erase(db["mail_outbox"],expired);
                     Json::Value q;q["state"]="pending";q["nextAttempt"]["$lte"]=workflow::now();
+                    q["$or"][0]["leaseUntil"]["$exists"]=false;q["$or"][1]["leaseUntil"]["$lte"]=workflow::now();
                     for(auto item:workflow::list(db["mail_outbox"],q,"createdAt",10)) {
-                        if(item["expiresAt"].asDouble()<=workflow::now()) {workflow::erase(db["mail_outbox"],workflow::key(item["_id"].asString()));continue;}
-                        const auto subject="Tranquil Talk: "+item["purpose"].asString();
-                        const auto text="You requested an account action for Tranquil Talk. Open this link within 30 minutes: "+item["url"].asString()+"\nIf this was not you, ignore this email.";
+                        auto filter=q;filter["_id"]=item["_id"];auto f=workflow::bson(filter);
+                        const auto lease=drogon::utils::getUuid();Json::Value change;change["$set"]["lease"]=lease;change["$set"]["leaseUntil"]=workflow::now()+90;change["$inc"]["attempts"]=1;auto update=workflow::bson(change);
+                        mongocxx::options::find_one_and_update options;options.return_document(mongocxx::options::return_document::k_after);
+                        auto claimed=db["mail_outbox"].find_one_and_update(f.view(),update.view(),options);if(!claimed)continue;item=workflow::decode(claimed->view());
+                        auto owned=workflow::key(item["_id"].asString());owned["lease"]=lease;
+                        const bool appointment=item.get("kind","")=="appointment";
+                        if(appointment && !appointment_mail::resolve(db,item)){workflow::erase(db["mail_outbox"],owned);continue;}
+                        const auto subject=appointment ? item["subject"].asString() : "Tranquil Talk: "+item["purpose"].asString();
+                        const auto text=appointment ? item["text"].asString()+"\n"+baseUrl()+"/#appointments" : "You requested an account action for Tranquil Talk. Open this link within 30 minutes: "+item["url"].asString()+"\nIf this was not you, ignore this email.";
                         Json::Value payload;
                         const bool development=mode()=="mailpit";
                         if(development){
                             payload["From"]["Email"]="no-reply@tranquil.local";payload["From"]["Name"]="Tranquil Talk (local development)";
                             payload["To"][0]["Email"]=item["to"];payload["Subject"]=subject;payload["Text"]=text;
-                            payload["Headers"]["Message-ID"]="<"+item["_id"].asString()+"@tranquil.local>";
+                            payload["Headers"]["Message-ID"]="<"+workflow::hash(item["_id"].asString())+"@tranquil.local>";
                         }else{payload["from"]=workflow::env("MAIL_FROM");payload["to"][0]=item["to"];payload["subject"]=subject;payload["text"]=text;}
                         auto request=drogon::HttpRequest::newHttpJsonRequest(payload);request->setMethod(drogon::Post);request->setPath(development ? "/api/v1/send" : "/emails");
                         if(!development)request->addHeader("Authorization","Bearer "+workflow::env("RESEND_API_KEY"));
@@ -42,9 +54,12 @@ inline std::thread start(std::atomic<bool>& running) {
                         auto client=drogon::HttpClient::newHttpClient(development ? workflow::env("MAILPIT_URL") : "https://api.resend.com");
                         auto response=client->sendRequest(request,15);
                         if(response.first==drogon::ReqResult::Ok && response.second && response.second->statusCode()>=200 && response.second->statusCode()<300)
-                            workflow::erase(db["mail_outbox"],workflow::key(item["_id"].asString()));
+                            workflow::erase(db["mail_outbox"],owned);
                         else {
-                            item["nextAttempt"]=workflow::now()+60;workflow::replace(db["mail_outbox"],workflow::key(item["_id"].asString()),item);
+                            if(appointment){item.removeMember("to");item.removeMember("text");item.removeMember("subject");}
+                            const auto attempts=item.get("attempts",1).asInt();item["nextAttempt"]=workflow::now()+std::min(3600,30*(1<<std::min(attempts,7)));
+                            if(attempts>=8)item["state"]="failed";
+                            item.removeMember("lease");item.removeMember("leaseUntil");workflow::replace(db["mail_outbox"],owned,item);
                         }
                     }
                 }catch(const std::exception&){ /* No credentials, addresses or action links in logs. Retry later. */ }
