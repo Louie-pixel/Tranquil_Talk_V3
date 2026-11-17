@@ -35,6 +35,9 @@ void DatabaseManager::init(const std::string& uri) {
     db.collection("reports").create_index(document{} << "status" << 1 << "createdAt" << 1 << finalize);
     db.collection("clinics").create_index(document{} << "ownerId" << 1 << "updatedAt" << -1 << finalize);
     db.collection("events").create_index(document{} << "startsAt" << 1 << finalize);
+    db.collection("mail_outbox").create_index(document{} << "appointmentId" << 1 << "state" << 1 << finalize);
+    db.collection("clinics").create_index(document{} << "sourceId" << 1 << "externalId" << 1 << finalize);
+    db.collection("clinic_imports").create_index(document{} << "createdAt" << 1 << finalize);
 }
 
 mongocxx::pool::entry DatabaseManager::getConnection() {

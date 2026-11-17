@@ -2,6 +2,7 @@
 #include "../utils/Workflow.h"
 #include "../utils/Validation.h"
 #include "../utils/RateLimit.h"
+#include "../utils/Timezones.h"
 #include <ctime>
 #include <cmath>
 using namespace workflow;
@@ -35,7 +36,8 @@ Json::Value fields(const Json::Value& b,const std::string& kind){
         ensure(d["website"]=="" || experts::httpsUrl(d["website"].asString()),"Clinic websites must use HTTPS.");
     }else{
         d["title"]=text(b,"title",3,200);d["description"]=text(b,"description",20,4000);d["location"]=text(b,"location",3,240);
-        ensure(b["startAt"].isNumeric(),"Choose an event date and time.");const auto start=b["startAt"].asDouble();
+        const auto start=timezones::start(b,"UTC");
+        d["timeZone"]=b.isMember("timeZone") ? timezones::validate(text(b,"timeZone",1,99)) : "UTC";
         ensure(std::isfinite(start) && start>now() && start<now()+366*86400,"Choose a future event within the next year.");
         std::time_t stamp=static_cast<time_t>(start);std::tm utc{};
 #ifdef _WIN32
@@ -77,6 +79,10 @@ void ManagementController::item(const drogon::HttpRequestPtr& req,Callback&& cb,
             ensure(current.get("revision",0)==b["revision"],"This record changed. Refresh before saving.",drogon::k409Conflict);
             if(req->method()==drogon::Delete){current["archived"]=true;result=current;}
             else{result=fields(b,kind);result["_id"]=current["_id"];result["ownerId"]=current.get("ownerId",who.id);result["createdAt"]=current.get("createdAt",now());}
+            if(kind=="clinics" && current.isMember("sourceId")){
+                for(const auto* field:{"sourceId","externalId","sourceName","sourceUrl","sourceUpdatedAt","category"})result[field]=current[field];
+                result["sourceLocked"]=true;
+            }
             result["revision"]=b["revision"].asInt()+1;result["updatedAt"]=now();replace(db[kind],objectId(id),result,s);
         });return output(result);
     });

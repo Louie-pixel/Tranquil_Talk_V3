@@ -10,7 +10,9 @@ function editManaged(kind,item){
         form.elements.lat.value=item.location?.coordinates?.[1] ?? "";form.elements.lng.value=item.location?.coordinates?.[0] ?? "";
     }else{
         for(const key of ["title","description","location"])form.elements[key].value=item[key] || "";
-        const date=new Date(item.startsAt);if(!Number.isNaN(date.getTime()))form.elements.start.value=new Date(date.getTime()-date.getTimezoneOffset()*60000).toISOString().slice(0,16);
+        const date=new Date(item.startsAt),zone=item.timeZone || careTime.zone();
+        if(form.elements.timeZone){if(![...form.elements.timeZone.options].some(o=>o.value===zone)){const option=make("option",zone);option.value=zone;form.elements.timeZone.append(option);}form.elements.timeZone.value=zone;}
+        if(!Number.isNaN(date.getTime()))form.elements.start.value=careTime.localInput(date.getTime()/1000,zone);
     }
     status(manageConfig[kind].status,item.archived ? "Save this record to restore its public listing. Events need a future date." : "Editing the selected record. Save to publish the update.");
     form.scrollIntoView({block:"start",behavior:"smooth"});form.querySelector('input:not([type="hidden"])').focus();
@@ -51,7 +53,7 @@ for(const kind of ["clinics","events"]){
     const config=manageConfig[kind];
     $(config.form).addEventListener("submit",event=>formAction(event,config.status,async(values,form)=>{
         const editing=values.id;const payload={...values,revision:Number(values.revision),archived:false};delete payload.id;
-        if(kind==="clinics"){payload.lat=Number(values.lat);payload.lng=Number(values.lng);}else{payload.startAt=new Date(values.start).getTime()/1000;delete payload.start;}
+        if(kind==="clinics"){payload.lat=Number(values.lat);payload.lng=Number(values.lng);}else{payload.localStart=values.start;payload.timeZone=values.timeZone || careTime.zone();delete payload.start;}
         await api("/manage/"+kind+(editing ? "/"+editing : ""),{method:editing ? "PUT" : "POST",authenticated:true,body:payload});
         resetManagedEditor(kind);await loadManaged(kind);status(config.status,kind==="clinics" ? "Clinic listing saved." : "Community event saved.");if(kind==="events")loadEvents();
     }));

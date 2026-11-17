@@ -8,8 +8,7 @@
 
 namespace {
 std::string env(const char* name, const std::string& fallback) {
-    const auto value = std::getenv(name);
-    return value ? value : fallback;
+    return config::value(name,fallback);
 }
 }
 int main(int argc, char* argv[]) {
@@ -22,6 +21,10 @@ int main(int argc, char* argv[]) {
         if(env("APP_ENV","")=="production") {
             if(mail::mode()!="resend" || !mail::ready() || mail::baseUrl().rfind("https://",0)!=0)
                 throw std::runtime_error("Configure production email and HTTPS origin");
+            const auto mongo=env("MONGODB_URI","");
+            if(mongo.find('@')==std::string::npos || env("TURN_SECRET","").size()<32 ||
+               !std::regex_match(env("TURN_URL",""),std::regex(R"(^turns?:[^\s]+$)")))
+                throw std::runtime_error("Configure authenticated MongoDB and TURN relay");
         }
         DatabaseManager::getInstance().init(env("MONGODB_URI",
             "mongodb://localhost:27017/?serverSelectionTimeoutMS=5000"));
@@ -68,14 +71,14 @@ int main(int argc, char* argv[]) {
                 res->addHeader("Cache-Control", "no-store");
                 res->addHeader("Permissions-Policy", "camera=(self), microphone=(self), geolocation=(self)");
                 res->addHeader("Content-Security-Policy",
-                    "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; "
+                    "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https://tile.openstreetmap.org; "
                     "connect-src 'self'; media-src 'self' blob:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
             })
             .addListener(env("BIND_ADDRESS", "127.0.0.1"), static_cast<unsigned short>(port))
             .run();
     } catch (const std::exception&) {
         // Avoid logging database credentials from driver exception messages.
-        std::cerr << "Startup failed. Check JWT_SECRET, MongoDB connectivity/indexes, PORT and WEB_ROOT.\n";
+        std::cerr << "Startup failed. Check secret files, JWT_SECRET, production email/HTTPS/TURN, MongoDB replica set/authentication, PORT and WEB_ROOT.\n";
         return 1;
     }
 }

@@ -22,6 +22,8 @@ const api = async (path, {method = "GET", body, authenticated = false} = {}) => 
     return data;
 };
 function status(id, message, error = false) {
+    $(id).setAttribute("role",error ? "alert" : "status");
+    $(id).setAttribute("aria-live",error ? "assertive" : "polite");
     $(id).textContent = message;
     $(id).classList.toggle("error", error);
 }
@@ -136,7 +138,7 @@ $("join-form").addEventListener("submit", async event => {
         const ticket = ticketFrom($("ticket").value);
         if (!/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(ticket) || ticket.length > 4096)
             throw new Error("Paste a valid invitation link or ticket.");
-        status("join-status", "Preparing your devices.");
+        status("join-status", "Preparing your devices…");
         $("call-panel").hidden = false;
         $("mute").textContent = "Mute microphone";
         $("camera").textContent = "Turn camera off"; $("camera").hidden = mode === "audio";
@@ -161,7 +163,7 @@ $("join-form").addEventListener("submit", async event => {
                 if (data.type === "joined") {
                     clearTimeout(timeout);
                     status("join-status", "");
-                    status("call-status", data.peers ? "Connecting." : "Waiting for the other participant.");
+                    status("call-status", data.peers ? "Connecting…" : "Waiting for the other participant…");
                     if (data.peers) await activeCall.offer();
                 } else if (data.type === "peer_left" || data.type === "hangup") {
                     endCall(false, "The other participant left. Your microphone and camera are off.");
@@ -173,7 +175,7 @@ $("join-form").addEventListener("submit", async event => {
                 if (socket === activeSocket) endCall(false, error.message || "The call could not connect.");
             });
         };
-        activeSocket.onerror = () => { clearTimeout(timeout); if (socket === activeSocket) endCall(false, "Couldn't connect to the room. Please try again."); };
+        activeSocket.onerror = () => { clearTimeout(timeout); if (socket === activeSocket) endCall(false, "Couldn’t connect to the room. Please try again."); };
         activeSocket.onclose = () => { clearTimeout(timeout); if (socket === activeSocket) endCall(false, "Room closed or expired. Your devices are off."); };
     } catch (error) { endCall(false, error.message || "Device access was denied. Please try again."); }
     finally { creating = false; if (!call) button.disabled = false; }
@@ -207,7 +209,7 @@ $("clear-reflection").addEventListener("click", () => {
     $("reflection").value = ""; $("reflection").dispatchEvent(new Event("input")); $("reflection").focus();
 });
 async function loadBlogs() {
-    status("blog-status", "Loading articles.");
+    status("blog-status", "Loading articles…");
     try {
         const articles = await api("/blogs");
         if (!Array.isArray(articles)) throw new Error("Unexpected article response.");
@@ -242,7 +244,7 @@ async function loadEvents() {
             const card = make("article", undefined, "event-card");
             const date = new Date(event.startsAt);
             card.append(make("h3", event.title), make("p", event.description),
-                make("p", (Number.isNaN(date.getTime()) ? "Date to be confirmed" : date.toLocaleString()) + " � " + (event.location || "Location to be confirmed")));
+                make("p", (Number.isNaN(date.getTime()) ? "Date to be confirmed" : date.toLocaleString()) + " · " + (event.location || "Location to be confirmed")));
             $("event-list").append(card);
         }
         status("event-status", events.length ? "" : "No upcoming events listed yet. Check back for community conversations and workshops.");
@@ -253,7 +255,7 @@ if (invitation) {
     $("ticket").value = invitation;
     history.replaceState(null, "", location.pathname + location.search + "#connect");
     $("connect").scrollIntoView();
-    status("join-status", "Invitation ready. Choose audio or video, then enter when you're comfortable.");
+    status("join-status", "Invitation ready. Choose audio or video, then enter when you’re comfortable.");
 }
 if(location.hash==="#register")history.replaceState(null,"",location.pathname+location.search+"#signup");
 loadBlogs(); loadEvents();

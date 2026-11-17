@@ -7,6 +7,7 @@ find_package(Drogon CONFIG REQUIRED)
 find_package(mongocxx CONFIG REQUIRED)
 find_package(bsoncxx CONFIG REQUIRED)
 find_package(OpenSSL REQUIRED)
+find_package(ICU 72 REQUIRED COMPONENTS uc i18n)
 include(FetchContent)
 set(JWT_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(JWT_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -31,8 +32,9 @@ target_include_directories(tranquil_bcrypt PUBLIC ${bcrypt_source_SOURCE_DIR}/in
 add_executable(TranquilBackend main.cc
     controllers/ClinicController.cc controllers/UserController.cc
     controllers/SignalingController.cc controllers/SessionController.cc controllers/ContentController.cc controllers/ExpertController.cc
-    controllers/WorkflowController.cc controllers/WorkflowAccounts.cc controllers/ManagementController.cc models/DatabaseManager.cc)
+    controllers/WorkflowController.cc controllers/WorkflowAccounts.cc controllers/ManagementController.cc
+    controllers/PreferencesController.cc controllers/ClinicIntegrationController.cc models/DatabaseManager.cc)
 target_link_libraries(TranquilBackend PRIVATE Drogon::Drogon
-    mongo::mongocxx_shared mongo::bsoncxx_shared jwt-cpp::jwt-cpp tranquil_bcrypt OpenSSL::Crypto)
+    mongo::mongocxx_shared mongo::bsoncxx_shared jwt-cpp::jwt-cpp tranquil_bcrypt OpenSSL::Crypto ICU::uc ICU::i18n)
 target_compile_options(TranquilBackend PRIVATE -Wall -Wextra -Wpedantic)
 

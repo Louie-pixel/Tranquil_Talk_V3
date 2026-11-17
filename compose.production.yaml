@@ -1,4 +1,6 @@
-# Use with: docker compose -f compose.yaml -f compose.production.yaml up -d --build
+# Legacy overlay retained for existing configuration references only.
+# New deployments must use standalone compose.live.yaml (authenticated database and mounted secrets).
+# The server refuses this overlay's unauthenticated development database URI.
 services:
   app:
     environment:

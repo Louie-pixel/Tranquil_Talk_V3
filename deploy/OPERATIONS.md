@@ -1,5 +1,7 @@
 # Complete application and deployment
 
+For the new appointment delivery, named timezones, clinic integration and authenticated production stack, follow [BACKEND-ROLLOUT.md](BACKEND-ROLLOUT.md). These additions await the final testing phase; earlier CI runs do not validate them.
+
 The static layout preview does not run real accounts, booking or calls. On Windows, install/open Docker Desktop with Linux containers and run `tools/start.ps1` from the repository. The launcher generates local configuration, starts the real API/database and local email inbox, and checks readiness. The application opens at http://localhost:8080; captured development emails are available at http://localhost:8025. See README.md for complete setup commands.
 
 ## Booking and consultation journey
@@ -25,7 +27,7 @@ The current scope is thirty-minute sessions, up to 200 returned appointments and
 
 For production, set `APP_BASE_URL` to the exact site origin without a trailing slash, `RESEND_API_KEY` to a private provider key and `MAIL_FROM` to an address on a verified sender domain. The production email adapter uses Resend. Local Compose instead uses `MAIL_MODE=mailpit`, `APP_ENV=development` and the fixed internal `MAILPIT_URL=http://mailpit:8025`; verification/reset emails arrive in a loopback-only local inbox without being delivered externally. Production refuses development mail modes. Public production origins must use HTTPS; the local `http://localhost:8080` and `http://127.0.0.1:8080` origins are allowed for development.
 
-The private durable outbox retries failed requests once per minute until link expiry, using provider idempotency keys. Successful delivery removes the pending email. Account tokens are SHA-256 digests in the action collection; their raw links are temporarily present only in pending email records. Links expire after thirty minutes, can be used once and are invalidated by a password reset. Public APIs never return the links. Resetting the password increases a session version checked by API requests and consultation sockets.
+The private durable outbox uses message leases and exponential retry delays capped at one hour. Eight failed delivery attempts mark a message failed; an administrator can retry an unexpired message. Provider idempotency keys accompany retries. Successful delivery removes the pending email. Account tokens are SHA-256 digests in the action collection; their raw links are temporarily present only in pending email records. Links expire after thirty minutes, can be used once and are invalidated by a password reset. Public APIs never return the links. Resetting the password increases a session version checked by API requests and consultation sockets.
 
 `MAIL_MODE=outbox` queues emails without delivering them and is for isolated automated tests only. CI reads test links through trusted Docker/database access. Do not enable that mode in production. If delivery is unconfigured, account email requests show a configuration error.
 
@@ -42,10 +44,10 @@ Authenticated clients receive one-hour HMAC credentials, never the shared secret
 For HTTPS, provision a server with Docker Compose, point a real DNS hostname to it and open TCP 80/443. Set `DOMAIN`, `JWT_SECRET`, `RESEND_API_KEY`, `MAIL_FROM`, `TURN_URL` and `TURN_SECRET` in its private environment. Run:
 
 ```sh
-docker compose -f compose.yaml -f compose.production.yaml up -d --build
+docker compose --env-file .env.production -f compose.live.yaml up -d --build --wait
 ```
 
-Caddy obtains/renews the certificate, redirects HTTP to HTTPS, proxies WebSocket upgrades and sends HSTS. Certificate state persists in named volumes. MongoDB is on an internal-only network; the app has a separate network for outbound email. The app's development port remains bound to loopback. Do not expose it externally without equivalent HTTPS protection.
+Caddy obtains/renews the certificate, redirects HTTP to HTTPS, proxies WebSocket upgrades and sends HSTS. Certificate state persists in named volumes. Production MongoDB is authenticated on an internal-only network; the app has a separate network for outbound email. The standalone production stack publishes no application/database ports and uses protected secret files prepared as described in BACKEND-ROLLOUT.md. The old development overlay is deprecated.
 
 This is a deployment configuration, not a provisioned public deployment. A real domain/server, verified sender and relay credentials must be supplied. Verify live HTTPS, email delivery, backups/restore and calls before launch. Keep the host and dependencies patched. The code does not claim encryption at rest or high-availability hosting.
 

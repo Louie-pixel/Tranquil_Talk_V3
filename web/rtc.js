@@ -16,12 +16,13 @@ class TranquilCall {
         this.iceTransportPolicy = iceTransportPolicy;
         this.offerer = false; this.restarts = 0; this.restartTimer = null;
     }
-    async prepare(mode) {
+    async prepare(mode, devices = {}) {
         if (mode !== "audio" && mode !== "video") throw new Error("Choose audio or video");
         const generation = ++this.generation;
         this.ended = false;
         if (!this.mediaDevices?.getUserMedia) throw new Error("Use HTTPS or localhost to access your microphone");
-        const stream = await this.mediaDevices.getUserMedia({audio: true, video: mode === "video"});
+        const stream = await this.mediaDevices.getUserMedia({audio: devices.audioDeviceId ? {deviceId:{exact:devices.audioDeviceId}} : true,
+            video: mode === "video" ? devices.videoDeviceId ? {deviceId:{exact:devices.videoDeviceId}} : true : false});
         if (this.ended || generation !== this.generation) {
             stream.getTracks().forEach(track => track.stop());
             throw new Error("Call ended before device access completed");
@@ -55,7 +56,7 @@ class TranquilCall {
             }
             this.status(state === "connected" ? "Connected" :
                 state === "failed" ? "Connection failed. Reconnecting where possible; otherwise leave and reconnect from your appointment." :
-                state === "disconnected" ? "Connection interrupted. Waiting to reconnect." : "Connecting.");
+                state === "disconnected" ? "Connection interrupted. Waiting to reconnect…" : "Connecting…");
         };
     }
     async receive(type, payload) {

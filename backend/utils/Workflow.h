@@ -24,7 +24,7 @@ inline void ensure(bool condition, const std::string& message,
     if (!condition) throw Error(code, message);
 }
 inline double now() { return static_cast<double>(std::time(nullptr)); }
-inline std::string env(const char* name) { auto p=std::getenv(name); return p ? p : ""; }
+inline std::string env(const char* name) { return config::value(name); }
 inline std::string encode(const Json::Value& value) {
     Json::StreamWriterBuilder b; b["indentation"]=""; return Json::writeString(b,value);
 }
