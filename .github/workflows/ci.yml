@@ -168,7 +168,7 @@ jobs:
         env:
           TEST_MONGO_CONTAINER: mongo
         run: npx playwright test --config=playwright.journey.config.cjs
-      - name: Test isolated authenticated production stack and backup restore
+      - name: Test authenticated production stack, Caddy configuration and backup restore
         id: production-checks
         continue-on-error: true
         env:
@@ -186,9 +186,9 @@ jobs:
         if: always() && (steps.api-checks.outcome != 'success' || steps.expert-checks.outcome != 'success' || steps.call-checks.outcome != 'success' || steps.workflow-checks.outcome != 'success' || steps.operations-checks.outcome != 'success' || steps.expanded-checks.outcome != 'success' || steps.journey-checks.outcome != 'success' || steps.production-checks.outcome != 'success')
         run: exit 1
       - uses: actions/upload-artifact@v4
-        if: failure()
+        if: always()
         with:
-          name: call-test-failures
+          name: integration-results
           path: test-results
       - name: Logs on failure
         if: failure()

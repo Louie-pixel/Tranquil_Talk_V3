@@ -6,7 +6,7 @@ test('isolated production stack authenticates, restarts, backs up and restores i
     const auth="const fs=require('fs');if(!db.getSiblingDB('admin').auth(fs.readFileSync('/run/secrets/mongo_root_user','utf8').trim(),fs.readFileSync('/run/secrets/mongo_root_password','utf8').trim()).ok)quit(1);";
     try{
         fs.mkdirSync(path.join(root,'deploy','secrets'),{recursive:true,mode:0o700});fs.mkdirSync(path.join(root,'backups'),{mode:0o700});
-        fs.copyFileSync('compose.live.yaml',path.join(root,'compose.yaml'));for(const name of ['mongo-init.js','backup.sh'])fs.copyFileSync(path.join('deploy',name),path.join(root,'deploy',name));
+        fs.copyFileSync('compose.live.yaml',path.join(root,'compose.yaml'));for(const name of ['mongo-init.js','backup.sh','Caddyfile'])fs.copyFileSync(path.join('deploy',name),path.join(root,'deploy',name));
         const password=randomBytes(32).toString('hex');const secrets={'jwt-secret':randomBytes(48).toString('hex'),'resend-key':'fixture-provider-key-not-used','turn-secret':randomBytes(32).toString('hex'),'mongo-root-user':'fixture_root','mongo-root-password':randomBytes(32).toString('hex'),'mongo-app-user':'fixture_app','mongo-app-password':password,'mongo-cluster-key':randomBytes(48).toString('base64'),'mongo-uri':`mongodb://fixture_app:${password}@mongo:27017/tranquil_talk?authSource=tranquil_talk&replicaSet=rs0&serverSelectionTimeoutMS=5000`};
         for(const [name,value] of Object.entries(secrets))fs.writeFileSync(path.join(root,'deploy','secrets',name),value,{mode:0o644});
         // Temporary fixture secrets need read access for the image's unprivileged app UID.
@@ -14,6 +14,7 @@ test('isolated production stack authenticates, restarts, backs up and restores i
         fs.writeFileSync(path.join(root,'fixture.yaml'),'services:\n  app:\n    image: tranquil-test:ci\n');
         compose(['up','-d','--no-build','--wait','--wait-timeout','180','app','mongo']);
         assert.match(compose(['exec','-T','app','curl','--fail','--silent','http://127.0.0.1:8080/api/health']),/"ready":true/);
+        compose(['run','--rm','--no-deps','proxy','caddy','validate','--config','/etc/caddy/Caddyfile']);
         const unauth=compose(['exec','-T','mongo','mongosh','--quiet','--eval',"try{db.getSiblingDB('tranquil_talk').users.findOne();quit(2);}catch(e){if(e.code!==13)quit(3);print('authentication-required');}"]);
         assert.match(unauth,/authentication-required/);
         compose(['exec','-T','mongo','mongosh','--quiet','--eval',auth+"db.getSiblingDB('tranquil_talk').restore_fixture.insertOne({_id:'isolated-production-sentinel',value:42});"]);

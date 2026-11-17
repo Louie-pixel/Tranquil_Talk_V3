@@ -1,6 +1,6 @@
 # Complete application and deployment
 
-For the new appointment delivery, named timezones, clinic integration and authenticated production stack, follow [BACKEND-ROLLOUT.md](BACKEND-ROLLOUT.md). These additions await the final testing phase; earlier CI runs do not validate them.
+For appointment delivery, named timezones, clinic integration and the authenticated production stack, follow [BACKEND-ROLLOUT.md](BACKEND-ROLLOUT.md). The combined final checks and remaining live-deployment requirements are recorded in [VALIDATION.md](VALIDATION.md); PR #9 provides the latest CI result.
 
 The static layout preview does not run real accounts, booking or calls. On Windows, install/open Docker Desktop with Linux containers and run `tools/start.ps1` from the repository. The launcher generates local configuration, starts the real API/database and local email inbox, and checks readiness. The application opens at http://localhost:8080; captured development emails are available at http://localhost:8025. See README.md for complete setup commands.
 

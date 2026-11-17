@@ -105,13 +105,13 @@ Integration tests require explicitly disposable Docker containers and create tes
 
 For a **layout preview only**, run `node tools/preview.cjs 8100`. It cannot authenticate users or search live records; use the Docker stack for those workflows.
 
-## Backend expansion awaiting final testing
+## Backend notifications, timezones and clinic integration
 
 Appointment changes now queue separate participant emails and accepted-appointment reminders at 24 hours and one hour before the start. Durable leases, retries and expiry handling support delivery workers. Account preferences control appointment emails/reminders and named timezones. UTC timestamps remain authoritative; ICU handles named-zone conversion and rejects nonexistent or ambiguous local times without explicit disambiguation.
 
 Verified administrators can preview OpenStreetMap clinic data and transactionally import reviewed directory batches with stable identifiers, source attribution, archive preservation and manual-edit protection. Patient searches stay within the app database. Source links appear on imported clinic cards.
 
-These additions have not been built, tested or deployed yet, following the requested implementation-first order. Frontend timezone/email preference controls are now implemented; administrator source imports remain available through the documented CLI/API. The [backend rollout guide](deploy/BACKEND-ROLLOUT.md) documents APIs, scripts, production requirements and the final validation work. Previous passing CI runs apply to the earlier implementation.
+Combined final validation is now enabled. The backend build, API suites, real local email/reminder delivery, full browser journey, responsive/accessibility checks and isolated production backup/restore have passed together; current fixes and latest CI status are tracked in [PR #9](https://github.com/Louie-pixel/Tranquil_Talk_V3/pull/9). See the [validation record](deploy/VALIDATION.md) for evidence, reproduction and remaining live-provider checks. Frontend preferences are implemented; administrator source imports use the documented CLI/API. No public deployment has been performed.
 
 ## Updated care and appointment interface
 
@@ -119,4 +119,4 @@ Clinic discovery combines real listing search and filters with an optional linke
 
 The waiting room supports early local device checks, device selection, microphone activity and speaker checks, with participant-bound entry still controlled by the backend. Account controls connect named timezones and appointment email/reminder preferences to the new APIs. Mobile layouts, keyboard controls, route focus/announcements, reduced-motion and forced-color styles are included.
 
-This frontend has not been browser-reviewed or tested yet. See [frontend rollout and final validation notes](deploy/FRONTEND-ROLLOUT.md). Rebuild an existing Docker image to include changed frontend files; uploading source does not update a running deployment.
+The frontend has undergone automated browser, keyboard, viewport and accessibility checks, plus visual review of fixture screenshots. See the [validation record](deploy/VALIDATION.md) and [frontend behavior/limits](deploy/FRONTEND-ROLLOUT.md). Rebuild an existing Docker image to include changed frontend files; uploading source does not update a running deployment.
