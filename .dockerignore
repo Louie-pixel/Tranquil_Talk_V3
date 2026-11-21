@@ -6,3 +6,7 @@
 *.exe
 outputs
 work
+deploy/secrets
+backups
+test-results
+playwright-report

@@ -1,0 +1,38 @@
+# Free demonstration service. See deploy/RENDER.md before creating it.
+# MongoDB, email delivery and TURN are external services, not included here.
+services:
+  - type: web
+    name: tranquiltalk
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeployTrigger: "off"
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: BIND_ADDRESS
+        value: 0.0.0.0
+      - key: WEB_ROOT
+        value: /app/web
+      - key: TRUST_PROXY_HEADERS
+        value: "true"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        sync: false
+      - key: APP_BASE_URL
+        sync: false
+      - key: MAIL_MODE
+        value: resend
+      - key: MAIL_FROM
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: TURN_URL
+        sync: false
+      - key: TURN_SECRET
+        sync: false
+      - key: CLINIC_OSM_ENABLED
+        value: "false"
