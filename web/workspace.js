@@ -92,17 +92,26 @@ async function proposeAppointment(a,card){
 }
 function needsResponse(a){return a.startAt>serverNow() && ((account?.id===a.expertId && a.status==="requested") || (account?.id!==a.expertId && a.status==="proposed"));}
 function activeAppointment(a){return ["requested","proposed","accepted"].includes(a.status) && a.startAt+1800>serverNow();}
+function roomOptions(a,container,label){
+    container.append(make("p","Room opens "+timeLabel(a.startAt-600)+" · "+careTime.zone(),"fine"));
+    container.append(actionButton(label,()=>openConsultation(a),false));
+    if(a.mode==="video" || label==="Open waiting room"){
+        container.append(actionButton("Join with audio only",()=>openConsultation(a,"audio")));
+    }
+}
 function appointmentCard(a){
     const expert=account.id===a.expertId,card=make("article",undefined,"panel appointment-card"),state=make("span",a.status.replaceAll("_"," "),"status-pill");state.dataset.state=a.status;card.dataset.appointment=a.id;
     const day=make("div",undefined,"appointment-date"),date=new Date(a.startAt*1000);day.append(make("strong",new Intl.DateTimeFormat(undefined,{day:"numeric",timeZone:careTime.zone()}).format(date)),make("span",new Intl.DateTimeFormat(undefined,{month:"short",timeZone:careTime.zone()}).format(date)));
-    const heading=make("div",undefined,"appointment-card-head"),identity=make("div");identity.append(state,make("h3",expert ? a.alias : a.expertName));heading.append(identity,day);card.append(heading,make("p",timeLabel(a.startAt),"appointment-time"),make("p",methodNames[a.mode]+" · 30 minutes · "+careTime.zone(),"fine"));
-    const explanations={requested:expert ? "A patient is waiting for your response." : "Request sent. Your professional needs to accept this time.",proposed:expert ? "Your alternative is waiting for the patient's response." : "Your professional suggested this time. Review and accept or decline it.",accepted:"Confirmed. This time is reserved for your appointment.",cancelled:"Cancelled. This time is no longer reserved.",declined:"Declined. You can request another available time."};
+    const heading=make("div",undefined,"appointment-card-head"),identity=make("div");identity.append(state,make("h3",expert ? a.alias : a.expertName));heading.append(identity,day);card.append(heading);
+    if(a.status==="proposed" && Number.isFinite(a.previousStartAt))card.append(make("p","Previous time: "+timeLabel(a.previousStartAt),"fine"));
+    card.append(make("p",(a.status==="proposed" ? "Proposed time: " : "")+timeLabel(a.startAt),"appointment-time"),make("p",methodNames[a.mode]+" · 30 minutes · "+careTime.zone(),"fine"));
+    const explanations={requested:expert ? "A patient is waiting for your response." : "Waiting for expert. Your request has been sent.",proposed:expert ? "Your alternative is waiting for the patient's response." : "Your professional suggested this time. Review and accept or decline it.",accepted:"Confirmed. This time is reserved for your appointment.",cancelled:"Cancelled. This time is no longer reserved.",declined:"Declined. You can request another available time."};
     card.append(make("p",explanations[a.status] || "Review the current appointment status.","appointment-note"));if(a.mode==="in_person")card.append(make("p",a.location,"venue"));
     const timeline=make("ol",undefined,"appointment-progress");timeline.setAttribute("aria-label","Appointment progress");for(const [label,current] of [["Requested",true],["Review",["proposed","accepted"].includes(a.status)],["Confirmed",a.status==="accepted"]]){const step=make("li",label);step.classList.toggle("complete",current);timeline.append(step);}if(["cancelled","declined"].includes(a.status))timeline.hidden=true;card.append(timeline);
     const actions=make("div",undefined,"actions"),future=a.startAt>serverNow();
-    if(needsResponse(a))actions.append(actionButton(expert ? "Accept request" : "Accept new time",()=>decideAppointment(a,"accept"),false),actionButton("Decline",()=>decideAppointment(a,"decline")));
+    if(needsResponse(a))actions.append(actionButton(expert ? "Accept request" : "Confirm new time",()=>decideAppointment(a,"accept"),false),actionButton("Decline",()=>decideAppointment(a,"decline")));
     if(expert && future && ["requested","accepted"].includes(a.status))actions.append(actionButton("Propose another time",()=>proposeAppointment(a,card)));
-    if(a.status==="accepted" && a.mode!=="in_person" && a.startAt+1800>serverNow())actions.append(actionButton("Open waiting room",()=>openConsultation(a),false));
+    if(a.status==="accepted" && a.mode!=="in_person" && a.startAt+1800>serverNow())roomOptions(a,actions,"Open waiting room");
     if(a.status==="accepted" && a.mode==="in_person" && a.location){const link=make("a","Directions","button secondary small");link.href="https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(a.location);link.target="_blank";link.rel="noopener noreferrer";actions.append(link);}
     if(future && ["requested","proposed","accepted"].includes(a.status))actions.append(actionButton("Cancel appointment",()=>decideAppointment(a,"cancel")));
     if(a.status==="accepted")actions.append(actionButton("Add to calendar",()=>downloadAppointment(a)));
@@ -112,7 +121,7 @@ function renderAppointments(){
     if(!account)return;const query=$("appointment-query").value.trim().toLocaleLowerCase(),items=workspace.items;
     $("upcoming-count").textContent=String(items.filter(activeAppointment).length);$("response-count").textContent=String(items.filter(needsResponse).length);$("appointments-zone").textContent=careTime.zone();
     const next=items.filter(a=>a.status==="accepted" && a.startAt+1800>serverNow()).sort((a,b)=>a.startAt-b.startAt)[0];$("next-appointment").replaceChildren();$("next-appointment").hidden=!next;
-    if(next){const text=make("div");text.append(make("p","YOUR NEXT CONFIRMED APPOINTMENT","eyebrow"),make("h3",account.id===next.expertId ? next.alias : next.expertName),make("p",timeLabel(next.startAt)+" · "+methodNames[next.mode]));$("next-appointment").append(text);if(next.mode!=="in_person")$("next-appointment").append(actionButton("Get ready",()=>openConsultation(next),false));}
+    if(next){const text=make("div");text.append(make("p","YOUR NEXT CONFIRMED APPOINTMENT","eyebrow"),make("h3",account.id===next.expertId ? next.alias : next.expertName),make("p",timeLabel(next.startAt)+" · "+methodNames[next.mode]));$("next-appointment").append(text);if(next.mode!=="in_person")roomOptions(next,$("next-appointment"),"Get ready");}
     const shown=items.filter(a=>(workspace.filter==="all" || (workspace.filter==="upcoming" ? activeAppointment(a) : workspace.filter==="response" ? needsResponse(a) : !activeAppointment(a))) && (!workspace.day || careTime.dateKey(a.startAt)===workspace.day) && (!query || [a.alias,a.expertName].some(v=>String(v || "").toLocaleLowerCase().includes(query)))).sort((a,b)=>workspace.filter==="past" ? b.startAt-a.startAt : a.startAt-b.startAt);
     $("appointment-list").replaceChildren(...shown.map(appointmentCard));if(!shown.length){const empty=make("div",undefined,"clinic-empty");empty.append(make("h3",items.length ? "A little more room here." : "Your first conversation starts here."),make("p",items.length ? "No appointments match this view. Try another filter or show all dates." : "Find a professional and choose a time that works for you."));$("appointment-list").append(empty);}
     $("clear-appointment-day").hidden=!workspace.day;$("clear-appointment-day").textContent=workspace.day ? "Clear date: "+workspace.day : "Show all dates";
@@ -196,11 +205,11 @@ function releaseConsultation(message="Your microphone and camera are off.",notif
     consultationStep("devices","Devices off");status("consultation-status",message);
 }
 function closeConsultation(){releaseConsultation(undefined,true);workspace.appointment=null;$("consultation-dialog").close();$("waiting-countdown").textContent="";}
-async function openConsultation(a){
-    endCall();releaseConsultation();workspace.appointment=a;$("consultation-dialog").showModal();$("consultation-dialog").classList.toggle("audio-only",a.mode==="audio");$("consultation-title").textContent="Take a moment. You're in the right place.";
+async function openConsultation(a,mediaMode=a.mode){
+    endCall();releaseConsultation();workspace.appointment={...a,mediaMode};$("consultation-dialog").showModal();$("consultation-dialog").classList.toggle("audio-only",mediaMode==="audio");$("consultation-title").textContent="Take a moment. You're in the right place.";
     $("consultation-description").textContent=methodNames[a.mode]+" · "+timeLabel(a.startAt)+" · "+careTime.zone()+" · display alias: "+a.alias;
-    $("participant-placeholder").textContent=a.mode==="audio" ? "Just your voice. Space to talk." : "A little space to settle in.";
-    $("device-check").textContent=a.mode==="audio" ? "Check microphone" : "Check microphone and camera";$("retry-consultation").hidden=true;$("relay-status").textContent="";$("microphone-device").replaceChildren();$("camera-device").replaceChildren();
+    $("participant-placeholder").textContent=mediaMode==="audio" ? "Just your voice. Space to talk." : "A little space to settle in.";
+    $("device-check").textContent=mediaMode==="audio" ? "Check microphone" : "Check microphone and camera";$("retry-consultation").hidden=true;$("relay-status").textContent="";$("microphone-device").replaceChildren();$("camera-device").replaceChildren();
     status("consultation-status","Start with a private device check. Nothing is sent to the other participant until you enter.");updateWaitingClock();
 }
 function updateWaitingClock(){
@@ -223,19 +232,19 @@ $("device-check").addEventListener("click",async()=>{
         $("relay-status").textContent=config.relayAvailable ? "Calls use the configured TURN relay. Your account details are not shown to the other participant." : "A TURN relay is not configured. Some networks may block this call, and peer network information may be visible.";
         workspace.rtc=new TranquilCall({send:(type,payload={})=>{if(workspace.ws?.readyState===WebSocket.OPEN)workspace.ws.send(JSON.stringify({type,...payload}));},status:message=>{
             if(epoch!==workspace.rtcEpoch)return;status("consultation-status",message);
-            if(message==="Connected"){consultationStep("connected","Connected");$("participant-placeholder").textContent="You're connected. Space to talk.";$("remote-placeholder").hidden=a.mode!=="audio";$("consultation-dialog").classList.add("has-remote");}
+            if(message==="Connected"){consultationStep("connected","Connected");$("participant-placeholder").textContent="You're connected. Space to talk.";$("remote-placeholder").hidden=a.mediaMode!=="audio";$("consultation-dialog").classList.add("has-remote");}
             else if(/interrupt|failed|Reconnect/i.test(message)){consultationStep("waiting","Reconnecting");$("retry-consultation").hidden=false;}
         },localVideo:$("consultation-local"),remoteVideo:$("consultation-remote"),iceServers:config.iceServers,iceTransportPolicy:config.iceTransportPolicy});
-        const rtc=workspace.rtc;await rtc.prepare(a.mode,{audioDeviceId:audioId,videoDeviceId:cameraId});if(epoch!==workspace.rtcEpoch){rtc.end();return;}
-        $("device-confirmation").hidden=false;$("stop-devices").hidden=false;$("consultation-mute").hidden=false;$("consultation-camera").hidden=a.mode==="audio";$("camera-device-label").hidden=a.mode==="audio";updateDeviceControls();
-        consultationStep("devices","Devices ready");status("consultation-status",a.mode==="audio" ? "Microphone access is working. Your camera is off. Check the sound bar, then confirm you're ready." : "Microphone and camera access are working. Check the sound bar and your preview, then confirm you're ready.");startSoundMeter(rtc.stream);updateWaitingClock();
+        const rtc=workspace.rtc;await rtc.prepare(a.mediaMode,{audioDeviceId:audioId,videoDeviceId:cameraId});if(epoch!==workspace.rtcEpoch){rtc.end();return;}
+        $("device-confirmation").hidden=false;$("stop-devices").hidden=false;$("consultation-mute").hidden=false;$("consultation-camera").hidden=a.mediaMode==="audio";$("camera-device-label").hidden=a.mediaMode==="audio";updateDeviceControls();
+        consultationStep("devices","Devices ready");status("consultation-status",a.mediaMode==="audio" ? "Microphone access is working. Your camera is off. Check the sound bar, then confirm you're ready." : "Microphone and camera access are working. Check the sound bar and your preview, then confirm you're ready.");startSoundMeter(rtc.stream);updateWaitingClock();
         try{const devices=await navigator.mediaDevices.enumerateDevices();if(epoch!==workspace.rtcEpoch)return;
             for(const [kind,id,selected] of [["audioinput","microphone-device",audioId],["videoinput","camera-device",cameraId]]){
                 const select=$(id);select.replaceChildren();for(const [i,device] of devices.filter(d=>d.kind===kind).entries()){const option=make("option",device.label || (kind==="audioinput" ? "Microphone " : "Camera ")+(i+1));option.value=device.deviceId;select.append(option);}const actual=rtc.stream.getTracks().find(t=>t.kind===(kind==="audioinput" ? "audio" : "video"))?.getSettings?.().deviceId;select.value=actual || selected || select.options[0]?.value || "";
             }$("device-selectors").hidden=false;
         }catch{/* The initial device check remains usable when enumeration is unavailable. */}
         $("device-check").disabled=false;$("device-check").textContent="Check devices again";
-    }catch(error){if(epoch===workspace.rtcEpoch){const help=error.name==="NotAllowedError" ? "Device permission was denied. Use your browser's site settings to allow the microphone"+(a.mode==="video" ? " and camera" : "")+", then retry." : error.name==="NotFoundError" ? "No matching device was found. Connect a microphone or choose another device." : error.message;releaseConsultation(help);}}
+    }catch(error){if(epoch===workspace.rtcEpoch){const help=error.name==="NotAllowedError" ? "Device permission was denied. Use your browser's site settings to allow the microphone"+(a.mediaMode==="video" ? " and camera" : "")+", then retry." : error.name==="NotFoundError" ? "No matching device was found. Connect a microphone or choose another device." : error.message;releaseConsultation(help);}}
 });
 function startSoundMeter(stream){
     try{const Context=window.AudioContext || window.webkitAudioContext;if(!Context)throw new Error("Unavailable");const context=new Context();workspace.audioContext=context;context.resume().catch(()=>{});const analyser=context.createAnalyser();analyser.fftSize=256;context.createMediaStreamSource(stream).connect(analyser);const values=new Uint8Array(analyser.fftSize);
