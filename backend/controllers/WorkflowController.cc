@@ -43,6 +43,7 @@ Json::Value selectSlot(mongocxx::database db,mongocxx::client_session* s,const s
 Json::Value publicAppointment(mongocxx::database db,Json::Value a,const std::string& viewer) {
     Json::Value result;
     for(const auto* f:{"status","mode","alias","startAt","revision","location","expertId","createdAt"})result[f]=a[f];
+    if(a["status"]=="proposed" && a.isMember("previousStartAt"))result["previousStartAt"]=a["previousStartAt"];
     result["id"]=a["_id"];result["durationMinutes"]=30;
     auto p=find(db["expert_profiles"],objectId(a["expertId"].asString()));
     result["expertName"]=p.isNull() ? "Professional unavailable" : p["name"];
@@ -138,6 +139,7 @@ void WorkflowController::appointmentAction(const drogon::HttpRequestPtr& req,Cal
             else if(action=="propose") {
                 verified(db,who,s);const auto slotId=text(b,"slotId",1,100);
                 auto slot=selectSlot(db,s,slotId,a["expertId"].asString(),a["mode"].asString());
+                a["previousStartAt"]=a["startAt"];
                 release(db,s,id);a["startAt"]=slot["startAt"];a["slotId"]=slotId;
                 a["sourceTimeZone"]=slot.get("timeZone","UTC");
                 a["location"]=a["mode"]=="in_person" ? slot["location"] : Json::Value("");

@@ -93,9 +93,10 @@ $("locate").addEventListener("click",async()=>{
         if(!Number.isFinite(lat) || !Number.isFinite(lng) || Math.abs(lat)>90 || Math.abs(lng)>180)throw {code:2};
         $("clinic-query").value="";await findClinics({origin:{lat,lng},area:"Current location"});
     }catch(error){if(epoch!==clinicState.epoch)return;
-        const messages={1:"Location access is blocked. Allow it in your browser's site settings and try again, or search by area.",
+        const messages={1:"Location access is blocked. Enter a suburb, city or clinic name, then choose Find care.",
             2:"Your device couldn't determine its location. Check that device location services are enabled, or search by area.",
             3:"Location is taking too long. Try again, or enter your suburb or city."};
+        $("clinic-query").setAttribute("aria-describedby","clinic-status");
         status("clinic-status",messages[error.code] || "Location couldn't be obtained. Search by area instead.",true);$("clinic-query").focus();
     }finally{clinicState.locationBusy=false;$("locate").disabled=false;}
 });
